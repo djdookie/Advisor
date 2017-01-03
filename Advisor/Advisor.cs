@@ -48,22 +48,31 @@ namespace HDT.Plugins.Advisor
 		// Update the card list on player's turn
 		internal void TurnStart(ActivePlayer player)
 		{
-			if (player == ActivePlayer.Player && Opponent != null)
-			{
-                cardList.Show();
-				var mana = AvailableMana();
-				var klasse = KlassenConverter(CoreAPI.Game.Opponent.Class);
-				var cards = HearthDb.Cards.Collectible.Values
-					.Where(c => c.Cost == mana && c.Class == klasse)
-					.Select(c => new Card(c))
-					.OrderBy(c => c.Rarity)
-					.ToList<Card>();
-                cardList.Update(cards);
-			}
-		}
+            //if (player == ActivePlayer.Player && Opponent != null)
+            //{
+            //             cardList.Show();
+            //	var mana = AvailableMana();
+            //	var klasse = KlassenConverter(CoreAPI.Game.Opponent.Class);
+            //	var cards = HearthDb.Cards.Collectible.Values
+            //		.Where(c => c.Cost == mana && c.Class == klasse)
+            //		.Select(c => new Card(c))
+            //		.OrderBy(c => c.Rarity)
+            //		.ToList<Card>();
+            //             cardList.Update(cards);
+            //}
 
-		// Calculate the mana opponent will have on his next turn
-		internal int AvailableMana()
+            cardList.Show();
+            var mana = AvailableMana();
+            var klasse = KlassConverter(CoreAPI.Game.Opponent.Class);
+            var trackerRepository = new Services.TrackerRepository();
+            //var cards = trackerRepository.GetAllArchetypeDecks().FirstOrDefault().Cards.Select(x => new Models.Card((x.Id, x.Name, x.Count, x.Image.Clone())).ToList();
+            var decks = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList();
+            var cards = decks.FirstOrDefault().Cards.ToList();
+            cardList.Update(cards);
+        }
+
+        // Calculate the mana opponent will have on his next turn
+        internal int AvailableMana()
 		{
 			var opp = Opponent;
 			if (opp != null)
@@ -77,9 +86,9 @@ namespace HDT.Plugins.Advisor
 		}
 
 		// Convert hero class string to enum
-		internal CardClass KlassenConverter(string klasse)
+		internal CardClass KlassConverter(string klass)
 		{
-			switch (klasse.ToLowerInvariant())
+			switch (klass.ToLowerInvariant())
 			{
 				case "druid":
 					return CardClass.DRUID;
