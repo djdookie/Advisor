@@ -7,12 +7,15 @@ using System.Windows.Controls;
 using Hearthstone_Deck_Tracker.API;
 using Hearthstone_Deck_Tracker.Plugins;
 using Hearthstone_Deck_Tracker.Utility.Logging;
+using Hearthstone_Deck_Tracker.Hearthstone;
 
 namespace HDT.Plugins.Advisor
 {
     public class AdvisorPlugin : IPlugin
     {
         private CardList cardList;
+        Advisor advisor;
+        IEnumerable<Card> revealedCards;
 
         public string Author
         {
@@ -47,11 +50,13 @@ namespace HDT.Plugins.Advisor
         {
 			cardList = new CardList();
 			Core.OverlayCanvas.Children.Add(cardList);
-			Advisor advisor = new Advisor(cardList);
+			advisor = new Advisor(cardList);
 
 			GameEvents.OnGameStart.Add(advisor.GameStart);
 			GameEvents.OnInMenu.Add(advisor.InMenu);
-			GameEvents.OnTurnStart.Add(advisor.TurnStart);
+			//GameEvents.OnTurnStart.Add(advisor.TurnStart);
+            //GameEvents.OnOpponentPlay.Add(advisor.OpponentPlay);
+            //GameEvents.OnOpponentSecretTriggered.Add(advisor.OpponentSecretTiggered);
         }
 
         public void OnUnload()
@@ -61,6 +66,13 @@ namespace HDT.Plugins.Advisor
 
         public void OnUpdate()
         {
+            if (Core.Game.IsInMenu) return;
+
+            if (revealedCards != Core.Game.Opponent.RevealedCards)
+            {
+                revealedCards = Core.Game.Opponent.RevealedCards;
+                advisor.updateCardList(revealedCards);
+            }
         }
 
         public Version Version

@@ -9,6 +9,7 @@ using Hearthstone_Deck_Tracker.Enums;
 using Hearthstone_Deck_Tracker.Hearthstone;
 using Hearthstone_Deck_Tracker.Hearthstone.Entities;
 using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
+using Hearthstone_Deck_Tracker.Utility.Logging;
 
 namespace HDT.Plugins.Advisor
 {
@@ -45,8 +46,37 @@ namespace HDT.Plugins.Advisor
 			}
 		}
 
-		// Update the card list on player's turn
-		internal void TurnStart(ActivePlayer player)
+        //
+        //internal void OpponentPlay(Card card)
+        //{
+        //    //var opponentDeck = CoreAPI.Game.Opponent.Deck;
+        //    //var game = CoreAPI.Game.CurrentGameStats.OpponentCards;
+        //    //var game = CoreAPI.Game.CurrentGameStats;
+        //    //Log.Info("Advisor: " + card);
+
+        //    //var cardEntites = Core.Game.Opponent.RevealedEntities.Where(x => (x.IsMinion || x.IsSpell || x.IsWeapon) && !x.Info.Created && !x.Info.Stolen).GroupBy(x => x.CardId).ToList();
+        //    updateCardList();
+        //}
+
+        //internal void OpponentSecretTiggered(Card card)
+        //{
+        //    updateCardList();
+        //}
+
+        internal void updateCardList(IEnumerable<Card> cards)
+        {
+            //var revealedCards = Core.Game.Opponent.RevealedCards;
+            //var opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList();
+            //Log.Info("+++++ Advisor: " + opponentCardlist.Count);
+            //if (cardList != revealedCards) cardList.Update(revealedCards.ToList());
+
+            // Zeige alle bisher vom Gegner gespielten Karten
+            cardList.Update(cards.ToList());
+        }
+
+
+        // Update the card list on player's turn
+        internal void TurnStart(ActivePlayer player)
 		{
             //if (player == ActivePlayer.Player && Opponent != null)
             //{
@@ -61,14 +91,14 @@ namespace HDT.Plugins.Advisor
             //             cardList.Update(cards);
             //}
 
-            cardList.Show();
-            var mana = AvailableMana();
-            var klasse = KlassConverter(CoreAPI.Game.Opponent.Class);
-            var trackerRepository = new Services.TrackerRepository();
-            //var cards = trackerRepository.GetAllArchetypeDecks().FirstOrDefault().Cards.Select(x => new Models.Card((x.Id, x.Name, x.Count, x.Image.Clone())).ToList();
-            var decks = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList();
-            var cards = decks.FirstOrDefault().Cards.ToList();
-            cardList.Update(cards);
+            //cardList.Show();
+            //var mana = AvailableMana();
+            //var klasse = KlassConverter(CoreAPI.Game.Opponent.Class);
+            //var trackerRepository = new Services.TrackerRepository();
+            ////var cards = trackerRepository.GetAllArchetypeDecks().FirstOrDefault().Cards.Select(x => new Models.Card((x.Id, x.Name, x.Count, x.Image.Clone())).ToList();
+            //var decks = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList();
+            //var cards = decks.FirstOrDefault().Cards.ToList();
+            //cardList.Update(cards);
         }
 
         // Calculate the mana opponent will have on his next turn
