@@ -22,6 +22,15 @@ namespace HDT.Plugins.Advisor.Models
 			IsStandard = standard;
 		}
 
+        public Deck(IEnumerable<Hearthstone_Deck_Tracker.Hearthstone.Card> cards) : this()
+        {
+            foreach (var card in cards)
+            {
+                //Database.GetCardFromId(card.Id);
+                this.Cards.Add(new Models.Card(card.Id, card.Name, card.Count, card.Background));
+            }
+        }
+
 		/// <summary>
 		/// Uses the Jaccard index to give a indication of similarity
 		/// between the two decks. </summary>

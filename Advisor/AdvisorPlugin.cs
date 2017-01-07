@@ -15,7 +15,7 @@ namespace HDT.Plugins.Advisor
     {
         private CardList cardList;
         Advisor advisor;
-        IEnumerable<Card> revealedCards;
+       // IEnumerable<Card> revealedCards;
 
         public string Author
         {
@@ -51,12 +51,14 @@ namespace HDT.Plugins.Advisor
 			cardList = new CardList();
 			Core.OverlayCanvas.Children.Add(cardList);
 			advisor = new Advisor(cardList);
+            //revealedCards = null;
 
-			GameEvents.OnGameStart.Add(advisor.GameStart);
+            GameEvents.OnGameStart.Add(advisor.GameStart);
 			GameEvents.OnInMenu.Add(advisor.InMenu);
-			//GameEvents.OnTurnStart.Add(advisor.TurnStart);
-            //GameEvents.OnOpponentPlay.Add(advisor.OpponentPlay);
-            //GameEvents.OnOpponentSecretTriggered.Add(advisor.OpponentSecretTiggered);
+			
+            //GameEvents.OnTurnStart.Add(advisor.TurnStart);
+            GameEvents.OnOpponentPlay.Add(advisor.OpponentPlay);
+            GameEvents.OnOpponentSecretTriggered.Add(advisor.OpponentSecretTiggered);
         }
 
         public void OnUnload()
@@ -66,18 +68,21 @@ namespace HDT.Plugins.Advisor
 
         public void OnUpdate()
         {
-            if (Core.Game.IsInMenu) return;
+            //if (Core.Game.IsInMenu) return;
 
-            if (revealedCards != Core.Game.Opponent.RevealedCards)
-            {
-                revealedCards = Core.Game.Opponent.RevealedCards;
-                advisor.updateCardList(revealedCards);
-            }
+            //if (revealedCards == null || !revealedCards.SequenceEqual(Core.Game.Opponent.RevealedCards))
+            //{
+            //    revealedCards = Core.Game.Opponent.RevealedCards;
+                
+            //    //advisor.updateCardList(revealedCards);
+            //}
         }
 
         public Version Version
         {
             get { return new Version(0, 0, 1); }
         }
+
+        
     }
 }
