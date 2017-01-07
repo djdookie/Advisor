@@ -51,11 +51,9 @@ namespace HDT.Plugins.Advisor
 			cardList = new CardList();
 			Core.OverlayCanvas.Children.Add(cardList);
 			advisor = new Advisor(cardList);
-            //revealedCards = null;
 
-            GameEvents.OnGameStart.Add(advisor.GameStart);
 			GameEvents.OnInMenu.Add(advisor.InMenu);
-			
+            GameEvents.OnGameStart.Add(advisor.GameStart);
             //GameEvents.OnTurnStart.Add(advisor.TurnStart);
             GameEvents.OnOpponentPlay.Add(advisor.OpponentPlay);
             GameEvents.OnOpponentSecretTriggered.Add(advisor.OpponentSecretTiggered);
@@ -68,14 +66,6 @@ namespace HDT.Plugins.Advisor
 
         public void OnUpdate()
         {
-            //if (Core.Game.IsInMenu) return;
-
-            //if (revealedCards == null || !revealedCards.SequenceEqual(Core.Game.Opponent.RevealedCards))
-            //{
-            //    revealedCards = Core.Game.Opponent.RevealedCards;
-                
-            //    //advisor.updateCardList(revealedCards);
-            //}
         }
 
         public Version Version

@@ -11,6 +11,8 @@ using Hearthstone_Deck_Tracker.Hearthstone.Entities;
 using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
 using Hearthstone_Deck_Tracker.Utility.Logging;
 using HDT.Plugins.Advisor.Services;
+using System.Collections;
+//using HDT.Plugins.Advisor.Models;
 
 namespace HDT.Plugins.Advisor
 {
@@ -18,6 +20,8 @@ namespace HDT.Plugins.Advisor
     {
         private int mana = 0;
         private CardList cardList = null;
+        // Highest deck similarity
+        //double maxSim = 0;
         TrackerRepository trackerRepository;
 
         public Advisor(CardList list)
@@ -37,6 +41,7 @@ namespace HDT.Plugins.Advisor
         internal void GameStart()
         {
             mana = 0;
+            //maxSim = 0;
             cardList.Update(new List<Card>());
         }
 
@@ -52,12 +57,6 @@ namespace HDT.Plugins.Advisor
 
         internal async void OpponentPlay(Card card)
         {
-            //var opponentDeck = CoreAPI.Game.Opponent.Deck;
-            //var game = CoreAPI.Game.CurrentGameStats.OpponentCards;
-            //var game = CoreAPI.Game.CurrentGameStats;
-            //Log.Info("Advisor: " + card);
-
-            //var cardEntites = Core.Game.Opponent.RevealedEntities.Where(x => (x.IsMinion || x.IsSpell || x.IsWeapon) && !x.Info.Created && !x.Info.Stolen).GroupBy(x => x.CardId).ToList();
             await Task.Delay(100);
             updateCardList();
         }
@@ -67,54 +66,57 @@ namespace HDT.Plugins.Advisor
             updateCardList();
         }
 
-        //internal void updateCardList(IEnumerable<Hearthstone_Deck_Tracker.Hearthstone.Card> cards)
         internal void updateCardList()
         {
             //var opponentCardlist = Core.Game.Opponent.RevealedCards;
             var opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated);
             //Log.Info("+++++ Advisor: " + opponentCardlist.Count);
-            //if (cardList != opponentCardlist)
-            //{
-            cardList.Update(opponentCardlist.ToList());
-            //}
 
-            //Zeige alle bisher vom Gegner gespielten Karten
-            //cardList.Update(cards.ToList());
+            //Update list of the opponent's played cards
+            //cardList.Update(opponentCardlist.ToList());
 
-            //var opponentDeck = new Models.Deck(cards);
+            var opponentDeck = new Models.Deck(opponentCardlist);
 
-            //foreach (var archetypeDeck in trackerRepository.GetAllArchetypeDecks())
-            //{
-            //    archetypeDeck.Similarity(opponentDeck);
-            //}
+            // Create archetype dictionary and calculate matching similarities to yet known opponent cards
+            IDictionary<Models.ArchetypeDeck, float> dict = new Dictionary<Models.ArchetypeDeck, float>();
+
+
+            foreach (var archetypeDeck in trackerRepository.GetAllArchetypeDecks())
+            {
+                dict.Add(archetypeDeck, opponentDeck.Similarity(archetypeDeck));
+            }
+
+            // Sort dictionary by value
+            var sortedDict = from entry in dict orderby entry.Value descending select entry;
+
+            //Log.Info("+++++ ADVISOR: " + sortedDict.First().Key.Name + " " + sortedDict.First().Value);
         }
 
+        //      // Update the card list on player's turn
+        //      internal void TurnStart(ActivePlayer player)
+        //{
+        //          //if (player == ActivePlayer.Player && Opponent != null)
+        //          //{
+        //          //             cardList.Show();
+        //          //	var mana = AvailableMana();
+        //          //	var klasse = KlassenConverter(CoreAPI.Game.Opponent.Class);
+        //          //	var cards = HearthDb.Cards.Collectible.Values
+        //          //		.Where(c => c.Cost == mana && c.Class == klasse)
+        //          //		.Select(c => new Card(c))
+        //          //		.OrderBy(c => c.Rarity)
+        //          //		.ToList<Card>();
+        //          //             cardList.Update(cards);
+        //          //}
 
-  //      // Update the card list on player's turn
-  //      internal void TurnStart(ActivePlayer player)
-		//{
-  //          //if (player == ActivePlayer.Player && Opponent != null)
-  //          //{
-  //          //             cardList.Show();
-  //          //	var mana = AvailableMana();
-  //          //	var klasse = KlassenConverter(CoreAPI.Game.Opponent.Class);
-  //          //	var cards = HearthDb.Cards.Collectible.Values
-  //          //		.Where(c => c.Cost == mana && c.Class == klasse)
-  //          //		.Select(c => new Card(c))
-  //          //		.OrderBy(c => c.Rarity)
-  //          //		.ToList<Card>();
-  //          //             cardList.Update(cards);
-  //          //}
-
-  //          //cardList.Show();
-  //          //var mana = AvailableMana();
-  //          //var klasse = KlassConverter(CoreAPI.Game.Opponent.Class);
-  //          //var trackerRepository = new Services.TrackerRepository();
-  //          ////var cards = trackerRepository.GetAllArchetypeDecks().FirstOrDefault().Cards.Select(x => new Models.Card((x.Id, x.Name, x.Count, x.Image.Clone())).ToList();
-  //          //var decks = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList();
-  //          //var cards = decks.FirstOrDefault().Cards.ToList();
-  //          //cardList.Update(cards);
-  //      }
+        //          //cardList.Show();
+        //          //var mana = AvailableMana();
+        //          //var klasse = KlassConverter(CoreAPI.Game.Opponent.Class);
+        //          //var trackerRepository = new Services.TrackerRepository();
+        //          ////var cards = trackerRepository.GetAllArchetypeDecks().FirstOrDefault().Cards.Select(x => new Models.Card((x.Id, x.Name, x.Count, x.Image.Clone())).ToList();
+        //          //var decks = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList();
+        //          //var cards = decks.FirstOrDefault().Cards.ToList();
+        //          //cardList.Update(cards);
+        //      }
 
         // Calculate the mana opponent will have on his next turn
         internal int AvailableMana()
