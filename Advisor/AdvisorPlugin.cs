@@ -8,6 +8,7 @@ using Hearthstone_Deck_Tracker.API;
 using Hearthstone_Deck_Tracker.Plugins;
 using Hearthstone_Deck_Tracker.Utility.Logging;
 using Hearthstone_Deck_Tracker.Hearthstone;
+using HDT.Plugins.Advisor.Layout;
 
 namespace HDT.Plugins.Advisor
 {

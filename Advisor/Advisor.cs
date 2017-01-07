@@ -12,6 +12,7 @@ using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
 using Hearthstone_Deck_Tracker.Utility.Logging;
 using HDT.Plugins.Advisor.Services;
 using System.Collections;
+using HDT.Plugins.Advisor.Layout;
 //using HDT.Plugins.Advisor.Models;
 
 namespace HDT.Plugins.Advisor
@@ -77,11 +78,11 @@ namespace HDT.Plugins.Advisor
 
             var opponentDeck = new Models.Deck(opponentCardlist);
 
-            // Create archetype dictionary and calculate matching similarities to yet known opponent cards
+            // Create archetype dictionary
             IDictionary<Models.ArchetypeDeck, float> dict = new Dictionary<Models.ArchetypeDeck, float>();
 
-
-            foreach (var archetypeDeck in trackerRepository.GetAllArchetypeDecks())
+            // Calculate matching similarities to yet known opponent cards
+            foreach (var archetypeDeck in trackerRepository.GetAllArchetypeDecks().Where(d => d.Klass == Models.KlassKonverter.FromString(CoreAPI.Game.Opponent.Class)))
             {
                 dict.Add(archetypeDeck, opponentDeck.Similarity(archetypeDeck));
             }
@@ -89,7 +90,15 @@ namespace HDT.Plugins.Advisor
             // Sort dictionary by value
             var sortedDict = from entry in dict orderby entry.Value descending select entry;
 
-            //Log.Info("+++++ ADVISOR: " + sortedDict.First().Key.Name + " " + sortedDict.First().Value);
+            // If any archetype deck matches more than 0% show the deck with the highest similarity
+            if (sortedDict.First().Value > 0)
+            {
+                //cardList.LblArchetype.Text = String.Format("{0} ({1}%)", sortedDict.First().Key.Name, sortedDict.First().Value * 100);
+                var opponentCards = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).Where(d => d.Name == sortedDict.First().Key.Name).FirstOrDefault().Cards.ToList();
+
+                cardList.Update(opponentCards);
+                //Log.Info("+++++ ADVISOR: " + sortedDict.First().Key.Name + " " + sortedDict.First().Value);
+            }
         }
 
         //      // Update the card list on player's turn

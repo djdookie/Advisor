@@ -56,7 +56,7 @@
   <ItemGroup>
     <Compile Include="AdvisorPlugin.cs" />
     <Compile Include="Advisor.cs" />
-    <Compile Include="CardList.xaml.cs">
+    <Compile Include="Layout\CardList.xaml.cs">
       <DependentUpon>CardList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Models\ArchetypeDeck.cs" />
@@ -67,11 +67,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\ITrackerRepository.cs" />
     <Compile Include="Services\TrackerRepository.cs" />
+    <Compile Include="Layout\HearthstoneTextBlock.xaml.cs">
+      <DependentUpon>HearthstoneTextBlock.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Layout\OutlinedTextBlock.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="CardList.xaml">
+    <Page Include="Layout\CardList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Layout\HearthstoneTextBlock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

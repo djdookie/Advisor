@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using Hearthstone_Deck_Tracker.API;
 using Hearthstone_Deck_Tracker.Hearthstone;
 
-namespace HDT.Plugins.Advisor
+namespace HDT.Plugins.Advisor.Layout
 {
     public partial class CardList
     {
