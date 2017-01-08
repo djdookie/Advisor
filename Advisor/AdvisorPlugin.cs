@@ -53,7 +53,7 @@ namespace HDT.Plugins.Advisor
 			Core.OverlayCanvas.Children.Add(cardList);
 			advisor = new Advisor(cardList);
 
-			GameEvents.OnInMenu.Add(advisor.InMenu);
+            GameEvents.OnInMenu.Add(advisor.InMenu);
             GameEvents.OnGameStart.Add(advisor.GameStart);
             //GameEvents.OnTurnStart.Add(advisor.TurnStart);
             GameEvents.OnOpponentPlay.Add(advisor.OpponentPlay);

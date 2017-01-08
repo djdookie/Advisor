@@ -58,7 +58,7 @@ namespace HDT.Plugins.Advisor.Models
 				}
 			}
 
-			return (float)Math.Round((float)lenAnB / (lenA + lenB - lenAnB), 2);
+			return (float)Math.Round((float)lenAnB / (lenA + lenB - lenAnB), 4);
 		}
 	}
 }

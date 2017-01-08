@@ -16,8 +16,8 @@ namespace HDT.Plugins.Advisor.Layout
         public void Update(List<Card> cards)
         {
             // hide if card list is empty
-            this.Visibility = cards.Count <= 0 ? Visibility.Hidden : Visibility.Visible;
-            this.ItemsSource = cards;
+            //this.Visibility = cards.Count <= 0 ? Visibility.Hidden : Visibility.Visible;
+            this.icCardlist.ItemsSource = cards;
             UpdatePosition();
         }
 

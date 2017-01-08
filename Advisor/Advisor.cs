@@ -19,7 +19,7 @@ namespace HDT.Plugins.Advisor
 {
     internal class Advisor
     {
-        private int mana = 0;
+        //private int mana = 0;
         private CardList cardList = null;
         // Highest deck similarity
         //double maxSim = 0;
@@ -30,20 +30,33 @@ namespace HDT.Plugins.Advisor
             cardList = list;
             trackerRepository = new Services.TrackerRepository();
 
+            cardList.LblArchetype.Text = "No matching archetype yet";
+            //cardList.Update(new List<Card>());
+            updateCardList();
+
             // Hide in menu, if necessary
-            if (Config.Instance.HideInMenu && CoreAPI.Game.IsInMenu) cardList.Hide();
+            if (Config.Instance.HideInMenu && CoreAPI.Game.IsInMenu)
+            {
+                cardList.Hide();
+            } else
+            {
+                cardList.Show();
+            }
         }
 
-        internal List<Entity> Entities => Helper.DeepClone<Dictionary<int, Entity>>(CoreAPI.Game.Entities).Values.ToList<Entity>();
+        //internal List<Entity> Entities => Helper.DeepClone<Dictionary<int, Entity>>(CoreAPI.Game.Entities).Values.ToList<Entity>();
 
-        internal Entity Opponent => Entities?.FirstOrDefault(x => x.IsOpponent);
+        //internal Entity Opponent => Entities?.FirstOrDefault(x => x.IsOpponent);
 
         // Reset on when a new game starts
         internal void GameStart()
         {
-            mana = 0;
+            //mana = 0;
             //maxSim = 0;
-            cardList.Update(new List<Card>());
+            cardList.LblArchetype.Text = "No matching archetype yet";
+            //cardList.Update(new List<Card>());
+            updateCardList();
+            cardList.Show();
         }
 
 		// Need to handle hiding the element when in the game menu
@@ -56,9 +69,8 @@ namespace HDT.Plugins.Advisor
 		}
 
 
-        internal async void OpponentPlay(Card card)
+        internal void OpponentPlay(Card card)
         {
-            await Task.Delay(100);
             updateCardList();
         }
 
@@ -67,37 +79,51 @@ namespace HDT.Plugins.Advisor
             updateCardList();
         }
 
-        internal void updateCardList()
+        internal async void updateCardList()
         {
+            // Small delay to guarantee opponents cards list is up to date
+            await Task.Delay(100);
+
+            // Get opponent's cards list (all yet revealed cards)
             //var opponentCardlist = Core.Game.Opponent.RevealedCards;
             var opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated);
-            //Log.Info("+++++ Advisor: " + opponentCardlist.Count);
 
-            //Update list of the opponent's played cards
-            //cardList.Update(opponentCardlist.ToList());
-
-            var opponentDeck = new Models.Deck(opponentCardlist);
-
-            // Create archetype dictionary
-            IDictionary<Models.ArchetypeDeck, float> dict = new Dictionary<Models.ArchetypeDeck, float>();
-
-            // Calculate matching similarities to yet known opponent cards
-            foreach (var archetypeDeck in trackerRepository.GetAllArchetypeDecks().Where(d => d.Klass == Models.KlassKonverter.FromString(CoreAPI.Game.Opponent.Class)))
+            // If no opponent's cards were revealed yet, return empty card list
+            if (opponentCardlist.Count() <= 0)
             {
-                dict.Add(archetypeDeck, opponentDeck.Similarity(archetypeDeck));
+                cardList.Update(new List<Card>());
+                return;
             }
-
-            // Sort dictionary by value
-            var sortedDict = from entry in dict orderby entry.Value descending select entry;
-
-            // If any archetype deck matches more than 0% show the deck with the highest similarity
-            if (sortedDict.First().Value > 0)
+            else
             {
-                //cardList.LblArchetype.Text = String.Format("{0} ({1}%)", sortedDict.First().Key.Name, sortedDict.First().Value * 100);
-                var opponentCards = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).Where(d => d.Name == sortedDict.First().Key.Name).FirstOrDefault().Cards.ToList();
+                //Log.Info("+++++ Advisor: " + opponentCardlist.Count);
 
-                cardList.Update(opponentCards);
-                //Log.Info("+++++ ADVISOR: " + sortedDict.First().Key.Name + " " + sortedDict.First().Value);
+                //Update list of the opponent's played cards
+                //cardList.Update(opponentCardlist.ToList());
+
+                var opponentDeck = new Models.Deck(opponentCardlist);
+
+                // Create archetype dictionary
+                IDictionary<Models.ArchetypeDeck, float> dict = new Dictionary<Models.ArchetypeDeck, float>();
+
+                // Calculate matching similarities to yet known opponent cards
+                foreach (var archetypeDeck in trackerRepository.GetAllArchetypeDecks().Where(d => d.Klass == Models.KlassKonverter.FromString(CoreAPI.Game.Opponent.Class)))
+                {
+                    dict.Add(archetypeDeck, opponentDeck.Similarity(archetypeDeck));
+                }
+
+                // Sort dictionary by value
+                var sortedDict = from entry in dict orderby entry.Value descending select entry;
+
+                // If any archetype deck matches more than 0% show the deck with the highest similarity
+                if (sortedDict.FirstOrDefault().Value > 0)
+                {
+                    cardList.LblArchetype.Text = String.Format("{0} ({1}%)", sortedDict.FirstOrDefault().Key.Name, Math.Round(sortedDict.FirstOrDefault().Value * 100, 2));
+                    var opponentCards = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).Where(d => d.Name == sortedDict.FirstOrDefault().Key.Name).FirstOrDefault().Cards.ToList();
+
+                    cardList.Update(opponentCards);
+                    //Log.Info("+++++ ADVISOR: " + sortedDict.FirstOrDefault().Key.Name + " " + sortedDict.FirstOrDefault().Value);
+                }
             }
         }
 
@@ -127,55 +153,55 @@ namespace HDT.Plugins.Advisor
         //          //cardList.Update(cards);
         //      }
 
-        // Calculate the mana opponent will have on his next turn
-        internal int AvailableMana()
-		{
-			var opp = Opponent;
-			if (opp != null)
-			{
-				var res = opp.GetTag(GameTag.RESOURCES);
-				var overload = opp.GetTag(GameTag.OVERLOAD_OWED);
-				// looking a turn ahead, so add one mana
-				mana = res + 1 - overload;
-			}
-			return mana;
-		}
+  //      // Calculate the mana opponent will have on his next turn
+  //      internal int AvailableMana()
+		//{
+		//	var opp = Opponent;
+		//	if (opp != null)
+		//	{
+		//		var res = opp.GetTag(GameTag.RESOURCES);
+		//		var overload = opp.GetTag(GameTag.OVERLOAD_OWED);
+		//		// looking a turn ahead, so add one mana
+		//		mana = res + 1 - overload;
+		//	}
+		//	return mana;
+		//}
 
-		// Convert hero class string to enum
-		internal CardClass KlassConverter(string klass)
-		{
-			switch (klass.ToLowerInvariant())
-			{
-				case "druid":
-					return CardClass.DRUID;
+		//// Convert hero class string to enum
+		//internal CardClass KlassConverter(string klass)
+		//{
+		//	switch (klass.ToLowerInvariant())
+		//	{
+		//		case "druid":
+		//			return CardClass.DRUID;
 
-				case "hunter":
-					return CardClass.HUNTER;
+		//		case "hunter":
+		//			return CardClass.HUNTER;
 
-				case "mage":
-					return CardClass.MAGE;
+		//		case "mage":
+		//			return CardClass.MAGE;
 
-				case "paladin":
-					return CardClass.PALADIN;
+		//		case "paladin":
+		//			return CardClass.PALADIN;
 
-				case "priest":
-					return CardClass.PRIEST;
+		//		case "priest":
+		//			return CardClass.PRIEST;
 
-				case "rogue":
-					return CardClass.ROGUE;
+		//		case "rogue":
+		//			return CardClass.ROGUE;
 
-				case "shaman":
-					return CardClass.SHAMAN;
+		//		case "shaman":
+		//			return CardClass.SHAMAN;
 
-				case "warlock":
-					return CardClass.WARLOCK;
+		//		case "warlock":
+		//			return CardClass.WARLOCK;
 
-				case "warrior":
-					return CardClass.WARRIOR;
+		//		case "warrior":
+		//			return CardClass.WARRIOR;
 
-				default:
-					return CardClass.NEUTRAL;
-			}
-		}
+		//		default:
+		//			return CardClass.NEUTRAL;
+		//	}
+		//}
     }
 }
