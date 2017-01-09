@@ -23,7 +23,7 @@ namespace HDT.Plugins.Advisor.Layout
 
         public void UpdatePosition()
         {
-            Canvas.SetTop(this, Core.OverlayWindow.Height * 2 / 100);
+            Canvas.SetTop(this, Core.OverlayWindow.Height * 1 / 100);
             Canvas.SetLeft(this, Core.OverlayWindow.Width * 12 / 100);
         }
 

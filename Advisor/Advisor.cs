@@ -59,15 +59,34 @@ namespace HDT.Plugins.Advisor
             cardList.Show();
         }
 
-		// Need to handle hiding the element when in the game menu
-		internal void InMenu()
-		{
-			if (Config.Instance.HideInMenu)
-			{
+        // Need to handle hiding the element when in the game menu
+        internal void InMenu()
+        {
+            if (Config.Instance.HideInMenu)
+            {
                 cardList.Hide();
-			}
-		}
+            }
+        }
 
+        internal void OpponentHandDiscard(Card card)
+        {
+            updateCardList();
+        }
+
+        internal void OpponentJoustReveal(Card card)
+        {
+            updateCardList();
+        }
+
+        internal void OpponentDeckToPlay(Card card)
+        {
+            updateCardList();
+        }
+
+        internal void OpponentDeckDiscard(Card card)
+        {
+            updateCardList();
+        }
 
         internal void OpponentPlay(Card card)
         {
@@ -122,6 +141,25 @@ namespace HDT.Plugins.Advisor
                     var opponentCards = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).Where(d => d.Name == sortedDict.FirstOrDefault().Key.Name).FirstOrDefault().Cards.ToList();
 
                     cardList.Update(opponentCards);
+                    
+                    // Remove already played cards from archetype deck
+                    //foreach (var card in opponentCardlist)
+                    //{
+                    //    if (opponentCards.Contains(card))
+                    //    {
+                    //        var item = opponentCards.Find(x => x.Id == card.Id);
+                    //        if (item.Count > 1)
+                    //        {
+                    //            item.Count -= 1;
+                    //        }
+                    //        else
+                    //        {
+                    //            opponentCards.Remove(item);
+                    //        }
+                    //    }
+                    //}
+                    //cardList.Update(opponentCards);
+
                     //Log.Info("+++++ ADVISOR: " + sortedDict.FirstOrDefault().Key.Name + " " + sortedDict.FirstOrDefault().Value);
                 }
             }

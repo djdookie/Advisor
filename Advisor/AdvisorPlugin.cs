@@ -58,6 +58,10 @@ namespace HDT.Plugins.Advisor
             //GameEvents.OnTurnStart.Add(advisor.TurnStart);
             GameEvents.OnOpponentPlay.Add(advisor.OpponentPlay);
             GameEvents.OnOpponentSecretTriggered.Add(advisor.OpponentSecretTiggered);
+            GameEvents.OnOpponentDeckDiscard.Add(advisor.OpponentDeckDiscard);
+            GameEvents.OnOpponentDeckToPlay.Add(advisor.OpponentDeckToPlay);
+            GameEvents.OnOpponentHandDiscard.Add(advisor.OpponentHandDiscard);
+            GameEvents.OnOpponentJoustReveal.Add(advisor.OpponentJoustReveal);
         }
 
         public void OnUnload()
