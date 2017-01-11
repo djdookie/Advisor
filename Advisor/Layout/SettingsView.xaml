@@ -16,20 +16,34 @@
         <GroupBox Header="Options">
             <StackPanel>
                 <CheckBox Content="Auto archive decks"
-                          IsChecked="{Binding Settings.AutoArchiveArchetypes}"
+                          IsChecked="{Binding Settings.Default.AutoArchiveArchetypes}"
                           HorizontalAlignment="Left" Margin="0,5,0,0"
                           VerticalAlignment="Top"
                           ToolTip="Auto archive all archetype decks imported by the plugin." />
                 <CheckBox Content="Remove class from deck name"
-                          IsChecked="{Binding Settings.RemoveClassFromName}"
+                          IsChecked="{Binding Settings.Default.RemoveClassFromName}"
                           HorizontalAlignment="Left" Margin="0,5,0,0"
                           VerticalAlignment="Top"
                           ToolTip="Remove the class from deck names imported by the plugin." />
                 <CheckBox Content="Delete previously imported decks"
-                          IsChecked="{Binding Settings.DeletePreviouslyImported}"
+                          IsChecked="{Binding Settings.Default.DeletePreviouslyImported}"
                           HorizontalAlignment="Left" Margin="0,5,0,0"
                           VerticalAlignment="Top"
                           ToolTip="Delete any previously imported archetype decks before importing again." />
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Overlay Position X:" VerticalAlignment="Center"></Label>
+                    <TextBox Text="{Binding Settings.Default.OverlayPositionX}"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Center" Width="50"
+                          ToolTip="The x position of the overlay." />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Overlay Position Y:" VerticalAlignment="Center"></Label>
+                    <TextBox Text="{Binding Settings.Default.OverlayPositionY}"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Center" Width="50"
+                          ToolTip="The x position of the overlay." />
+                </StackPanel>
             </StackPanel>
         </GroupBox>
     </StackPanel>

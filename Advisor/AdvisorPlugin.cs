@@ -9,6 +9,7 @@ using Hearthstone_Deck_Tracker.Plugins;
 using Hearthstone_Deck_Tracker.Utility.Logging;
 using Hearthstone_Deck_Tracker.Hearthstone;
 using HDT.Plugins.Advisor.Layout;
+using Advisor.Properties;
 
 namespace HDT.Plugins.Advisor
 {
@@ -74,6 +75,8 @@ namespace HDT.Plugins.Advisor
         public void OnUnload()
         {
             Core.OverlayCanvas.Children.Remove(_advisorOverlay);
+            //Settings.Default.Save();
+            
         }
 
         public void OnUpdate()

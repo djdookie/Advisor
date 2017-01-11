@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -35,6 +36,7 @@ namespace HDT.Plugins.Advisor
         {
             _notificationFlyout = CreateDialogFlyout();
             _settingsFlyout = CreateSettingsFlyout();
+            Settings.Default.PropertyChanged += new PropertyChangedEventHandler(Settings_PropertyChanged);
 
             _advisorOverlay = overlay;
             trackerRepository = new TrackerRepository();
@@ -51,6 +53,12 @@ namespace HDT.Plugins.Advisor
             {
                 _advisorOverlay.Show();
             }
+        }
+
+        private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            _advisorOverlay.UpdatePosition();
+            Settings.Default.Save();
         }
 
         //internal List<Entity> Entities => Helper.DeepClone<Dictionary<int, Entity>>(CoreAPI.Game.Entities).Values.ToList<Entity>();

@@ -58,5 +58,29 @@ namespace Advisor.Properties {
                 this["RemoveClassFromName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("230")]
+        public int OverlayPositionX {
+            get {
+                return ((int)(this["OverlayPositionX"]));
+            }
+            set {
+                this["OverlayPositionX"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int OverlayPositionY {
+            get {
+                return ((int)(this["OverlayPositionY"]));
+            }
+            set {
+                this["OverlayPositionY"] = value;
+            }
+        }
     }
 }

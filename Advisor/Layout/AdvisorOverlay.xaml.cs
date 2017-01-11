@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using Advisor.Properties;
 using Hearthstone_Deck_Tracker;
 using Hearthstone_Deck_Tracker.Hearthstone;
 using Core = Hearthstone_Deck_Tracker.API.Core;
@@ -27,8 +28,8 @@ namespace HDT.Plugins.Advisor.Layout
         {
             //Canvas.SetTop(this, Core.OverlayWindow.Height * 1 / 100);
             //Canvas.SetLeft(this, Core.OverlayWindow.Width * 12 / 100);
-            Canvas.SetLeft(this, 230);
-            Canvas.SetTop(this, 10);
+            Canvas.SetLeft(this, Settings.Default.OverlayPositionX);
+            Canvas.SetTop(this, Settings.Default.OverlayPositionY);
         }
 
         public void Show()
