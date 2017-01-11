@@ -1,46 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using HearthDb.Enums;
+using System.Windows;
+using System.Windows.Controls;
+using Advisor.Properties;
 using Hearthstone_Deck_Tracker;
-using Hearthstone_Deck_Tracker.Enums;
-using Hearthstone_Deck_Tracker.Hearthstone;
-using Hearthstone_Deck_Tracker.Hearthstone.Entities;
 using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
-using Hearthstone_Deck_Tracker.Utility.Logging;
 using HDT.Plugins.Advisor.Services;
-using System.Collections;
 using HDT.Plugins.Advisor.Layout;
+using HDT.Plugins.Advisor.Services.TempoStorm;
+using Hearthstone_Deck_Tracker.Utility.Logging;
+//using Hearthstone_Deck_Tracker.Windows;
+using MahApps.Metro.Controls;
+using Card = Hearthstone_Deck_Tracker.Hearthstone.Card;
+using Deck = Hearthstone_Deck_Tracker.Hearthstone.Deck;
+
 //using HDT.Plugins.Advisor.Models;
 
 namespace HDT.Plugins.Advisor
 {
+
     internal class Advisor
     {
         //private int mana = 0;
-        private CardList cardList = null;
+        private AdvisorOverlay _advisorOverlay = null;
         // Highest deck similarity
         //double maxSim = 0;
         TrackerRepository trackerRepository;
+        private static Flyout _settingsFlyout;
+        private static Flyout _notificationFlyout;
 
-        public Advisor(CardList list)
+        public Advisor(AdvisorOverlay overlay)
         {
-            cardList = list;
-            trackerRepository = new Services.TrackerRepository();
+            _notificationFlyout = CreateDialogFlyout();
+            _settingsFlyout = CreateSettingsFlyout();
 
-            cardList.LblArchetype.Text = "No matching archetype yet";
-            //cardList.Update(new List<Card>());
+            _advisorOverlay = overlay;
+            trackerRepository = new TrackerRepository();
+
+            _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
+            //_advisorOverlay.Update(new List<Card>());
             UpdateCardList();
 
             // Hide in menu, if necessary
             if (Config.Instance.HideInMenu && CoreAPI.Game.IsInMenu)
             {
-                cardList.Hide();
+                _advisorOverlay.Hide();
             } else
             {
-                cardList.Show();
+                _advisorOverlay.Show();
             }
         }
 
@@ -53,10 +62,10 @@ namespace HDT.Plugins.Advisor
         {
             //mana = 0;
             //maxSim = 0;
-            cardList.LblArchetype.Text = "No matching archetype yet";
-            //cardList.Update(new List<Card>());
+            _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
+            //_advisorOverlay.Update(new List<Card>());
             UpdateCardList();
-            cardList.Show();
+            _advisorOverlay.Show();
         }
 
         // Need to handle hiding the element when in the game menu
@@ -64,7 +73,7 @@ namespace HDT.Plugins.Advisor
         {
             if (Config.Instance.HideInMenu)
             {
-                cardList.Hide();
+                _advisorOverlay.Hide();
             }
         }
 
@@ -110,15 +119,14 @@ namespace HDT.Plugins.Advisor
             // If no opponent's cards were revealed yet, return empty card list
             if (!opponentCardlist.Any())
             {
-                cardList.Update(new List<Card>(), true);
+                _advisorOverlay.Update(new List<Card>(), true);
             }
             else
             {
                 //Log.Info("+++++ Advisor: " + opponentCardlist.Count);
 
                 //Update list of the opponent's played cards
-                //cardList.Update(opponentCardlist.ToList());
-
+                //_advisorOverlay.Update(opponentCardlist.ToList());
                 var opponentDeck = new Models.Deck(opponentCardlist);
 
                 // Create archetype dictionary
@@ -136,12 +144,12 @@ namespace HDT.Plugins.Advisor
                 // If any archetype deck matches more than 0% show the deck with the highest similarity
                 if (sortedDict.FirstOrDefault().Value > 0)
                 {
-                    cardList.LblArchetype.Text = String.Format("{0} ({1}%)", sortedDict.FirstOrDefault().Key.Name, Math.Round(sortedDict.FirstOrDefault().Value * 100, 2));
+                    _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}%)", sortedDict.FirstOrDefault().Key.Name, Math.Round(sortedDict.FirstOrDefault().Value * 100, 2));
                     Deck deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).FirstOrDefault(d => d.Name == sortedDict.FirstOrDefault().Key.Name);
                     if (deck != null)
                     {
                         var predictedCards = ((Deck)deck.Clone()).Cards.ToList();
-                        //cardList.Update(opponentCards);
+                        //_advisorOverlay.Update(opponentCards);
 
                         //Remove already played cards from predicted archetype deck
                         foreach (var card in opponentCardlist)
@@ -153,95 +161,98 @@ namespace HDT.Plugins.Advisor
                                 {
                                     item.Count -= card.Count;
                                 }
-                                //else
-                                //{
-                                //    opponentCards.Remove(item);
-                                //}
                             }
                         }
-                        cardList.Update(predictedCards, false);
+                        _advisorOverlay.Update(predictedCards, false);
                     }
-
-                    //Log.Info("+++++ ADVISOR: " + sortedDict.FirstOrDefault().Key.Name + " " + sortedDict.FirstOrDefault().Value);
                 }
             }
         }
 
-        //      // Update the card list on player's turn
-        //      internal void TurnStart(ActivePlayer player)
-        //{
-        //          //if (player == ActivePlayer.Player && Opponent != null)
-        //          //{
-        //          //             cardList.Show();
-        //          //	var mana = AvailableMana();
-        //          //	var klasse = KlassenConverter(CoreAPI.Game.Opponent.Class);
-        //          //	var cards = HearthDb.Cards.Collectible.Values
-        //          //		.Where(c => c.Cost == mana && c.Class == klasse)
-        //          //		.Select(c => new Card(c))
-        //          //		.OrderBy(c => c.Rarity)
-        //          //		.ToList<Card>();
-        //          //             cardList.Update(cards);
-        //          //}
+        public static void CloseOpenNoteWindows()
+        {
+            //foreach (var x in Application.Current.Windows.OfType<NoteView>())
+            //    x.Close();
+            //foreach (var x in Application.Current.Windows.OfType<BasicNoteView>())
+            //    x.Close();
+        }
 
-        //          //cardList.Show();
-        //          //var mana = AvailableMana();
-        //          //var klasse = KlassConverter(CoreAPI.Game.Opponent.Class);
-        //          //var trackerRepository = new Services.TrackerRepository();
-        //          ////var cards = trackerRepository.GetAllArchetypeDecks().FirstOrDefault().Cards.Select(x => new Models.Card((x.Id, x.Name, x.Count, x.Image.Clone())).ToList();
-        //          //var decks = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList();
-        //          //var cards = decks.FirstOrDefault().Cards.ToList();
-        //          //cardList.Update(cards);
-        //      }
+        public static void ShowSettings()
+        {
+            if (_settingsFlyout == null)
+                _settingsFlyout = CreateSettingsFlyout();
+            _settingsFlyout.IsOpen = true;
+        }
 
-  //      // Calculate the mana opponent will have on his next turn
-  //      internal int AvailableMana()
-		//{
-		//	var opp = Opponent;
-		//	if (opp != null)
-		//	{
-		//		var res = opp.GetTag(GameTag.RESOURCES);
-		//		var overload = opp.GetTag(GameTag.OVERLOAD_OWED);
-		//		// looking a turn ahead, so add one mana
-		//		mana = res + 1 - overload;
-		//	}
-		//	return mana;
-		//}
+        public static void CloseSettings()
+        {
+            if (_settingsFlyout != null)
+                _settingsFlyout.IsOpen = false;
+        }
 
-		//// Convert hero class string to enum
-		//internal CardClass KlassConverter(string klass)
-		//{
-		//	switch (klass.ToLowerInvariant())
-		//	{
-		//		case "druid":
-		//			return CardClass.DRUID;
+        public static void CloseNotification()
+        {
+            if (_notificationFlyout != null)
+                _notificationFlyout.IsOpen = false;
+        }
 
-		//		case "hunter":
-		//			return CardClass.HUNTER;
+        public static void Notify(string title, string message, int autoClose, string icon = null, Action action = null)
+        {
+            if (_notificationFlyout == null)
+                _notificationFlyout = CreateDialogFlyout();
+            var view = new DialogView(_notificationFlyout, title, message, autoClose);
+            if (!string.IsNullOrEmpty(icon))
+            {
+                view.SetUtilityButton(action, icon);
+            }
+            _notificationFlyout.Content = view;
+            _notificationFlyout.IsOpen = true;
+        }
 
-		//		case "mage":
-		//			return CardClass.MAGE;
+        public static async Task ImportMetaDecks()
+        {
+            try
+            {
+                IArchetypeImporter importer =
+                    new SnapshotImporter(new HttpClient(), new TrackerRepository());
+                var count = await importer.ImportDecks(
+                    Settings.Default.AutoArchiveArchetypes,
+                    Settings.Default.DeletePreviouslyImported,
+                    Settings.Default.RemoveClassFromName);
+                Notify("Import Complete", $"{count} decks imported", 10);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+                Notify("Import Failed", e.Message, 15, "error", null);
+            }
+        }
 
-		//		case "paladin":
-		//			return CardClass.PALADIN;
+        private static Flyout CreateSettingsFlyout()
+        {
+            var settings = new Flyout();
+            settings.Name = "AdvisorSettingsFlyout";
+            settings.Position = Position.Left;
+            Panel.SetZIndex(settings, 100);
+            settings.Header = "Advisor Settings";
+            settings.Content = new SettingsView();
+            Core.MainWindow.Flyouts.Items.Add(settings);
+            return settings;
+        }
 
-		//		case "priest":
-		//			return CardClass.PRIEST;
-
-		//		case "rogue":
-		//			return CardClass.ROGUE;
-
-		//		case "shaman":
-		//			return CardClass.SHAMAN;
-
-		//		case "warlock":
-		//			return CardClass.WARLOCK;
-
-		//		case "warrior":
-		//			return CardClass.WARRIOR;
-
-		//		default:
-		//			return CardClass.NEUTRAL;
-		//	}
-		//}
+        private static Flyout CreateDialogFlyout()
+        {
+            var dialog = new Flyout();
+            dialog.Name = "AdvisorDialogFlyout";
+            dialog.Theme = FlyoutTheme.Accent;
+            dialog.Position = Position.Bottom;
+            dialog.TitleVisibility = Visibility.Collapsed;
+            dialog.CloseButtonVisibility = Visibility.Collapsed;
+            dialog.IsPinned = false;
+            dialog.Height = 50;
+            Panel.SetZIndex(dialog, 1000);
+            Core.MainWindow.Flyouts.Items.Add(dialog);
+            return dialog;
+        }
     }
 }

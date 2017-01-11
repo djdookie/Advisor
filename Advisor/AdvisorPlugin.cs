@@ -14,7 +14,8 @@ namespace HDT.Plugins.Advisor
 {
     public class AdvisorPlugin : IPlugin
     {
-        private CardList cardList;
+        private MenuItem _menu;
+        private AdvisorOverlay _advisorOverlay;
         Advisor advisor;
        // IEnumerable<Card> revealedCards;
 
@@ -35,7 +36,12 @@ namespace HDT.Plugins.Advisor
 
         public MenuItem MenuItem
         {
-            get { return null; }
+            get
+            {
+                if (_menu == null)
+                    _menu = new AdvisorMenu();
+                return _menu;
+            }
         }
 
         public string Name
@@ -45,13 +51,14 @@ namespace HDT.Plugins.Advisor
 
         public void OnButtonPress()
         {
+            Advisor.ShowSettings();
         }
 
         public void OnLoad()
         {
-			cardList = new CardList();
-			Core.OverlayCanvas.Children.Add(cardList);
-			advisor = new Advisor(cardList);
+			_advisorOverlay = new AdvisorOverlay();
+			Core.OverlayCanvas.Children.Add(_advisorOverlay);
+			advisor = new Advisor(_advisorOverlay);
 
             GameEvents.OnInMenu.Add(advisor.InMenu);
             GameEvents.OnGameStart.Add(advisor.GameStart);
@@ -66,7 +73,7 @@ namespace HDT.Plugins.Advisor
 
         public void OnUnload()
         {
-            Core.OverlayCanvas.Children.Remove(cardList);
+            Core.OverlayCanvas.Children.Remove(_advisorOverlay);
         }
 
         public void OnUpdate()

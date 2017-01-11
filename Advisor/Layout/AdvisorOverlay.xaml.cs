@@ -7,9 +7,9 @@ using Core = Hearthstone_Deck_Tracker.API.Core;
 
 namespace HDT.Plugins.Advisor.Layout
 {
-    public partial class CardList
+    public partial class AdvisorOverlay
     {
-        public CardList()
+        public AdvisorOverlay()
         {
             InitializeComponent();
         }

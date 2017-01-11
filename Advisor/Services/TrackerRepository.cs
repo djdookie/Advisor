@@ -100,42 +100,41 @@ namespace HDT.Plugins.Advisor.Services
 
 		public void AddDeck(string name, string playerClass, string cards, bool archive, params string[] tags)
 		{
-            //var deck = Helper.ParseCardString(cards);
-            //if (deck != null)
-            //{
-            //	deck.Name = name;
-            //	if (deck.Class != playerClass)
-            //		deck.Class = playerClass;
-            //	if (tags.Any())
-            //	{
-            //		var reloadTags = false;
-            //		foreach (var t in tags)
-            //		{
-            //			if (!DeckList.Instance.AllTags.Contains(t))
-            //			{
-            //				DeckList.Instance.AllTags.Add(t);
-            //				reloadTags = true;
-            //			}
-            //			deck.Tags.Add(t);
-            //		}
-            //		if (reloadTags)
-            //		{
-            //			DeckList.Save();
-            //			Core.MainWindow.ReloadTags();
-            //		}
-            //	}
-            //	// hack time!
-            //	// use MainWindow.ArchiveDeck to update
-            //	// set deck archive to opposite of desired
-            //	deck.Archived = !archive;
-            //	// add and save
-            //	DeckList.Instance.Decks.Add(deck);
-            //	DeckList.Save();
-            //	// now reverse 'archive' of the deck
-            //	// this should refresh all ui elements
-            //	Core.MainWindow.ArchiveDeck(deck, archive);
-            //}
-            throw new System.NotImplementedException();
+            var deck = Helper.ParseCardString(cards);
+            if (deck != null)
+            {
+                deck.Name = name;
+                if (deck.Class != playerClass)
+                    deck.Class = playerClass;
+                if (tags.Any())
+                {
+                    var reloadTags = false;
+                    foreach (var t in tags)
+                    {
+                        if (!DeckList.Instance.AllTags.Contains(t))
+                        {
+                            DeckList.Instance.AllTags.Add(t);
+                            reloadTags = true;
+                        }
+                        deck.Tags.Add(t);
+                    }
+                    if (reloadTags)
+                    {
+                        DeckList.Save();
+                        Core.MainWindow.ReloadTags();
+                    }
+                }
+                // hack time!
+                // use MainWindow.ArchiveDeck to update
+                // set deck archive to opposite of desired
+                deck.Archived = !archive;
+                // add and save
+                DeckList.Instance.Decks.Add(deck);
+                DeckList.Save();
+                // now reverse 'archive' of the deck
+                // this should refresh all ui elements
+                Core.MainWindow.ArchiveDeck(deck, archive);
+            }
 		}
 
 		public void DeleteAllDecksWithTag(string tag)
