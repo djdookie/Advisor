@@ -32,7 +32,7 @@ namespace HDT.Plugins.Advisor
 
             cardList.LblArchetype.Text = "No matching archetype yet";
             //cardList.Update(new List<Card>());
-            updateCardList();
+            UpdateCardList();
 
             // Hide in menu, if necessary
             if (Config.Instance.HideInMenu && CoreAPI.Game.IsInMenu)
@@ -55,7 +55,7 @@ namespace HDT.Plugins.Advisor
             //maxSim = 0;
             cardList.LblArchetype.Text = "No matching archetype yet";
             //cardList.Update(new List<Card>());
-            updateCardList();
+            UpdateCardList();
             cardList.Show();
         }
 
@@ -70,48 +70,47 @@ namespace HDT.Plugins.Advisor
 
         internal void OpponentHandDiscard(Card card)
         {
-            updateCardList();
+            UpdateCardList();
         }
 
         internal void OpponentJoustReveal(Card card)
         {
-            updateCardList();
+            UpdateCardList();
         }
 
         internal void OpponentDeckToPlay(Card card)
         {
-            updateCardList();
+            UpdateCardList();
         }
 
         internal void OpponentDeckDiscard(Card card)
         {
-            updateCardList();
+            UpdateCardList();
         }
 
         internal void OpponentPlay(Card card)
         {
-            updateCardList();
+            UpdateCardList();
         }
 
         internal void OpponentSecretTiggered(Card card)
         {
-            updateCardList();
+            UpdateCardList();
         }
 
-        internal async void updateCardList()
+        internal async void UpdateCardList()
         {
             // Small delay to guarantee opponents cards list is up to date
             await Task.Delay(100);
 
             // Get opponent's cards list (all yet revealed cards)
             //var opponentCardlist = Core.Game.Opponent.RevealedCards;
-            var opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated);
+            List<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList();
 
             // If no opponent's cards were revealed yet, return empty card list
-            if (opponentCardlist.Count() <= 0)
+            if (!opponentCardlist.Any())
             {
                 cardList.Update(new List<Card>());
-                return;
             }
             else
             {
@@ -138,27 +137,30 @@ namespace HDT.Plugins.Advisor
                 if (sortedDict.FirstOrDefault().Value > 0)
                 {
                     cardList.LblArchetype.Text = String.Format("{0} ({1}%)", sortedDict.FirstOrDefault().Key.Name, Math.Round(sortedDict.FirstOrDefault().Value * 100, 2));
-                    var opponentCards = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).Where(d => d.Name == sortedDict.FirstOrDefault().Key.Name).FirstOrDefault().Cards.ToList();
+                    Deck deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).FirstOrDefault(d => d.Name == sortedDict.FirstOrDefault().Key.Name);
+                    if (deck != null)
+                    {
+                        var predictedCards = ((Deck)deck.Clone()).Cards.ToList();
+                        //cardList.Update(opponentCards);
 
-                    cardList.Update(opponentCards);
-                    
-                    // Remove already played cards from archetype deck
-                    //foreach (var card in opponentCardlist)
-                    //{
-                    //    if (opponentCards.Contains(card))
-                    //    {
-                    //        var item = opponentCards.Find(x => x.Id == card.Id);
-                    //        if (item.Count > 1)
-                    //        {
-                    //            item.Count -= 1;
-                    //        }
-                    //        else
-                    //        {
-                    //            opponentCards.Remove(item);
-                    //        }
-                    //    }
-                    //}
-                    //cardList.Update(opponentCards);
+                        //Remove already played cards from predicted archetype deck
+                        foreach (var card in opponentCardlist)
+                        {
+                            if (predictedCards.Contains(card))
+                            {
+                                var item = predictedCards.Find(x => x.Id == card.Id);
+                                if (item.Count >= card.Count)
+                                {
+                                    item.Count -= card.Count;
+                                }
+                                //else
+                                //{
+                                //    opponentCards.Remove(item);
+                                //}
+                            }
+                        }
+                        cardList.Update(predictedCards);
+                    }
 
                     //Log.Info("+++++ ADVISOR: " + sortedDict.FirstOrDefault().Key.Name + " " + sortedDict.FirstOrDefault().Value);
                 }
