@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using Hearthstone_Deck_Tracker.API;
+using Hearthstone_Deck_Tracker;
 using Hearthstone_Deck_Tracker.Hearthstone;
+using Core = Hearthstone_Deck_Tracker.API.Core;
 
 namespace HDT.Plugins.Advisor.Layout
 {
@@ -13,18 +14,21 @@ namespace HDT.Plugins.Advisor.Layout
             InitializeComponent();
         }
 
-        public void Update(List<Card> cards)
+        public void Update(List<Card> cards, bool reset)
         {
             // hide if card list is empty
             //this.Visibility = cards.Count <= 0 ? Visibility.Hidden : Visibility.Visible;
-            this.icCardlist.ItemsSource = cards;
+            //this.acList.ItemsSource = cards;
+            this.acList.Update(cards, reset);
             UpdatePosition();
         }
 
         public void UpdatePosition()
         {
-            Canvas.SetTop(this, Core.OverlayWindow.Height * 1 / 100);
-            Canvas.SetLeft(this, Core.OverlayWindow.Width * 12 / 100);
+            //Canvas.SetTop(this, Core.OverlayWindow.Height * 1 / 100);
+            //Canvas.SetLeft(this, Core.OverlayWindow.Width * 12 / 100);
+            Canvas.SetLeft(this, 230);
+            Canvas.SetTop(this, 10);
         }
 
         public void Show()
@@ -36,5 +40,7 @@ namespace HDT.Plugins.Advisor.Layout
         {
             this.Visibility = Visibility.Hidden;
         }
+
+        public bool ShowToolTip => Config.Instance.WindowCardToolTips;
     }
 }

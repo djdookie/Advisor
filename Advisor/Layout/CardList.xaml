@@ -1,22 +1,46 @@
 ﻿<StackPanel x:Class="HDT.Plugins.Advisor.Layout.CardList"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:hearthstoneDeckTracker="clr-namespace:Hearthstone_Deck_Tracker;assembly=HearthstoneDeckTracker"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+            xmlns:controls="clr-namespace:Hearthstone_Deck_Tracker.Controls;assembly=HearthstoneDeckTracker"
+            mc:Ignorable="d"
+            d:DesignHeight="300" d:DesignWidth="300">
     <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblArchetype" FontSize="15" Width="200" TextAlignment="Center" Text="Renolock (10%)"/>
-    <ItemsControl x:Name="icCardlist">
+    <Viewbox Name="ViewBoxPlayer" StretchDirection="DownOnly" Stretch="Fill">
+        <controls:AnimatedCardList x:Name="acList" Background="Transparent" BorderThickness="0"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="221"
+                                ScrollViewer.VerticalScrollBarVisibility="Disabled" IsEnabled="False"
+                                ScrollViewer.CanContentScroll="False">
+            <controls:AnimatedCardList.ItemContainerStyle>
+                <Style TargetType="controls:AnimatedCard">
+                    <!--<Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
+                    <Setter Property="ToolTipService.ShowDuration" Value="60000" />
+                    <Setter Property="ToolTipService.IsEnabled" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:CardList}}, Path=ShowToolTip}" />
+                    <Setter Property="ToolTip">
+                        <Setter.Value>
+                            <ToolTip Background="Transparent" BorderBrush="Transparent">
+                                <hearthstoneDeckTracker:CardToolTip/>
+                            </ToolTip>
+                        </Setter.Value>
+                    </Setter>-->
+                    <Setter Property="Margin" Value="0,1,0,0"/>
+                </Style>
+            </controls:AnimatedCardList.ItemContainerStyle>
+        </controls:AnimatedCardList>
+    </Viewbox>
+
+    <!--<ItemsControl x:Name="icCardlist">
         <ItemsControl.ItemContainerStyle>
-        <Style>
-            <Setter Property="FrameworkElement.Margin" Value="0,1,0,0" />
-        </Style>
-    </ItemsControl.ItemContainerStyle>
-    <ItemsControl.ItemTemplate>
-        <DataTemplate>
-            <Rectangle Fill="{Binding Background}" Height="34" Width="217" />
-        </DataTemplate>
-    </ItemsControl.ItemTemplate>
-</ItemsControl>
+            <Style>
+                <Setter Property="FrameworkElement.Margin" Value="0,1,0,0" />
+            </Style>
+        </ItemsControl.ItemContainerStyle>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Rectangle Fill="{Binding Background}" Height="34" Width="217" />
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>-->
 </StackPanel>

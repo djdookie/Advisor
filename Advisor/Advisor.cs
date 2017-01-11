@@ -110,7 +110,7 @@ namespace HDT.Plugins.Advisor
             // If no opponent's cards were revealed yet, return empty card list
             if (!opponentCardlist.Any())
             {
-                cardList.Update(new List<Card>());
+                cardList.Update(new List<Card>(), true);
             }
             else
             {
@@ -159,7 +159,7 @@ namespace HDT.Plugins.Advisor
                                 //}
                             }
                         }
-                        cardList.Update(predictedCards);
+                        cardList.Update(predictedCards, false);
                     }
 
                     //Log.Info("+++++ ADVISOR: " + sortedDict.FirstOrDefault().Key.Name + " " + sortedDict.FirstOrDefault().Value);
