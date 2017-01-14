@@ -70,13 +70,13 @@ namespace HDT.Plugins.Advisor
             GameEvents.OnOpponentDeckToPlay.Add(advisor.OpponentDeckToPlay);
             GameEvents.OnOpponentHandDiscard.Add(advisor.OpponentHandDiscard);
             GameEvents.OnOpponentJoustReveal.Add(advisor.OpponentJoustReveal);
+            // TODO: How to prevent from multiple GameEvent registrations we disabling and reenabling plugins? See: https://github.com/HearthSim/Hearthstone-Deck-Tracker/issues/3079
         }
 
         public void OnUnload()
         {
             Core.OverlayCanvas.Children.Remove(_advisorOverlay);
             //Settings.Default.Save();
-            
         }
 
         public void OnUpdate()

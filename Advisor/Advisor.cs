@@ -34,6 +34,7 @@ namespace HDT.Plugins.Advisor
         private static Flyout _notificationFlyout;
         //IEnumerable<ArchetypeDeck> archetypeDecks;
         //private IList<Deck> _archetypeDecks;
+        private Guid currentArchetypeDeckGuid;
 
         public Advisor(AdvisorOverlay overlay)
         {
@@ -148,6 +149,7 @@ namespace HDT.Plugins.Advisor
             // If no opponent's cards were revealed yet, return empty card list
             if (!opponentCardlist.Any())
             {
+                currentArchetypeDeckGuid = Guid.Empty;
                 _advisorOverlay.Update(new List<Card>(), true);
             }
             else
@@ -165,7 +167,8 @@ namespace HDT.Plugins.Advisor
                 // Calculate matching similarities to yet known opponent cards
                 //foreach (var archetypeDeck in trackerRepository.GetAllArchetypeDecks().Where(d => d.Klass == Models.KlassKonverter.FromString(CoreAPI.Game.Opponent.Class)))
                 //LoadArchetypeDecks();
-                foreach (var archetypeDeck in ArchetypeDecks)
+                //foreach (var archetypeDeck in ArchetypeDecks)
+                foreach (var archetypeDeck in ArchetypeDecks.Where(d => d.Class == CoreAPI.Game.Opponent.Class))
                 {
                     //dict.Add(archetypeDeck, opponentDeck.Similarity(archetypeDeck));
                     dict.Add(archetypeDeck, archetypeDeck.Similarity(opponentCardlist));
@@ -196,7 +199,12 @@ namespace HDT.Plugins.Advisor
                                 }
                             }
                         }
-                        _advisorOverlay.Update(predictedCards, false);
+                        //var sortedPredictedCards = predictedCards.OrderBy(x => x.Cost).ThenBy(y => y.Name).ToList();
+                        bool isNewArchetypeDeck = currentArchetypeDeckGuid != sortedDict.FirstOrDefault().Key.DeckId;
+                        // Update overlay cards
+                        _advisorOverlay.Update(predictedCards, isNewArchetypeDeck);
+                        // Remember current archetype deck guid with highest similarity to opponent's played cards
+                        currentArchetypeDeckGuid = sortedDict.FirstOrDefault().Key.DeckId;
                     }
                 }
             }
