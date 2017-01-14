@@ -10,6 +10,7 @@ using Hearthstone_Deck_Tracker;
 using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
 using HDT.Plugins.Advisor.Services;
 using HDT.Plugins.Advisor.Layout;
+using HDT.Plugins.Advisor.Models;
 using HDT.Plugins.Advisor.Services.TempoStorm;
 using Hearthstone_Deck_Tracker.Utility.Logging;
 //using Hearthstone_Deck_Tracker.Windows;
@@ -28,9 +29,11 @@ namespace HDT.Plugins.Advisor
         private AdvisorOverlay _advisorOverlay = null;
         // Highest deck similarity
         //double maxSim = 0;
-        TrackerRepository trackerRepository;
+        //TrackerRepository trackerRepository;
         private static Flyout _settingsFlyout;
         private static Flyout _notificationFlyout;
+        //IEnumerable<ArchetypeDeck> archetypeDecks;
+        //private IList<Deck> _archetypeDecks;
 
         public Advisor(AdvisorOverlay overlay)
         {
@@ -39,7 +42,8 @@ namespace HDT.Plugins.Advisor
             Settings.Default.PropertyChanged += new PropertyChangedEventHandler(Settings_PropertyChanged);
 
             _advisorOverlay = overlay;
-            trackerRepository = new TrackerRepository();
+            //trackerRepository = new TrackerRepository();
+            //LoadArchetypeDecks();
 
             _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
             //_advisorOverlay.Update(new List<Card>());
@@ -55,6 +59,26 @@ namespace HDT.Plugins.Advisor
             }
         }
 
+        ///// <summary>
+        ///// Load all archetype decks from tracker repository
+        ///// </summary>
+        //private void GetArchetypeDecks()
+        //{
+        //    //archetypeDecks = trackerRepository.GetAllArchetypeDecks().Where(d => d.Klass == Models.KlassKonverter.FromString(CoreAPI.Game.Opponent.Class));
+        //    _archetypeDecks = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList();
+
+        //    // TODO: Update archetypeDecks when new import is done!
+        //    // TODO: Select newest version of any all decks like before?
+        //}
+
+        /// <summary>
+        /// All archetype decks from tracker repository
+        /// </summary>
+        private IList<Deck> ArchetypeDecks
+        {
+            get { return DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList(); }
+        }
+
         private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             _advisorOverlay.UpdatePosition();
@@ -68,10 +92,7 @@ namespace HDT.Plugins.Advisor
         // Reset on when a new game starts
         internal void GameStart()
         {
-            //mana = 0;
-            //maxSim = 0;
             _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
-            //_advisorOverlay.Update(new List<Card>());
             UpdateCardList();
             _advisorOverlay.Show();
         }
@@ -122,7 +143,7 @@ namespace HDT.Plugins.Advisor
 
             // Get opponent's cards list (all yet revealed cards)
             //var opponentCardlist = Core.Game.Opponent.RevealedCards;
-            List<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList();
+            IList<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList();
 
             // If no opponent's cards were revealed yet, return empty card list
             if (!opponentCardlist.Any())
@@ -135,15 +156,19 @@ namespace HDT.Plugins.Advisor
 
                 //Update list of the opponent's played cards
                 //_advisorOverlay.Update(opponentCardlist.ToList());
-                var opponentDeck = new Models.Deck(opponentCardlist);
+                //var opponentDeck = new Models.Deck(opponentCardlist);
 
                 // Create archetype dictionary
-                IDictionary<Models.ArchetypeDeck, float> dict = new Dictionary<Models.ArchetypeDeck, float>();
+                //IDictionary<Models.ArchetypeDeck, float> dict = new Dictionary<Models.ArchetypeDeck, float>();
+                IDictionary<Deck, float> dict = new Dictionary<Deck, float>();
 
                 // Calculate matching similarities to yet known opponent cards
-                foreach (var archetypeDeck in trackerRepository.GetAllArchetypeDecks().Where(d => d.Klass == Models.KlassKonverter.FromString(CoreAPI.Game.Opponent.Class)))
+                //foreach (var archetypeDeck in trackerRepository.GetAllArchetypeDecks().Where(d => d.Klass == Models.KlassKonverter.FromString(CoreAPI.Game.Opponent.Class)))
+                //LoadArchetypeDecks();
+                foreach (var archetypeDeck in ArchetypeDecks)
                 {
-                    dict.Add(archetypeDeck, opponentDeck.Similarity(archetypeDeck));
+                    //dict.Add(archetypeDeck, opponentDeck.Similarity(archetypeDeck));
+                    dict.Add(archetypeDeck, archetypeDeck.Similarity(opponentCardlist));
                 }
 
                 // Sort dictionary by value
