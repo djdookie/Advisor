@@ -221,8 +221,8 @@ namespace HDT.Plugins.Advisor
         {
             try
             {
-                IArchetypeImporter importer =
-                    new SnapshotImporter(new HttpClient(), new TrackerRepository());
+                //IArchetypeImporter importer = new SnapshotImporter(new HttpClient(), new TrackerRepository());
+                IArchetypeImporter importer = new Services.MetaStats.SnapshotImporter(new TrackerRepository());
                 var count = await importer.ImportDecks(
                     Settings.Default.AutoArchiveArchetypes,
                     Settings.Default.DeletePreviouslyImported,

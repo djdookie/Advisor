@@ -52,6 +52,10 @@
       <HintPath>C:\Users\Patrick\AppData\Local\HearthstoneDeckTracker\app-1.1.5.1\HearthstoneDeckTracker.exe</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9.5\lib\Net45\HtmlAgilityPack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MahApps.Metro">
       <HintPath>C:\Users\Patrick\AppData\Local\HearthstoneDeckTracker\app-1.1.5.1\MahApps.Metro.dll</HintPath>
       <Private>False</Private>
@@ -115,6 +119,7 @@
     <Compile Include="Services\IHttpClient.cs" />
     <Compile Include="Services\ILoggingService.cs" />
     <Compile Include="Services\ITrackerRepository.cs" />
+    <Compile Include="Services\MetaStats\SnapshotImporter.cs" />
     <Compile Include="Services\TempoStorm\DeckSnapshot.cs" />
     <Compile Include="Services\TempoStorm\Error.cs" />
     <Compile Include="Services\TempoStorm\Include.cs" />

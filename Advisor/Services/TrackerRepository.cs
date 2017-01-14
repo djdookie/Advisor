@@ -137,7 +137,40 @@ namespace HDT.Plugins.Advisor.Services
             }
 		}
 
-		public void DeleteAllDecksWithTag(string tag)
+        public void AddDeck(string name, Hearthstone_Deck_Tracker.Hearthstone.Deck deck, bool archive, params string[] tags)
+        {
+            deck.Name = name;
+            if (tags.Any())
+            {
+                var reloadTags = false;
+                foreach (var t in tags)
+                {
+                    if (!DeckList.Instance.AllTags.Contains(t))
+                    {
+                        DeckList.Instance.AllTags.Add(t);
+                        reloadTags = true;
+                    }
+                    deck.Tags.Add(t);
+                }
+                if (reloadTags)
+                {
+                    DeckList.Save();
+                    Core.MainWindow.ReloadTags();
+                }
+            }
+            // hack time!
+            // use MainWindow.ArchiveDeck to update
+            // set deck archive to opposite of desired
+            deck.Archived = !archive;
+            // add and save
+            DeckList.Instance.Decks.Add(deck);
+            DeckList.Save();
+            // now reverse 'archive' of the deck
+            // this should refresh all ui elements
+            Core.MainWindow.ArchiveDeck(deck, archive);
+        }
+
+        public void DeleteAllDecksWithTag(string tag)
 		{
 			if (string.IsNullOrWhiteSpace(tag))
 				return;
