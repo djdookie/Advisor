@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using HDT.Plugins.Advisor.Models;
 using Hearthstone_Deck_Tracker;
+using Hearthstone_Deck_Tracker.Controls.DeckPicker;
 using Hearthstone_Deck_Tracker.Hearthstone;
 using Hearthstone_Deck_Tracker.Utility.Logging;
 using Hearthstone_Deck_Tracker.Windows;
@@ -48,7 +49,7 @@ namespace HDT.Plugins.Advisor.Services
 				var game = Core.Game.CurrentGameStats;
 				if (game != null && game.CanGetOpponentDeck)
 				{
-					Log.Info("opponent deck available");
+					Log.Info("Opponent deck available");
 					// hero class
 					deck.Klass = KlassKonverter.FromString(game.OpponentHero);
 					// standard viable, use temp HDT deck
@@ -125,18 +126,25 @@ namespace HDT.Plugins.Advisor.Services
                         Core.MainWindow.ReloadTags();
                     }
                 }
-                // hack time!
-                // use MainWindow.ArchiveDeck to update
-                // set deck archive to opposite of desired
-                deck.Archived = !archive;
-                // add and save
+                //// hack time!
+                //// use MainWindow.ArchiveDeck to update
+                //// set deck archive to opposite of desired
+                //deck.Archived = !archive;
+                //// add and save
+                //DeckList.Instance.Decks.Add(deck);
+                //DeckList.Save();
+                //// now reverse 'archive' of the deck
+                //// this should refresh all ui elements
+                //Core.MainWindow.ArchiveDeck(deck, archive);
+
+                // Add and save deck
+                deck.Archived = archive;
                 DeckList.Instance.Decks.Add(deck);
                 DeckList.Save();
-                // now reverse 'archive' of the deck
-                // this should refresh all ui elements
-                Core.MainWindow.ArchiveDeck(deck, archive);
+                // Refresh decklist
+                //Core.MainWindow.LoadAndUpdateDecks();
             }
-		}
+        }
 
         public void AddDeck(string name, Hearthstone_Deck_Tracker.Hearthstone.Deck deck, bool archive, params string[] tags)
         {
@@ -159,16 +167,23 @@ namespace HDT.Plugins.Advisor.Services
                     Core.MainWindow.ReloadTags();
                 }
             }
-            // hack time!
-            // use MainWindow.ArchiveDeck to update
-            // set deck archive to opposite of desired
-            deck.Archived = !archive;
-            // add and save
+            //// hack time!
+            //// use MainWindow.ArchiveDeck to update
+            //// set deck archive to opposite of desired
+            //deck.Archived = !archive;
+            //// add and save
+            //DeckList.Instance.Decks.Add(deck);
+            //DeckList.Save();
+            //// now reverse 'archive' of the deck
+            //// this should refresh all ui elements
+            //Core.MainWindow.ArchiveDeck(deck, archive);
+
+            // Add and save deck
+            deck.Archived = archive;
             DeckList.Instance.Decks.Add(deck);
             DeckList.Save();
-            // now reverse 'archive' of the deck
-            // this should refresh all ui elements
-            Core.MainWindow.ArchiveDeck(deck, archive);
+            // Refresh decklist
+            //Core.MainWindow.LoadAndUpdateDecks();
         }
 
         public int DeleteAllDecksWithTag(string tag)
@@ -181,8 +196,10 @@ namespace HDT.Plugins.Advisor.Services
 				DeckList.Instance.Decks.Remove(d);
 			if (decks.Any())
 				DeckList.Save();
-            // TODO: Refresh Decklist somehow
-            return decks.Count;
+            // Refresh decklist
+            //Core.MainWindow.LoadAndUpdateDecks();
+		    var deletedDecks = decks.Count - DeckList.Instance.Decks.Where(d => d.Tags.Contains(tag)).ToList().Count;
+            return deletedDecks;
 		}
 
 		public string GetGameMode()

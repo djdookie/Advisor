@@ -257,6 +257,8 @@ namespace HDT.Plugins.Advisor
                     Settings.Default.AutoArchiveArchetypes,
                     Settings.Default.DeletePreviouslyImported,
                     Settings.Default.RemoveClassFromName);
+                // Refresh decklist
+                Core.MainWindow.LoadAndUpdateDecks();
                 Notify("Import complete", $"{count} decks imported", 10);
             }
             catch (Exception e)
@@ -275,6 +277,8 @@ namespace HDT.Plugins.Advisor
                     Settings.Default.AutoArchiveArchetypes,
                     Settings.Default.DeletePreviouslyImported,
                     Settings.Default.RemoveClassFromName);
+                // Refresh decklist
+                Core.MainWindow.LoadAndUpdateDecks();
                 Notify("Import complete", $"{count} decks imported", 10);
             }
             catch (Exception e)
@@ -290,6 +294,8 @@ namespace HDT.Plugins.Advisor
             {
                 var importer = new Services.MetaStats.SnapshotImporter(new TrackerRepository());
                 var count = importer.DeleteDecks();
+                // Refresh decklist
+                Core.MainWindow.LoadAndUpdateDecks();
                 Notify("Deletion complete", $"{count} decks deleted", 10);
             }
             catch (Exception e)

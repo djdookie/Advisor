@@ -127,7 +127,7 @@ namespace HDT.Plugins.Advisor.Services.TempoStorm
 				_tracker.AddDeck(deckName, dt.Deck.PlayerClass, cards, archive, ArchetypeTag, PluginTag);
 				deckCount++;
 			}
-			return deckCount;
+            return deckCount;
 		}
 	}
 }
