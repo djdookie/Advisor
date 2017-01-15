@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 using Advisor.Properties;
 using Hearthstone_Deck_Tracker;
 using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
@@ -65,8 +66,6 @@ namespace HDT.Plugins.Advisor
         //{
         //    //archetypeDecks = trackerRepository.GetAllArchetypeDecks().Where(d => d.Klass == Models.KlassKonverter.FromString(CoreAPI.Game.Opponent.Class));
         //    _archetypeDecks = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList();
-
-        //    // TODO: Update archetypeDecks when new import is done!
         //    // TODO: Select newest version of any all decks like before?
         //}
 
@@ -250,22 +249,36 @@ namespace HDT.Plugins.Advisor
 
         public static async Task ImportMetastatsDecks()
         {
+            //construct Progress<T>, passing ReportProgress as the Action<T> 
+            var progressIndicator = new Progress<Tuple<int, int>>(ReportProgress);
             try
             {
-                IArchetypeImporter importer = new Services.MetaStats.SnapshotImporter(new TrackerRepository());
+                var importer = new Services.MetaStats.SnapshotImporter(new TrackerRepository()); // TODO: Get back to the IArchetypeImporter interface?
                 var count = await importer.ImportDecks(
                     Settings.Default.AutoArchiveArchetypes,
                     Settings.Default.DeletePreviouslyImported,
-                    Settings.Default.RemoveClassFromName);
+                    Settings.Default.RemoveClassFromName,
+                    progressIndicator);
                 // Refresh decklist
                 Core.MainWindow.LoadAndUpdateDecks();
                 Notify("Import complete", $"{count} decks imported", 10);
+
             }
             catch (Exception e)
             {
                 Log.Error(e);
                 Notify("Import Failed", e.Message, 15, "error", null);
             }
+        }
+
+        /// <summary>
+        /// Reports the progress to the UI.
+        /// </summary>
+        /// <param name="value"></param>
+        private static void ReportProgress(Tuple<int, int> value)
+        {
+            int percentage = (int)((double)value.Item1 / value.Item2 * 100); 
+            Notify("Import in progress", $"{value.Item1} of {value.Item2} decks ({percentage} %) imported", 0);
         }
 
         public static async Task ImportTempostormDecks()

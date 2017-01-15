@@ -9,7 +9,7 @@ using HtmlAgilityPack;
 
 namespace HDT.Plugins.Advisor.Services.MetaStats
 {
-	public class SnapshotImporter : IArchetypeImporter
+	public class SnapshotImporter
 	{
         private const string BaseUrl = "http://metastats.net";
 	    private const string BaseSnapshotUrl = "http://metastats.net/decks/";
@@ -29,7 +29,6 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
 			_logger = new TrackerLogger();
             _decksFound = 0;
             _decksImported = 0;
-
 		}
 
         /// <summary>
@@ -38,8 +37,9 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
         /// <param name="archive">Option to auto-archive imported decks</param>
         /// <param name="deletePrevious">Option to delete all previously imported decks</param>
         /// <param name="removeClass">Option to remove classname from deck title</param>
-        /// <returns></returns>
-		public async Task<int> ImportDecks(bool archive, bool deletePrevious, bool removeClass)
+        /// <param name="progress">Tuple of two integers holding the progress information for the UI</param>
+        /// <returns>The number of imported decks</returns>
+		public async Task<int> ImportDecks(bool archive, bool deletePrevious, bool removeClass, IProgress<Tuple<int, int>> progress)
 		{
 			_logger.Info("Starting archetype deck import");
 			int deckCount = 0;
@@ -65,12 +65,13 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
                 // Get the value of the HREF attribute
                 string hrefValue = link.GetAttributeValue("href", string.Empty);
                 // Create tasks to parallel process all classites and speed up the deck collection
-                var task = Task.Run(() => GetClassDecks(BaseUrl + hrefValue));
+                var task = Task.Run(() => GetClassDecks(BaseUrl + hrefValue, progress));
                 tasks.Add(task);
             }
 
             // Wait for all threads to finish, then combine results
             await Task.WhenAll(tasks);
+            
             foreach (var t in tasks)
             {
                 decks.AddRange(t.Result);
@@ -81,28 +82,30 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
             // Add all decks to the tracker
 		    foreach (var deck in decks)
 		    {
-                _logger.Info($"Importing deck ({deck.Name})");
+                _logger.Info($"Importing deck ({deck.Name})"); // TODO: Remove because of low performance?
 
                 // Optionally remove player class from deck name
                 // E.g. 'Control Warrior' => 'Control'
                 var deckName = deck.Name;
                 if (removeClass)
-                    deckName = deckName.Replace(deck.Class, "").Trim();
+                    deckName = deckName.Replace(deck.Class, "").Trim(); // TODO: Remove double spaces after removal of classnames
 
                 _tracker.AddDeck(deckName, deck, archive, ArchetypeTag, PluginTag);
                 deckCount++;
             }
 
-			return deckCount;
+            _logger.Info($"Import of {deckCount} archetype decks completed");
+
+            return deckCount;
 		}
 
-	    /// <summary>
+        /// <summary>
         /// Gets all decks for a given class URL.
         /// </summary>
         /// <param name="url">The URL of the class</param>
-        /// <param name="decks">The list of decks to be filled</param>
-        /// <returns></returns>
-        private async Task<IList<Deck>> GetClassDecks(string url)
+        /// <param name="progress">Tuple of two integers holding the progress information for the UI</param>
+        /// <returns>The list of all parsed decks</returns>
+        private async Task<IList<Deck>> GetClassDecks(string url, IProgress<Tuple<int, int>> progress)
         {
             HtmlWeb hw = new HtmlWeb();
             HtmlDocument doc = new HtmlDocument();
@@ -114,12 +117,15 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
             // Count found decks thread-safe
             Interlocked.Add(ref _decksFound, deckSites.Count);
 
+            // Report progress for UI
+            progress.Report(new Tuple<int, int>(_decksImported, _decksFound));
+
             var decks = new List<Deck>();
 
             foreach (HtmlNode link in deckSites)
             {
                 string hrefValue = link.GetAttributeValue("href", string.Empty);
-                var result = await Task.Run(() => GetDeck(BaseUrl + hrefValue));
+                var result = await Task.Run(() => GetDeck(BaseUrl + hrefValue, progress));
                 decks.Add(result);
             }
 
@@ -130,13 +136,17 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
         /// Gets a deck from the meta description of a website.
         /// </summary>
         /// <param name="url">The URL to the website</param>
-        /// <returns></returns>
-        private async Task<Deck> GetDeck(string url)
+        /// <param name="progress">Tuple of two integers holding the progress information for the UI</param>
+        /// <returns>The parsed deck</returns>
+        private async Task<Deck> GetDeck(string url, IProgress<Tuple<int, int>> progress)
         {
             var result = await MetaTagImporter.TryFindDeck(url);
 
             // Count imported decks thread-safe
             Interlocked.Increment(ref _decksImported);
+
+            // Report progress for UI
+            progress.Report(new Tuple<int, int>(_decksImported, _decksFound));
 
             return result;
         }
