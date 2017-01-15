@@ -10,8 +10,6 @@ using Hearthstone_Deck_Tracker;
 using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
 using HDT.Plugins.Advisor.Services;
 using HDT.Plugins.Advisor.Layout;
-using HDT.Plugins.Advisor.Models;
-using HDT.Plugins.Advisor.Services.TempoStorm;
 using Hearthstone_Deck_Tracker.Utility.Logging;
 //using Hearthstone_Deck_Tracker.Windows;
 using MahApps.Metro.Controls;
@@ -250,22 +248,54 @@ namespace HDT.Plugins.Advisor
             _notificationFlyout.IsOpen = true;
         }
 
-        public static async Task ImportMetaDecks()
+        public static async Task ImportMetastatsDecks()
         {
             try
             {
-                //IArchetypeImporter importer = new SnapshotImporter(new HttpClient(), new TrackerRepository());
                 IArchetypeImporter importer = new Services.MetaStats.SnapshotImporter(new TrackerRepository());
                 var count = await importer.ImportDecks(
                     Settings.Default.AutoArchiveArchetypes,
                     Settings.Default.DeletePreviouslyImported,
                     Settings.Default.RemoveClassFromName);
-                Notify("Import Complete", $"{count} decks imported", 10);
+                Notify("Import complete", $"{count} decks imported", 10);
             }
             catch (Exception e)
             {
                 Log.Error(e);
                 Notify("Import Failed", e.Message, 15, "error", null);
+            }
+        }
+
+        public static async Task ImportTempostormDecks()
+        {
+            try
+            {
+                IArchetypeImporter importer = new Services.TempoStorm.SnapshotImporter(new HttpClient(), new TrackerRepository());
+                var count = await importer.ImportDecks(
+                    Settings.Default.AutoArchiveArchetypes,
+                    Settings.Default.DeletePreviouslyImported,
+                    Settings.Default.RemoveClassFromName);
+                Notify("Import complete", $"{count} decks imported", 10);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+                Notify("Import failed", e.Message, 15, "error", null);
+            }
+        }
+
+        public static void DeleteArchetypeDecks()
+        {
+            try
+            {
+                var importer = new Services.MetaStats.SnapshotImporter(new TrackerRepository());
+                var count = importer.DeleteDecks();
+                Notify("Deletion complete", $"{count} decks deleted", 10);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+                Notify("Deletion failed", e.Message, 15, "error", null);
             }
         }
 

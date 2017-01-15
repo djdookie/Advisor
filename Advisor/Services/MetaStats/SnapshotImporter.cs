@@ -41,14 +41,13 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
         /// <returns></returns>
 		public async Task<int> ImportDecks(bool archive, bool deletePrevious, bool removeClass)
 		{
-			_logger.Info("Starting meta deck import");
+			_logger.Info("Starting archetype deck import");
 			int deckCount = 0;
 
 			// Delete previous snapshot decks
 			if (deletePrevious)
 			{
-				_logger.Info("Deleting previous meta decks");
-				_tracker.DeleteAllDecksWithTag(PluginTag);
+			    DeleteDecks();
 			}
 
             HtmlWeb hw = new HtmlWeb();
@@ -97,7 +96,7 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
 			return deckCount;
 		}
 
-        /// <summary>
+	    /// <summary>
         /// Gets all decks for a given class URL.
         /// </summary>
         /// <param name="url">The URL of the class</param>
@@ -140,6 +139,15 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
             Interlocked.Increment(ref _decksImported);
 
             return result;
+        }
+
+        /// <summary>
+        /// Deletes all decks with Plugin tag.
+        /// </summary>
+        public int DeleteDecks()
+        {
+            _logger.Info("Deleting all archetype decks");
+            return _tracker.DeleteAllDecksWithTag(PluginTag);
         }
     }
 }

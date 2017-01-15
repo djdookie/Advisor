@@ -9,5 +9,7 @@
             d:DesignHeight="300" d:DesignWidth="300">
     <!-- SubMenus -->
     <MenuItem Header="SETTINGS" Click="Menu_Settings_Click" />
-    <MenuItem Header="IMPORT META DECKS" Click="Menu_ImportDecks_Click" />
+    <MenuItem Header="IMPORT METASTATS DECKS" Click="Menu_ImportMetastatsDecks_Click" />
+    <MenuItem Header="IMPORT TEMPOSTORM DECKS" Click="Menu_ImportTempostormDecks_Click" />
+    <MenuItem Header="DELETE ARCHETYPE DECKS" Click="Menu_DeleteArchetypeDecks_Click" />
 </MenuItem>

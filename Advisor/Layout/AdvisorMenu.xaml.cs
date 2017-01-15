@@ -19,9 +19,19 @@ namespace HDT.Plugins.Advisor.Layout
 			Advisor.ShowSettings();
 		}
 
-		private async void Menu_ImportDecks_Click(object sender, RoutedEventArgs e)
+		private async void Menu_ImportMetastatsDecks_Click(object sender, RoutedEventArgs e)
 		{
-			await Advisor.ImportMetaDecks();
+			await Advisor.ImportMetastatsDecks();
 		}
-	}
+
+        private async void Menu_ImportTempostormDecks_Click(object sender, RoutedEventArgs e)
+        {
+            await Advisor.ImportTempostormDecks();
+        }
+
+        private void Menu_DeleteArchetypeDecks_Click(object sender, RoutedEventArgs e)
+        {
+            Advisor.DeleteArchetypeDecks();
+        }
+    }
 }

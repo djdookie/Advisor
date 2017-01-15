@@ -23,6 +23,6 @@ namespace HDT.Plugins.Advisor.Services
 
         void AddDeck(string name, Hearthstone_Deck_Tracker.Hearthstone.Deck deck, bool archive, params string[] tags);
 
-        void DeleteAllDecksWithTag(string tag);
+        int DeleteAllDecksWithTag(string tag);
 	}
 }
