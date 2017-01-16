@@ -190,10 +190,7 @@ namespace HDT.Plugins.Advisor
                             if (predictedCards.Contains(card))
                             {
                                 var item = predictedCards.Find(x => x.Id == card.Id);
-                                if (item.Count >= card.Count)
-                                {
-                                    item.Count -= card.Count;
-                                }
+                                item.Count -= card.Count;
                             }
                         }
                         //var sortedPredictedCards = predictedCards.OrderBy(x => x.Cost).ThenBy(y => y.Name).ToList();
