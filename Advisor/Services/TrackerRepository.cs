@@ -181,7 +181,7 @@ namespace HDT.Plugins.Advisor.Services
             // Add and save deck
             deck.Archived = archive;
             DeckList.Instance.Decks.Add(deck);
-            DeckList.Save();
+            //DeckList.Save();
             // Refresh decklist
             //Core.MainWindow.LoadAndUpdateDecks();
         }

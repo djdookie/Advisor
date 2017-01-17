@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using Hearthstone_Deck_Tracker;
 using Hearthstone_Deck_Tracker.Hearthstone;
 using Hearthstone_Deck_Tracker.Importing;
 using HtmlAgilityPack;
@@ -42,7 +43,7 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
 		public async Task<int> ImportDecks(bool archive, bool deletePrevious, bool removeClass, IProgress<Tuple<int, int>> progress)
 		{
 			_logger.Info("Starting archetype deck import");
-			int deckCount = 0;
+			//int deckCount = 0;
 
 			// Delete previous snapshot decks
 			if (deletePrevious)
@@ -78,21 +79,11 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
             }
 
             // TODO: Remove duplicates if any?
+            
+            _logger.Info($"Saving {decks.Count} decks to the decklist.");
 
             // Add all decks to the tracker
-		    foreach (var deck in decks)
-		    {
-                _logger.Info($"Importing deck ({deck.Name})"); // TODO: Remove because of low performance?
-
-                // Optionally remove player class from deck name
-                // E.g. 'Control Warrior' => 'Control'
-                var deckName = deck.Name;
-                if (removeClass)
-                    deckName = deckName.Replace(deck.Class, "").Trim(); // TODO: Remove double spaces after removal of classnames
-
-                _tracker.AddDeck(deckName, deck, archive, ArchetypeTag, PluginTag);
-                deckCount++;
-            }
+            var deckCount = await Task.Run(() => SaveDecks(decks, archive, removeClass));
 
             _logger.Info($"Import of {deckCount} archetype decks completed");
 
@@ -100,6 +91,37 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
 		}
 
         /// <summary>
+        /// Save a list of decks to the Decklist.
+        /// </summary>
+        /// <param name="decks">A list of HDT decks</param>
+        /// <param name="archive">Flag if the decks should be auto-archived</param>
+        /// <param name="removeClass">Flag if the classname should be removed from the deckname</param>
+        /// <returns></returns>
+	    private int SaveDecks(IEnumerable<Deck> decks, bool archive, bool removeClass)
+	    {
+	        var deckCount = 0;
+            
+	        foreach (var deck in decks)
+	        {
+	            _logger.Info($"Importing deck ({deck.Name})");
+
+	            // Optionally remove player class from deck name
+	            // E.g. 'Control Warrior' => 'Control'
+	            var deckName = deck.Name;
+	            if (removeClass)
+	            {
+	                deckName = deckName.Replace(deck.Class, "").Trim();
+	                deckName = deckName.Replace("  ", " ");
+	            }
+
+	            _tracker.AddDeck(deckName, deck, archive, ArchetypeTag, PluginTag);
+	            deckCount++;
+	        }
+            DeckList.Save();
+            return deckCount;
+	    }
+
+	    /// <summary>
         /// Gets all decks for a given class URL.
         /// </summary>
         /// <param name="url">The URL of the class</param>
