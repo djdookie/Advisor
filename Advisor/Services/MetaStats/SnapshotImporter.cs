@@ -37,10 +37,10 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
         /// </summary>
         /// <param name="archive">Option to auto-archive imported decks</param>
         /// <param name="deletePrevious">Option to delete all previously imported decks</param>
-        /// <param name="removeClass">Option to remove classname from deck title</param>
+        /// <param name="shortenName">Option to shorten the deck title</param>
         /// <param name="progress">Tuple of two integers holding the progress information for the UI</param>
         /// <returns>The number of imported decks</returns>
-		public async Task<int> ImportDecks(bool archive, bool deletePrevious, bool removeClass, IProgress<Tuple<int, int>> progress)
+		public async Task<int> ImportDecks(bool archive, bool deletePrevious, bool shortenName, IProgress<Tuple<int, int>> progress)
 		{
 			_logger.Info("Starting archetype deck import");
 			//int deckCount = 0;
@@ -83,7 +83,7 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
             _logger.Info($"Saving {decks.Count} decks to the decklist.");
 
             // Add all decks to the tracker
-            var deckCount = await Task.Run(() => SaveDecks(decks, archive, removeClass));
+            var deckCount = await Task.Run(() => SaveDecks(decks, archive, shortenName));
 
             _logger.Info($"Import of {deckCount} archetype decks completed");
 
@@ -95,9 +95,9 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
         /// </summary>
         /// <param name="decks">A list of HDT decks</param>
         /// <param name="archive">Flag if the decks should be auto-archived</param>
-        /// <param name="removeClass">Flag if the classname should be removed from the deckname</param>
+        /// <param name="shortenName">Flag if class name and website name should be removed from the deckname</param>
         /// <returns></returns>
-	    private int SaveDecks(IEnumerable<Deck> decks, bool archive, bool removeClass)
+	    private int SaveDecks(IEnumerable<Deck> decks, bool archive, bool shortenName)
 	    {
 	        var deckCount = 0;
             
@@ -108,9 +108,10 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
 	            // Optionally remove player class from deck name
 	            // E.g. 'Control Warrior' => 'Control'
 	            var deckName = deck.Name;
-	            if (removeClass)
+	            if (shortenName)
 	            {
 	                deckName = deckName.Replace(deck.Class, "").Trim();
+	                deckName = deckName.Replace("- MetaStats ", "");
 	                deckName = deckName.Replace("  ", " ");
 	            }
 

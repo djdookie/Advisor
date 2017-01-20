@@ -20,8 +20,8 @@
                           HorizontalAlignment="Left" Margin="0,5,0,0"
                           VerticalAlignment="Top"
                           ToolTip="Auto archive all archetype decks imported by the plugin." />
-                <CheckBox Content="Remove class from deck name"
-                          IsChecked="{Binding Settings.Default.RemoveClassFromName}"
+                <CheckBox Content="Shorten deck names"
+                          IsChecked="{Binding Settings.Default.ShortenDeckNames}"
                           HorizontalAlignment="Left" Margin="0,5,0,0"
                           VerticalAlignment="Top"
                           ToolTip="Remove the class from deck names imported by the plugin." />

@@ -50,12 +50,12 @@ namespace Advisor.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool RemoveClassFromName {
+        public bool ShortenDeckNames {
             get {
-                return ((bool)(this["RemoveClassFromName"]));
+                return ((bool)(this["ShortenDeckNames"]));
             }
             set {
-                this["RemoveClassFromName"] = value;
+                this["ShortenDeckNames"] = value;
             }
         }
         

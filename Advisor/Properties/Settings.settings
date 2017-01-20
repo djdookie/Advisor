@@ -8,7 +8,7 @@
     <Setting Name="DeletePreviouslyImported" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="RemoveClassFromName" Type="System.Boolean" Scope="User">
+    <Setting Name="ShortenDeckNames" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="OverlayPositionX" Type="System.Int32" Scope="User">

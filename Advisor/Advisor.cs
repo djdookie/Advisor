@@ -254,7 +254,7 @@ namespace HDT.Plugins.Advisor
                 var count = await importer.ImportDecks(
                     Settings.Default.AutoArchiveArchetypes,
                     Settings.Default.DeletePreviouslyImported,
-                    Settings.Default.RemoveClassFromName,
+                    Settings.Default.ShortenDeckNames,
                     progressIndicator);
                 // Refresh decklist
                 Core.MainWindow.LoadAndUpdateDecks();
@@ -264,7 +264,7 @@ namespace HDT.Plugins.Advisor
             catch (Exception e)
             {
                 Log.Error(e);
-                Notify("Import Failed", e.Message, 15, "error", null);
+                Notify("Import failed", e.Message, 15, "error", null);
             }
         }
 
@@ -286,7 +286,7 @@ namespace HDT.Plugins.Advisor
                 var count = await importer.ImportDecks(
                     Settings.Default.AutoArchiveArchetypes,
                     Settings.Default.DeletePreviouslyImported,
-                    Settings.Default.RemoveClassFromName);
+                    Settings.Default.ShortenDeckNames);
                 // Refresh decklist
                 Core.MainWindow.LoadAndUpdateDecks();
                 Notify("Import complete", $"{count} decks imported", 10);
