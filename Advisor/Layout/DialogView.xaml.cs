@@ -76,7 +76,7 @@ namespace HDT.Plugins.Advisor.Layout
 			Process.Start(e.Uri.ToString());
 		}
 
-		private async Task AutoClose(int seconds)
+		private async void AutoClose(int seconds)
 		{
 			// zero means no auto close
 			if (seconds <= 0)

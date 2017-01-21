@@ -136,6 +136,7 @@ namespace HDT.Plugins.Advisor
             // Only continue if in valid gamemode
             if (IsValidGamemmode)
             {
+                _advisorOverlay.UpdatePosition();
                 _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
                 UpdateCardList();
                 _advisorOverlay.Show();
