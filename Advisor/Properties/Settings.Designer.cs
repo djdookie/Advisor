@@ -82,5 +82,89 @@ namespace Advisor.Properties {
                 this["OverlayPositionY"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ActivateInRanked {
+            get {
+                return ((bool)(this["ActivateInRanked"]));
+            }
+            set {
+                this["ActivateInRanked"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ActivateInCasual {
+            get {
+                return ((bool)(this["ActivateInCasual"]));
+            }
+            set {
+                this["ActivateInCasual"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ActivateInFriendly {
+            get {
+                return ((bool)(this["ActivateInFriendly"]));
+            }
+            set {
+                this["ActivateInFriendly"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ActivateInSpectator {
+            get {
+                return ((bool)(this["ActivateInSpectator"]));
+            }
+            set {
+                this["ActivateInSpectator"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ActivateInArena {
+            get {
+                return ((bool)(this["ActivateInArena"]));
+            }
+            set {
+                this["ActivateInArena"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ActivateInBrawl {
+            get {
+                return ((bool)(this["ActivateInBrawl"]));
+            }
+            set {
+                this["ActivateInBrawl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ActivateInPractice {
+            get {
+                return ((bool)(this["ActivateInPractice"]));
+            }
+            set {
+                this["ActivateInPractice"] = value;
+            }
+        }
     }
 }

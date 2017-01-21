@@ -11,6 +11,7 @@ using Hearthstone_Deck_Tracker;
 using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
 using HDT.Plugins.Advisor.Services;
 using HDT.Plugins.Advisor.Layout;
+using Hearthstone_Deck_Tracker.Enums;
 using Hearthstone_Deck_Tracker.Utility.Logging;
 //using Hearthstone_Deck_Tracker.Windows;
 using MahApps.Metro.Controls;
@@ -59,6 +60,42 @@ namespace HDT.Plugins.Advisor
             }
         }
 
+        /// <summary>
+        /// Determine if in valid gamemode as specified in config
+        /// </summary>
+        public bool IsValidGamemmode
+        {
+            get
+            {
+                if (Core.Game.IsRunning && Core.Game.CurrentGameStats != null)
+                {
+                    switch (Core.Game.CurrentGameMode)
+                    {
+                        case GameMode.Ranked:
+                            return Settings.Default.ActivateInRanked;
+                        case GameMode.Casual:
+                            return Settings.Default.ActivateInCasual;
+                        case GameMode.Friendly:
+                            return Settings.Default.ActivateInFriendly;
+                        case GameMode.Spectator:
+                            return Settings.Default.ActivateInSpectator;
+                        case GameMode.Arena:
+                            return Settings.Default.ActivateInArena;
+                        case GameMode.Brawl:
+                            return Settings.Default.ActivateInBrawl;
+                        case GameMode.Practice:
+                            return Settings.Default.ActivateInPractice;
+                        default:
+                            return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
         ///// <summary>
         ///// Load all archetype decks from tracker repository
         ///// </summary>
@@ -77,10 +114,16 @@ namespace HDT.Plugins.Advisor
             get { return DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList(); }
         }
 
+        /// <summary>
+        /// If settings were changed, update overlay and save settings
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            _advisorOverlay.UpdatePosition();
             Settings.Default.Save();
+            //_advisorOverlay.UpdatePosition();
+            GameStart();
         }
 
         //internal List<Entity> Entities => Helper.DeepClone<Dictionary<int, Entity>>(CoreAPI.Game.Entities).Values.ToList<Entity>();
@@ -90,9 +133,17 @@ namespace HDT.Plugins.Advisor
         // Reset on when a new game starts
         internal void GameStart()
         {
-            _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
-            UpdateCardList();
-            _advisorOverlay.Show();
+            // Only continue if in valid gamemode
+            if (IsValidGamemmode)
+            {
+                _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
+                UpdateCardList();
+                _advisorOverlay.Show();
+            }
+            else
+            {
+                _advisorOverlay.Hide();
+            }
         }
 
         // Need to handle hiding the element when in the game menu
@@ -136,6 +187,9 @@ namespace HDT.Plugins.Advisor
 
         internal async void UpdateCardList()
         {
+            // Only continue if in valid gamemode
+            if (!IsValidGamemmode) return;
+
             // Small delay to guarantee opponents cards list is up to date
             await Task.Delay(100);
 
