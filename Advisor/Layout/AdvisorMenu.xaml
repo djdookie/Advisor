@@ -4,12 +4,14 @@
             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             mc:Ignorable="d"
-            Header="ADVISOR"
+            Header="Advisor"
             Click="MenuItem_Click"
             d:DesignHeight="300" d:DesignWidth="300">
     <!-- SubMenus -->
-    <MenuItem Header="SETTINGS" Click="Menu_Settings_Click" />
-    <MenuItem Header="IMPORT METASTATS DECKS" Click="Menu_ImportMetastatsDecks_Click" />
-    <MenuItem Header="IMPORT TEMPOSTORM DECKS" Click="Menu_ImportTempostormDecks_Click" />
-    <MenuItem Header="DELETE ARCHETYPE DECKS" Click="Menu_DeleteArchetypeDecks_Click" />
+    <MenuItem Header="Settings" Click="Menu_Settings_Click" />
+    <MenuItem Header="Import Archetype decks" Click="Menu_ImportMetastatsDecks_Click" />
+    <!--<MenuItem Header="IMPORT TEMPOSTORM DECKS" Click="Menu_ImportTempostormDecks_Click" />-->
+    <MenuItem Header="Delete Archetype decks" Click="Menu_DeleteArchetypeDecks_Click" />
+    <MenuItem Header="Website" Click="Menu_Website_Click" />
+    <MenuItem Header="Donate" Click="Menu_Donate_Click" />
 </MenuItem>

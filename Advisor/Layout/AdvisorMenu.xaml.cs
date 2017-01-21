@@ -33,5 +33,15 @@ namespace HDT.Plugins.Advisor.Layout
         {
             Advisor.DeleteArchetypeDecks();
         }
+
+        private void Menu_Donate_Click(object sender, RoutedEventArgs e)
+        {
+            Advisor.Donate();
+        }
+
+        private void Menu_Website_Click(object sender, RoutedEventArgs e)
+        {
+            Advisor.OpenWebsite();
+        }
     }
 }

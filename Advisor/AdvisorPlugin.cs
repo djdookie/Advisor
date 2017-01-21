@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using Hearthstone_Deck_Tracker.Utility.Logging;
 using Hearthstone_Deck_Tracker.Hearthstone;
 using HDT.Plugins.Advisor.Layout;
 using Advisor.Properties;
+using HDT.Plugins.Advisor.Services;
 
 namespace HDT.Plugins.Advisor
 {
@@ -55,11 +57,15 @@ namespace HDT.Plugins.Advisor
             Advisor.ShowSettings();
         }
 
-        public void OnLoad()
+        public async void OnLoad()
         {
 			_advisorOverlay = new AdvisorOverlay();
 			Core.OverlayCanvas.Children.Add(_advisorOverlay);
 			advisor = new Advisor(_advisorOverlay);
+
+            // Check for updates
+            if (Settings.Default.CheckForUpdates)
+                await CheckForUpdate();
 
             GameEvents.OnInMenu.Add(advisor.InMenu);
             GameEvents.OnGameStart.Add(advisor.GameStart);
@@ -83,11 +89,17 @@ namespace HDT.Plugins.Advisor
         {
         }
 
-        public Version Version
-        {
-            get { return new Version(0, 0, 1); }
-        }
+        public Version Version => new Version(1, 0, 0);
 
-        
+        public async Task CheckForUpdate()
+        {
+            var latest = await Github.CheckForUpdate("djdookie", "Advisor", Version);
+            if (latest != null)
+            {
+                Advisor.Notify("Plugin update available", $"[DOWNLOAD]({latest.html_url}) Advisor v{latest.tag_name}", 0,
+                    "download", () => Process.Start(latest.html_url));
+                Log.Info("Update available: v" + latest.tag_name, "Advisor");
+            }
+        }
     }
 }

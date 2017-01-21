@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -186,6 +187,10 @@ namespace HDT.Plugins.Advisor
             UpdateCardList();
         }
 
+        /// <summary>
+        /// Determine similarity between all archetype decks and all cards played by the opponent yet.
+        /// Then update the cardlist displayed in the overlay with the highest matching archetype deck after removing all opponent cards.
+        /// </summary>
         internal async void UpdateCardList()
         {
             // Only continue if in valid gamemode
@@ -324,7 +329,7 @@ namespace HDT.Plugins.Advisor
         }
 
         /// <summary>
-        /// Reports the progress to the UI.
+        /// Reports the progress to the UI
         /// </summary>
         /// <param name="value"></param>
         private static void ReportProgress(Tuple<int, int> value)
@@ -369,6 +374,37 @@ namespace HDT.Plugins.Advisor
                 Notify("Deletion failed", e.Message, 15, "error", null);
             }
         }
+
+        /// <summary>
+        /// Open link to donation website in standard browser
+        /// </summary>
+        public static void Donate()
+        {
+            try
+            {
+                Process.Start("https://paypal.me/djdookie");
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
+        /// <summary>
+        /// Open link to plugin website in standard browser
+        /// </summary>
+        public static void OpenWebsite()
+        {
+            try
+            {
+                Process.Start("https://github.com/djdookie/Advisor");
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+            }
+        }
+
 
         private static Flyout CreateSettingsFlyout()
         {

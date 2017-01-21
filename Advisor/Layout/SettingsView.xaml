@@ -30,6 +30,11 @@
                           HorizontalAlignment="Left" Margin="0,5,0,0"
                           VerticalAlignment="Top"
                           ToolTip="Delete any previously imported archetype decks before importing again." />
+                <CheckBox Content="Check for updates"
+                          IsChecked="{Binding Settings.Default.CheckForUpdates}"
+                          HorizontalAlignment="Left" Margin="0,5,0,0"
+                          VerticalAlignment="Top"
+                          ToolTip="Automatically check for updates when the plugin is loaded." />
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Overlay Position X:" VerticalAlignment="Center"></Label>
                     <TextBox Text="{Binding Settings.Default.OverlayPositionX, UpdateSourceTrigger=PropertyChanged}"
@@ -46,7 +51,7 @@
                 </StackPanel>
             </StackPanel>
         </GroupBox>
-        <GroupBox x:Name="ModeGroup" Header="Game modes" ToolTip="Advisor will only be active in the selected game modes">
+        <GroupBox x:Name="ModeGroup" Header="Game modes" ToolTip="Advisor will only be active in the selected game modes.">
             <StackPanel>
                 <CheckBox x:Name="cbRanked" Content="Ranked"
                           IsChecked="{Binding Settings.ActivateInRanked}"
