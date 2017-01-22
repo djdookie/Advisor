@@ -9,9 +9,9 @@
             d:DesignHeight="300" d:DesignWidth="300">
     <!-- SubMenus -->
     <MenuItem Header="Settings" Click="Menu_Settings_Click" />
-    <MenuItem Header="Import Archetype decks" Click="Menu_ImportMetastatsDecks_Click" />
+    <MenuItem Header="Import archetype decks" Click="Menu_ImportMetastatsDecks_Click" />
     <!--<MenuItem Header="IMPORT TEMPOSTORM DECKS" Click="Menu_ImportTempostormDecks_Click" />-->
-    <MenuItem Header="Delete Archetype decks" Click="Menu_DeleteArchetypeDecks_Click" />
+    <MenuItem Header="Delete archetype decks" Click="Menu_DeleteArchetypeDecks_Click" />
     <MenuItem Header="Website" Click="Menu_Website_Click" />
     <MenuItem Header="Donate" Click="Menu_Donate_Click" />
 </MenuItem>
