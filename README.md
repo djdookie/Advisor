@@ -10,7 +10,7 @@ Since all played cards are additionally removed from that archetype deck, the pl
 
 # Installation
 - Download the [latest release](https://github.com/djdookie/Advisor/releases) (zip file)
-- Unzip into HDT plugin folder (Options->Plugins->Plugins folder, should be %AppData%\HearthstoneDeckTracker\Plugins)
+- Unzip it into HDT plugins folder (Options->Plugins->Plugins folder)
 - Restart HDT and enable the plugin (Options->Tracker->Plugins->Advisor->Enabled)
 - Import archetype decks (Plugins->Advisor->Import archetype decks)
 - Play the game and enjoy
