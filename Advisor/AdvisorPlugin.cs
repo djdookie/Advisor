@@ -96,9 +96,9 @@ namespace HDT.Plugins.Advisor
             var latest = await Github.CheckForUpdate("djdookie", "Advisor", Version);
             if (latest != null)
             {
-                Advisor.Notify("Plugin update available", $"[DOWNLOAD]({latest.html_url}) Advisor v{latest.tag_name}", 0,
+                Advisor.Notify("Plugin update available", $"[DOWNLOAD]({latest.html_url}) Advisor {latest.tag_name}", 0,
                     "download", () => Process.Start(latest.html_url));
-                Log.Info("Update available: v" + latest.tag_name, "Advisor");
+                Log.Info("Update available: " + latest.tag_name, "Advisor");
             }
         }
     }
