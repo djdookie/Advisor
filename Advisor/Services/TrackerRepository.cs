@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Threading;
 using HDT.Plugins.Advisor.Models;
 using Hearthstone_Deck_Tracker;
 using Hearthstone_Deck_Tracker.Controls.DeckPicker;
@@ -146,6 +148,13 @@ namespace HDT.Plugins.Advisor.Services
             }
         }
 
+        /// <summary>
+        /// Add a deck to the Decklist.
+        /// </summary>
+        /// <param name="name">Name of the deck</param>
+        /// <param name="deck">The new deck to add</param>
+        /// <param name="archive">Flag, if the new deck should be archieved</param>
+        /// <param name="tags">Tags to be added to the new deck</param>
         public void AddDeck(string name, Hearthstone_Deck_Tracker.Hearthstone.Deck deck, bool archive, params string[] tags)
         {
             deck.Name = name;
@@ -164,28 +173,23 @@ namespace HDT.Plugins.Advisor.Services
                 if (reloadTags)
                 {
                     DeckList.Save();
-                    Core.MainWindow.ReloadTags();
+                    Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
+                    {
+                        Core.MainWindow.ReloadTags(); //TODO: Refresh tags in all tag lists in the UI.
+                    }));
                 }
             }
-            //// hack time!
-            //// use MainWindow.ArchiveDeck to update
-            //// set deck archive to opposite of desired
-            //deck.Archived = !archive;
-            //// add and save
-            //DeckList.Instance.Decks.Add(deck);
-            //DeckList.Save();
-            //// now reverse 'archive' of the deck
-            //// this should refresh all ui elements
-            //Core.MainWindow.ArchiveDeck(deck, archive);
 
             // Add and save deck
             deck.Archived = archive;
             DeckList.Instance.Decks.Add(deck);
-            //DeckList.Save();
-            // Refresh decklist
-            //Core.MainWindow.LoadAndUpdateDecks();
         }
 
+        /// <summary>
+        /// Delete all decks with given tag.
+        /// </summary>
+        /// <param name="tag">The tag</param>
+        /// <returns></returns>
         public int DeleteAllDecksWithTag(string tag)
 		{
 			if (string.IsNullOrWhiteSpace(tag))
