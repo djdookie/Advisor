@@ -1,8 +1,4 @@
 # Advisor
-[![GitHub Latest](https://img.shields.io/github/release/djdookie/advisor.svg)](https://github.com/djdookie/Advisor/releases/latest)
-[![Github Latest Downloads](https://img.shields.io/github/downloads/djdookie/advisor/latest/total.svg)](https://github.com/djdookie/Advisor/releases/latest)
-[![Github All Downloads](https://img.shields.io/github/downloads/djdookie/advisor/total.svg)](https://github.com/djdookie/Advisor/releases)
-
 This is an open-source [Hearthstone Deck Tracker](https://github.com/HearthSim/Hearthstone-Deck-Tracker) plugin displaying a possible archetype deck your opponent could be playing. It also helps to track what cards remain in that deck. Popular archetype decks are downloaded from [MetaStats.net](https://www.metastats.net).
 
 ![Preview](https://github.com/djdookie/Advisor/blob/master/AdvisorPreview.jpg "Preview")
@@ -26,9 +22,17 @@ Since all played cards are additionally removed from that archetype deck, the pl
 # Donation
 If you like Advisor and want to support it, you can contribute here or make a [donation](https://paypal.me/djdookie). Thank you!
 
+# Disclaimer
+This software is provided by Dookie and other voluntary contributors "as is" and "with all faults." They make no representations or warranties of any kind concerning the safety, suitability, lack of viruses, inaccuracies, typographical errors, or other harmful components of this software. There are inherent dangers in the use of any software, and you are solely responsible for determining whether this software is compatible with your equipment and other software installed on your equipment. You are also solely responsible for the protection of your equipment and backup of your data, and no one but you will be liable for any damages or problems you may suffer in connection with using, modifying, or distributing this software.
+Only use this software if you understand and accept this disclaimer!
+
 # License information
 This software is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0). Copyright 2017 © Dookie
 
 # Special thanks
 This project is open source, like all the great stuff it is based on or inspired by.
 I especially want to thank the people behind Hearthstone Deck Tracker, MetaStats.net and some other HDT plugins like EndGame.
+
+[![GitHub Latest](https://img.shields.io/github/release/djdookie/advisor.svg)](https://github.com/djdookie/Advisor/releases/latest)
+[![Github Latest Downloads](https://img.shields.io/github/downloads/djdookie/advisor/latest/total.svg)](https://github.com/djdookie/Advisor/releases/latest)
+[![Github All Downloads](https://img.shields.io/github/downloads/djdookie/advisor/total.svg)](https://github.com/djdookie/Advisor/releases)
