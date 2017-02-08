@@ -1,6 +1,8 @@
 # Advisor
 This is a [Hearthstone Deck Tracker](https://github.com/HearthSim/Hearthstone-Deck-Tracker) plugin which tries to guess the opponent's deck while playing and shows it's supposed deck and cards left.
 
+![Preview](https://github.com/djdookie/Advisor/blob/master/AdvisorPreview.jpg "Preview")
+
 # Decription
 Advisor tries to guess the opponent's deck based on the played cards.
 First, the import function of Advisor allows you to quickly import hundreds of archetype decks from metastats.net.
