@@ -31,7 +31,7 @@ This software is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0). C
 
 # Special thanks
 This project is open source, like all the great stuff it is based on or inspired by.
-I especially want to thank the people behind Hearthstone Deck Tracker, MetaStats.net and some other HDT plugins like EndGame.
+I especially want to thank the people behind Hearthstone Deck Tracker, MetaStats.net and some other HDT plugins like EndGame. Think about sharing your game results using the [MetaStats plugin](https://metastats.net/plugins) to improve our collective knowledge base!
 
 [![GitHub Latest](https://img.shields.io/github/release/djdookie/advisor.svg)](https://github.com/djdookie/Advisor/releases/latest)
 [![Github Latest Downloads](https://img.shields.io/github/downloads/djdookie/advisor/latest/total.svg)](https://github.com/djdookie/Advisor/releases/latest)
