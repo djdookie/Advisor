@@ -1,5 +1,5 @@
 # Advisor
-This is an open-source [Hearthstone Deck Tracker](https://github.com/HearthSim/Hearthstone-Deck-Tracker) plugin displaying a possible archetype deck your opponent could be playing. It also helps to track what cards remain in that deck. Popular archetype decks are downloaded from [MetaStats.net](https://www.metastats.net).
+This is an open-source [Hearthstone Deck Tracker](https://github.com/HearthSim/Hearthstone-Deck-Tracker) plugin displaying a possible archetype deck your opponent could be playing. It also helps to track which cards remain in that deck. Popular archetype decks are downloaded from [MetaStats.net](https://www.metastats.net).
 
 ![Preview](https://github.com/djdookie/Advisor/blob/master/AdvisorPreview.jpg "Preview")
 
