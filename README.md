@@ -24,7 +24,7 @@ If you like Advisor and want to support it, you can contribute here or make a [d
 
 # Disclaimer
 This software is provided by Dookie and other voluntary contributors "as is" and "with all faults." They make no representations or warranties of any kind concerning the safety, suitability, lack of viruses, inaccuracies, typographical errors, or other harmful components of this software. There are inherent dangers in the use of any software, and you are solely responsible for determining whether this software is compatible with your equipment and other software installed on your equipment. You are also solely responsible for the protection of your equipment and backup of your data, and no one but you will be liable for any damages or problems you may suffer in connection with using, modifying, or distributing this software.
-Only use this software if you understand and accept this disclaimer!
+Only use this software on your own risk and if you understand and accept this disclaimer!
 
 # License information
 This software is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0). Copyright 2017 © Dookie
