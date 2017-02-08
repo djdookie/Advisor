@@ -2,6 +2,7 @@
 [![GitHub Latest](https://img.shields.io/github/release/djdookie/advisor.svg)](https://github.com/djdookie/Advisor/releases/latest)
 [![Github Latest Downloads](https://img.shields.io/github/downloads/djdookie/advisor/latest/total.svg)](https://github.com/djdookie/Advisor/releases/latest)
 [![Github All Downloads](https://img.shields.io/github/downloads/djdookie/advisor/total.svg)](https://github.com/djdookie/Advisor/releases)
+
 This is a [Hearthstone Deck Tracker](https://github.com/HearthSim/Hearthstone-Deck-Tracker) plugin which tries to guess the opponent's deck while playing and shows it's supposed deck and cards left.
 
 ![Preview](https://github.com/djdookie/Advisor/blob/master/AdvisorPreview.jpg "Preview")
