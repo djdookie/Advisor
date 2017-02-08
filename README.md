@@ -18,7 +18,7 @@ Since all played cards are additionally removed from that archetype deck, the pl
 - Download the [latest release](https://github.com/djdookie/Advisor/releases) (zip file)
 - Unzip it into HDT plugins folder (Options->Plugins->Plugins folder)
 - Restart HDT and enable the plugin (Options->Tracker->Plugins->Advisor->Enabled)
-- Import standard archetype decks (Plugins->Advisor->Import archetype decks)
+- Import standard archetype decks (Plugins->Advisor->Import archetype decks), repeat this once a day on demand
 - Play the game and enjoy
 - Optional: Check the plugins settings to fit your preferences
 - Hint: Move the secrets overlay position of HDT a bit to the right to not overlap with Advisors overlay window (Options->Overlay->General->Unlock overlay)
@@ -31,4 +31,4 @@ This software is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0). C
 
 # Special thanks
 This project is open source, like all the great stuff it is based on or inspired by.
-I especially want to thank the people behind Hearthstone Deck Tracker, Metastats.net and some other HDT plugins like EndGame.
+I especially want to thank the people behind Hearthstone Deck Tracker, MetaStats.net and some other HDT plugins like EndGame.
