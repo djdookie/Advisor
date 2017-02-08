@@ -3,7 +3,7 @@ This is an open-source [Hearthstone Deck Tracker](https://github.com/HearthSim/H
 
 ![Preview](https://github.com/djdookie/Advisor/blob/master/AdvisorPreview.jpg "Preview")
 
-# Decription
+# Description
 Advisor tries to guess the opponent's deck based on the played cards.
 First, the import function of Advisor allows you to quickly import hundreds of standard archetype decks from MetaStats.net.
 Now while playing a Hearthstone game, with every revealed opponent card the plugin calculates similarities between those cards and all imported archetype decks.
