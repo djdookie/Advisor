@@ -14,7 +14,7 @@ Since all played cards are additionally removed from that archetype deck, the pl
 - Download the [latest release](https://github.com/djdookie/Advisor/releases) (zip file)
 - Unzip it into HDT plugins folder (Options->Plugins->Plugins folder)
 - Restart HDT and enable the plugin (Options->Tracker->Plugins->Advisor->Enabled)
-- Import archetype decks (Plugins->Advisor->Import archetype decks)
+- Import archetype decks (Plugins->Advisor->Import archetype decks), repeat this once a day on demand
 - Play the game and enjoy
 - Optional: Check the plugins settings to fit your preferences
 - Hint: Move the secrets overlay position of HDT a bit to the right to not overlap with Advisors overlay window (Options->Overlay->General->Unlock overlay)
