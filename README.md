@@ -21,7 +21,7 @@ Since all played cards are additionally removed from that archetype deck, the pl
 If you like Advisor and want to support it, you can contribute here or make a [donation](https://paypal.me/djdookie). Thank you!
 
 # License information
-This software is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0). Copyright 2017 Patrick Hennig
+This software is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0). Copyright 2017 djdookie
 
 # Special thanks
 This project is open source, like all the great stuff it is based on or inspired by.
