@@ -11,7 +11,7 @@ Finally the deck with the highest match is presented to the player via overlay.
 Since all played cards are additionally removed from that archetype deck, the player can see which cards the opponent supposably has left in his deck or hand with a certain likelihood.
 
 # Installation
-- Download the [latest release](https://github.com/djdookie/Advisor/releases) (zip file)
+- Download the [latest release](https://github.com/djdookie/Advisor/releases) (take the Advisor.zip file, not the source code!)
 - Unzip it into HDT plugins folder (Options->Plugins->Plugins folder)
 - Restart HDT and enable the plugin (Options->Tracker->Plugins->Advisor->Enabled)
 - Import standard archetype decks (Plugins->Advisor->Import archetype decks), repeat this once a day on demand
