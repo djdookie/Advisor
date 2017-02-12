@@ -85,9 +85,16 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
             // Add all decks to the tracker
             var deckCount = await Task.Run(() => SaveDecks(decks, archive, shortenName));
 
-            _logger.Info($"Import of {deckCount} archetype decks completed");
+		    if (deckCount == decks.Count)
+		    {
+		        _logger.Info($"Import of {deckCount} archetype decks completed.");
+		    }
+		    else
+		    {
+		        _logger.Error($"Only {deckCount} of {decks.Count} archetype could be imported. Connection problems?");
+		    }
 
-            return deckCount;
+		    return deckCount;
 		}
 
         /// <summary>
@@ -103,6 +110,8 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
             
 	        foreach (var deck in decks)
 	        {
+	            if (deck == null) throw new ImportException("At least one deck couldn't be imported. Connection problems?");
+
 	            _logger.Info($"Importing deck ({deck.Name})");
 
 	            // Optionally remove player class from deck name

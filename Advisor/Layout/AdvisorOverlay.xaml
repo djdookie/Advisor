@@ -10,7 +10,7 @@
     <StackPanel.LayoutTransform>
         <ScaleTransform ScaleX="1" ScaleY="1"/>
     </StackPanel.LayoutTransform>
-    <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblArchetype" FontSize="15" TextAlignment="Center" Text="Renolock (10%)" Width="200"/>
+    <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblArchetype" FontSize="15" TextAlignment="Center" Text="Midrange Shaman (10 %)" Width="200"/>
     <Viewbox Name="ViewBoxPlayer" StretchDirection="DownOnly" Stretch="Fill">
         <controls:AnimatedCardList x:Name="acList" Background="Transparent" BorderThickness="0"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="221"
