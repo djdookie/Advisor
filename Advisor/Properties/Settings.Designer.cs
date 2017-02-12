@@ -178,5 +178,29 @@ namespace Advisor.Properties {
                 this["CheckForUpdates"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ActivateInStandard {
+            get {
+                return ((bool)(this["ActivateInStandard"]));
+            }
+            set {
+                this["ActivateInStandard"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ActivateInWild {
+            get {
+                return ((bool)(this["ActivateInWild"]));
+            }
+            set {
+                this["ActivateInWild"] = value;
+            }
+        }
     }
 }

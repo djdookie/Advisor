@@ -62,9 +62,9 @@ namespace HDT.Plugins.Advisor
         }
 
         /// <summary>
-        /// Determine if in valid gamemode as specified in config
+        /// Determine if in valid game mode as specified in config
         /// </summary>
-        public bool IsValidGamemmode
+        public bool IsValidGameMode
         {
             get
             {
@@ -86,6 +86,32 @@ namespace HDT.Plugins.Advisor
                             return Settings.Default.ActivateInBrawl;
                         case GameMode.Practice:
                             return Settings.Default.ActivateInPractice;
+                        default:
+                            return true;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Determine if in valid game format as specified in config
+        /// </summary>
+        public bool IsValidGameFormat
+        {
+            get
+            {
+                if (Core.Game.IsRunning && Core.Game.CurrentGameStats != null)
+                {
+                    switch (Core.Game.CurrentFormat)
+                    {
+                        case Format.Standard:
+                            return Settings.Default.ActivateInStandard;
+                        case Format.Wild:
+                            return Settings.Default.ActivateInWild;
                         default:
                             return true;
                     }
@@ -134,8 +160,8 @@ namespace HDT.Plugins.Advisor
         // Reset on when a new game starts
         internal void GameStart()
         {
-            // Only continue if in valid gamemode
-            if (IsValidGamemmode)
+            // Only continue if in valid game mode and game format
+            if (IsValidGameMode && IsValidGameFormat)
             {
                 _advisorOverlay.UpdatePosition();
                 _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
@@ -193,8 +219,8 @@ namespace HDT.Plugins.Advisor
         /// </summary>
         internal async void UpdateCardList()
         {
-            // Only continue if in valid gamemode
-            if (!IsValidGamemmode) return;
+            // Only continue if in valid game mode or game format
+            if (!IsValidGameMode || !IsValidGameFormat) return;
 
             // Small delay to guarantee opponents cards list is up to date
             await Task.Delay(100);
