@@ -36,18 +36,44 @@
                           VerticalAlignment="Top"
                           ToolTip="Automatically check for updates when the plugin is loaded." />
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Overlay Position X:" VerticalAlignment="Center"></Label>
+                    <Label Content="Overlay position (x, y):" VerticalAlignment="Center"></Label>
                     <TextBox Text="{Binding Settings.Default.OverlayPositionX, UpdateSourceTrigger=PropertyChanged}"
                           HorizontalAlignment="Left"
-                          VerticalAlignment="Center" Width="50"
+                          VerticalAlignment="Center" Width="40"
                           ToolTip="The x position of the overlay." />
+                    <TextBox Text="{Binding Settings.Default.OverlayPositionY, UpdateSourceTrigger=PropertyChanged}"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Center" Width="40"
+                          ToolTip="The y position of the overlay." />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Overlay Position Y:" VerticalAlignment="Center"></Label>
+                <!--<StackPanel Orientation="Horizontal">
+                    <Label Content="Overlay position Y:" VerticalAlignment="Center"></Label>
                     <TextBox Text="{Binding Settings.Default.OverlayPositionY, UpdateSourceTrigger=PropertyChanged}"
                           HorizontalAlignment="Left"
                           VerticalAlignment="Center" Width="50"
-                          ToolTip="The x position of the overlay." />
+                          ToolTip="The y position of the overlay." />
+                </StackPanel>-->
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Scaling:" VerticalAlignment="Center" Width="53"></Label>
+                    <Slider x:Name="SliderOverlayPlayerScaling"
+                                VerticalAlignment="Center" Width="160"
+                                Value="{Binding Settings.Default.OverlayScaling, UpdateSourceTrigger=PropertyChanged}"
+                                Minimum="1" SmallChange="1" LargeChange="10" Maximum="200" />
+                    <TextBox Text="{Binding Settings.Default.OverlayScaling, UpdateSourceTrigger=PropertyChanged}"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Center" Width="40"
+                          ToolTip="The scaling of the overlay in percent." Margin="5,0,0,0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Opacity:" VerticalAlignment="Center"></Label>
+                    <Slider x:Name="SliderOverlayPlayerOpacity"
+                            VerticalAlignment="Center" Width="160"
+                            Value="{Binding Settings.Default.OverlayOpacity, UpdateSourceTrigger=PropertyChanged}"
+                            Minimum="0" SmallChange="1" LargeChange="10" Maximum="100" />
+                    <TextBox Text="{Binding Settings.Default.OverlayOpacity, UpdateSourceTrigger=PropertyChanged}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center" Width="40"
+                        ToolTip="The opacity of the overlay in percent." Margin="5,0,0,0" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>

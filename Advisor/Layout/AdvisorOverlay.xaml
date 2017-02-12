@@ -6,7 +6,10 @@
             xmlns:hearthstoneDeckTracker="clr-namespace:Hearthstone_Deck_Tracker;assembly=HearthstoneDeckTracker"
             xmlns:controls="clr-namespace:Hearthstone_Deck_Tracker.Controls;assembly=HearthstoneDeckTracker"
             mc:Ignorable="d"
-            d:DesignHeight="300" d:DesignWidth="300">
+            d:DesignHeight="300" d:DesignWidth="300" Name="StackPanelOverlay">
+    <StackPanel.LayoutTransform>
+        <ScaleTransform ScaleX="1" ScaleY="1"/>
+    </StackPanel.LayoutTransform>
     <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblArchetype" FontSize="15" TextAlignment="Center" Text="Renolock (10%)" Width="200"/>
     <Viewbox Name="ViewBoxPlayer" StretchDirection="DownOnly" Stretch="Fill">
         <controls:AnimatedCardList x:Name="acList" Background="Transparent" BorderThickness="0"

@@ -5,6 +5,7 @@ using Advisor.Properties;
 using Hearthstone_Deck_Tracker;
 using Hearthstone_Deck_Tracker.Hearthstone;
 using Core = Hearthstone_Deck_Tracker.API.Core;
+using System.Windows.Media;
 
 namespace HDT.Plugins.Advisor.Layout
 {
@@ -24,12 +25,22 @@ namespace HDT.Plugins.Advisor.Layout
             UpdatePosition();
         }
 
+        /// <summary>
+        /// Update overlay position, scaling and opacity
+        /// </summary>
         public void UpdatePosition()
         {
+            // Set overlay position
             //Canvas.SetTop(this, Core.OverlayWindow.Height * 1 / 100);
             //Canvas.SetLeft(this, Core.OverlayWindow.Width * 12 / 100);
             Canvas.SetLeft(this, Settings.Default.OverlayPositionX);
             Canvas.SetTop(this, Settings.Default.OverlayPositionY);
+
+            // Set overlay scale
+            StackPanelOverlay.RenderTransform = new ScaleTransform(Settings.Default.OverlayScaling / 100.0, Settings.Default.OverlayScaling / 100.0);
+
+            // Set overlay opacity
+            StackPanelOverlay.Opacity = Settings.Default.OverlayOpacity / 100.0;
         }
 
         public void Show()

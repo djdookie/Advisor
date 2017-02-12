@@ -202,5 +202,29 @@ namespace Advisor.Properties {
                 this["ActivateInWild"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int OverlayScaling {
+            get {
+                return ((int)(this["OverlayScaling"]));
+            }
+            set {
+                this["OverlayScaling"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int OverlayOpacity {
+            get {
+                return ((int)(this["OverlayOpacity"]));
+            }
+            set {
+                this["OverlayOpacity"] = value;
+            }
+        }
     }
 }
