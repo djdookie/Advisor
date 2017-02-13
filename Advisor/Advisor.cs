@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -257,14 +258,28 @@ namespace HDT.Plugins.Advisor
                     dict.Add(archetypeDeck, archetypeDeck.Similarity(opponentCardlist));
                 }
 
-                // Sort dictionary by value
-                var sortedDict = from entry in dict orderby entry.Value descending select entry;
+                // Sort dictionary by similarity value
+                var sortedDict = from d in dict orderby d.Value descending select d;
 
                 // If any archetype deck matches more than 0% show the deck with the highest similarity
                 if (sortedDict.FirstOrDefault().Value > 0)
                 {
-                    _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}%)", sortedDict.FirstOrDefault().Key.Name, Math.Round(sortedDict.FirstOrDefault().Value * 100, 2));
-                    Deck deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).FirstOrDefault(d => d.Name == sortedDict.FirstOrDefault().Key.Name);
+                    // Select top decks with highest similarity value
+                    var topSimDecks = (from d in dict where Math.Abs(d.Value - dict.Values.Max()) < 0.001 select d).ToList();
+                    // Select top decks with most played games
+                    //int maxGames = 0;
+                    //foreach (var t in topSimDecks)
+                    //{
+                    //    var games = Int32.Parse(Regex.Match(t.Key.Note, @"[0-9]+$").ToString());
+                    //    if (games > maxGames) maxGames = games;
+                    //}
+                    var maxGames = topSimDecks.Max(x => Int32.Parse(Regex.Match(x.Key.Note, @"[0-9]+$").ToString()));
+                    var topGamesDecks = from t in topSimDecks where Int32.Parse(Regex.Match(t.Key.Note, @"[0-9]+$").ToString()) == maxGames select t;
+
+                    //_advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}%)", sortedDict.FirstOrDefault().Key.Name, Math.Round(sortedDict.FirstOrDefault().Value * 100, 2));
+                    //Deck deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).FirstOrDefault(d => d.Name == sortedDict.FirstOrDefault().Key.Name);
+                    _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}%)", topGamesDecks.FirstOrDefault().Key.Name, Math.Round(topGamesDecks.FirstOrDefault().Value * 100, 2));
+                    Deck deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).FirstOrDefault(d => d.Name == topGamesDecks.FirstOrDefault().Key.Name);
                     if (deck != null)
                     {
                         var predictedCards = ((Deck)deck.Clone()).Cards.ToList();
