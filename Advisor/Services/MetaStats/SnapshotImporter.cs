@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
@@ -143,8 +144,7 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
             HtmlDocument doc = new HtmlDocument();
             doc = hw.Load(url);
 
-            var deckSites = doc.DocumentNode.SelectNodes("//div[@class='decklist']/div/h4/a/@href");
-            //var deckUrls = new List<string>();
+            var deckSites = doc.DocumentNode.SelectNodes("//div[@class='decklist']");
 
             // Count found decks thread-safe
             Interlocked.Add(ref _decksFound, deckSites.Count);
@@ -154,10 +154,30 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
 
             var decks = new List<Deck>();
 
-            foreach (HtmlNode link in deckSites)
+            foreach (HtmlNode site in deckSites)
             {
+                // Extract link
+                HtmlNode link = site.SelectSingleNode("./div/h4/a/@href");
                 string hrefValue = link.GetAttributeValue("href", string.Empty);
+
+                // Extract info
+                HtmlNode stats = site.SelectSingleNode("./div/small");
+                string innerText = stats.InnerText;
+
+                // Create deck from site
                 var result = await Task.Run(() => GetDeck(BaseUrl + hrefValue, progress));
+
+                // Add info to the deck
+                result.Note = innerText;
+
+                // Parse and add Guid to the deck
+                string strGuid = Regex.Match(hrefValue, @"[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}").ToString();
+                result.DeckId = new Guid(strGuid);
+
+                // Set import datetime as LastEdited
+                result.LastEdited = DateTime.Now;
+
+                // Add deck to the decks list
                 decks.Add(result);
             }
 
@@ -172,8 +192,9 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
         /// <returns>The parsed deck</returns>
         private async Task<Deck> GetDeck(string url, IProgress<Tuple<int, int>> progress)
         {
+            // Create deck from metatags
             var result = await MetaTagImporter.TryFindDeck(url);
-
+            
             // Count imported decks thread-safe
             Interlocked.Increment(ref _decksImported);
 
