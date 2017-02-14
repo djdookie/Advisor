@@ -5,9 +5,9 @@ This is an open-source [Hearthstone Deck Tracker](https://github.com/HearthSim/H
 
 # Description
 Advisor tries to guess the opponent's deck based on the played cards.
-First, the import function of Advisor allows you to quickly import hundreds of standard archetype decks from MetaStats.net.
+First, the import function of Advisor allows you to quickly import hundreds of standard archetype decks from MetaStats.net. Currently the top 5 played standard decks of each archetype and each class of the last 7 days are imported.
 Now while playing a Hearthstone game, with every revealed opponent card the plugin calculates similarities between those cards and all imported archetype decks.
-Finally the deck with the highest match is presented to the player via overlay.
+Finally the deck with the highest match is presented to the player via overlay. If multiple decks with the same similarity are found, the most popular deck with the most played games is prioritized.
 Since all played cards are additionally removed from that archetype deck, the player can see which cards the opponent supposably has left in his deck or hand with a certain likelihood.
 
 # Installation
