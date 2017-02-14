@@ -30,6 +30,11 @@
                           HorizontalAlignment="Left" Margin="0,5,0,0"
                           VerticalAlignment="Top"
                           ToolTip="Delete any previously imported archetype decks before importing again." />
+                <CheckBox Content="Show deck statistics"
+                          IsChecked="{Binding Settings.Default.ShowStatistics}"
+                          HorizontalAlignment="Left" Margin="0,5,0,0"
+                          VerticalAlignment="Top"
+                          ToolTip="Shows statistics of the archetype deck like winrate and number of played games." />
                 <CheckBox Content="Check for updates"
                           IsChecked="{Binding Settings.Default.CheckForUpdates}"
                           HorizontalAlignment="Left" Margin="0,5,0,0"

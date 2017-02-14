@@ -53,6 +53,6 @@ namespace HDT.Plugins.Advisor.Layout
             this.Visibility = Visibility.Hidden;
         }
 
-        public bool ShowToolTip => Config.Instance.WindowCardToolTips;
+        //public bool ShowStatistics => Settings.Default.ShowStatistics;
     }
 }

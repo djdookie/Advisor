@@ -92,7 +92,7 @@ namespace HDT.Plugins.Advisor
         {
         }
 
-        public Version Version => new Version(1, 0, 2);
+        public Version Version => new Version(1, 0, 3);
 
         public async Task CheckForUpdate()
         {

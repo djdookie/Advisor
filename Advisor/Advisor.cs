@@ -49,6 +49,7 @@ namespace HDT.Plugins.Advisor
             //LoadArchetypeDecks();
 
             _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
+            _advisorOverlay.LblStats.Text = "";
             //_advisorOverlay.Update(new List<Card>());
             UpdateCardList();
 
@@ -166,6 +167,7 @@ namespace HDT.Plugins.Advisor
             {
                 _advisorOverlay.UpdatePosition();
                 _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
+                _advisorOverlay.LblStats.Text = "";
                 UpdateCardList();
                 _advisorOverlay.Show();
             }
@@ -230,60 +232,43 @@ namespace HDT.Plugins.Advisor
             //var opponentCardlist = Core.Game.Opponent.RevealedCards;
             IList<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList();
 
-            // If no opponent's cards were revealed yet, return empty card list
-            if (!opponentCardlist.Any())
+            // If no opponent's cards were revealed yet or we have no imported archetype decks in the database, return empty card list
+            if (!opponentCardlist.Any() || !ArchetypeDecks.Any())
             {
                 currentArchetypeDeckGuid = Guid.Empty;
                 _advisorOverlay.Update(new List<Card>(), true);
             }
             else
             {
-                //Log.Info("+++++ Advisor: " + opponentCardlist.Count);
-
-                //Update list of the opponent's played cards
-                //_advisorOverlay.Update(opponentCardlist.ToList());
-                //var opponentDeck = new Models.Deck(opponentCardlist);
-
                 // Create archetype dictionary
-                //IDictionary<Models.ArchetypeDeck, float> dict = new Dictionary<Models.ArchetypeDeck, float>();
                 IDictionary<Deck, float> dict = new Dictionary<Deck, float>();
 
-                // Calculate matching similarities to yet known opponent cards
-                //foreach (var archetypeDeck in trackerRepository.GetAllArchetypeDecks().Where(d => d.Klass == Models.KlassKonverter.FromString(CoreAPI.Game.Opponent.Class)))
-                //LoadArchetypeDecks();
-                //foreach (var archetypeDeck in ArchetypeDecks)
+                // Calculate similarities between all opponent's class archetype decks and all yet known opponent cards
                 foreach (var archetypeDeck in ArchetypeDecks.Where(d => d.Class == CoreAPI.Game.Opponent.Class))
                 {
-                    //dict.Add(archetypeDeck, opponentDeck.Similarity(archetypeDeck));
                     dict.Add(archetypeDeck, archetypeDeck.Similarity(opponentCardlist));
                 }
 
-                // Sort dictionary by similarity value
-                var sortedDict = from d in dict orderby d.Value descending select d;
+                // Get highest similarity value
+                var maxSim = dict.Values.Max();
 
                 // If any archetype deck matches more than 0% show the deck with the highest similarity
-                if (sortedDict.FirstOrDefault().Value > 0)
+                if (maxSim > 0)
                 {
                     // Select top decks with highest similarity value
-                    var topSimDecks = (from d in dict where Math.Abs(d.Value - dict.Values.Max()) < 0.001 select d).ToList();
+                    var topSimDecks = (from d in dict where Math.Abs(d.Value - maxSim) < 0.001 select d).ToList();
                     // Select top decks with most played games
-                    //int maxGames = 0;
-                    //foreach (var t in topSimDecks)
-                    //{
-                    //    var games = Int32.Parse(Regex.Match(t.Key.Note, @"[0-9]+$").ToString());
-                    //    if (games > maxGames) maxGames = games;
-                    //}
-                    var maxGames = topSimDecks.Max(x => Int32.Parse(Regex.Match(x.Key.Note, @"[0-9]+$").ToString()));
-                    var topGamesDecks = from t in topSimDecks where Int32.Parse(Regex.Match(t.Key.Note, @"[0-9]+$").ToString()) == maxGames select t;
+                    var maxGames = topSimDecks.Max(x => x.Key.GetPlayedGames());
+                    var topGamesDecks = (from t in topSimDecks where t.Key.GetPlayedGames() == maxGames select t).ToList();
+                    // Select best matched deck with both highest similarity value and most played games
+                    var matchedDeck = topGamesDecks.First();
 
-                    //_advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}%)", sortedDict.FirstOrDefault().Key.Name, Math.Round(sortedDict.FirstOrDefault().Value * 100, 2));
-                    //Deck deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).FirstOrDefault(d => d.Name == sortedDict.FirstOrDefault().Key.Name);
-                    _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}%)", topGamesDecks.FirstOrDefault().Key.Name, Math.Round(topGamesDecks.FirstOrDefault().Value * 100, 2));
-                    Deck deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).FirstOrDefault(d => d.Name == topGamesDecks.FirstOrDefault().Key.Name);
+                    _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}%)", matchedDeck.Key.Name, Math.Round(matchedDeck.Value * 100, 2));
+                    _advisorOverlay.LblStats.Text = String.Format("{0}", matchedDeck.Key.Note);
+                    Deck deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).First(d => d.Name == matchedDeck.Key.Name);
                     if (deck != null)
                     {
                         var predictedCards = ((Deck)deck.Clone()).Cards.ToList();
-                        //_advisorOverlay.Update(opponentCards);
 
                         //Remove already played cards from predicted archetype deck
                         foreach (var card in opponentCardlist)
@@ -295,11 +280,11 @@ namespace HDT.Plugins.Advisor
                             }
                         }
                         //var sortedPredictedCards = predictedCards.OrderBy(x => x.Cost).ThenBy(y => y.Name).ToList();
-                        bool isNewArchetypeDeck = currentArchetypeDeckGuid != sortedDict.FirstOrDefault().Key.DeckId;
+                        bool isNewArchetypeDeck = currentArchetypeDeckGuid != matchedDeck.Key.DeckId;
                         // Update overlay cards
                         _advisorOverlay.Update(predictedCards, isNewArchetypeDeck);
                         // Remember current archetype deck guid with highest similarity to opponent's played cards
-                        currentArchetypeDeckGuid = sortedDict.FirstOrDefault().Key.DeckId;
+                        currentArchetypeDeckGuid = matchedDeck.Key.DeckId;
                     }
                 }
             }

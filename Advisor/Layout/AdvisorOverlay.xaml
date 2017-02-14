@@ -5,12 +5,16 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:hearthstoneDeckTracker="clr-namespace:Hearthstone_Deck_Tracker;assembly=HearthstoneDeckTracker"
             xmlns:controls="clr-namespace:Hearthstone_Deck_Tracker.Controls;assembly=HearthstoneDeckTracker"
+            xmlns:properties="clr-namespace:Advisor.Properties"
             mc:Ignorable="d"
             d:DesignHeight="300" d:DesignWidth="300" Name="StackPanelOverlay">
     <StackPanel.LayoutTransform>
         <ScaleTransform ScaleX="1" ScaleY="1"/>
     </StackPanel.LayoutTransform>
-    <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblArchetype" FontSize="15" TextAlignment="Center" Text="Midrange Shaman (10 %)" Width="200"/>
+    <StackPanel.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </StackPanel.Resources>
+    <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblArchetype" FontSize="15" TextAlignment="Center" Text="Midrange Shaman (10%)" Width="200"/>
     <Viewbox Name="ViewBoxPlayer" StretchDirection="DownOnly" Stretch="Fill">
         <controls:AnimatedCardList x:Name="acList" Background="Transparent" BorderThickness="0"
                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="221"
@@ -33,7 +37,7 @@
             </controls:AnimatedCardList.ItemContainerStyle>
         </controls:AnimatedCardList>
     </Viewbox>
-
+    <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblStats" FontSize="15" TextAlignment="Center" Text="Win-Rate: 50%, #Games: 30" Width="200" Visibility="{Binding Path=ShowStatistics, Source={x:Static properties:Settings.Default}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     <!--<ItemsControl x:Name="icCardlist">
         <ItemsControl.ItemContainerStyle>
             <Style>

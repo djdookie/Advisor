@@ -226,5 +226,17 @@ namespace Advisor.Properties {
                 this["OverlayOpacity"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowStatistics {
+            get {
+                return ((bool)(this["ShowStatistics"]));
+            }
+            set {
+                this["ShowStatistics"] = value;
+            }
+        }
     }
 }
