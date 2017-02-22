@@ -72,10 +72,12 @@ namespace HDT.Plugins.Advisor
         /// Gets the number of played games stored in the deck's note field.
         /// </summary>
         /// <param name="thisDeck">The deck</param>
-        /// <returns>Number of played games with the given deck</returns>
+        /// <returns>Number of played games with the given deck. If no info is found or parse is unsuccessful, return 0.</returns>
         public static int GetPlayedGames(this Deck thisDeck)
         {
-            return Int32.Parse(Regex.Match(thisDeck.Note, @"[0-9]+$").ToString());
+            int result;
+            bool success = Int32.TryParse(Regex.Match(thisDeck.Note, @"[0-9]+$").ToString(), out result);
+            return success ? result : 0;
         }
     }
 }

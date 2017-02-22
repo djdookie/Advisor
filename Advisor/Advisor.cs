@@ -361,7 +361,7 @@ namespace HDT.Plugins.Advisor
         private static void ReportProgress(Tuple<int, int> value)
         {
             int percentage = (int)((double)value.Item1 / value.Item2 * 100); 
-            Notify("Import in progress", $"{value.Item1} of {value.Item2} decks ({percentage} %) imported", 0);
+            Notify("Import in progress", $"{value.Item1} of {value.Item2} decks ({percentage}%) imported", 0);
         }
 
         public static async Task ImportTempostormDecks()
