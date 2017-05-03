@@ -230,7 +230,7 @@ namespace HDT.Plugins.Advisor
 
             // Get opponent's cards list (all yet revealed cards)
             //var opponentCardlist = Core.Game.Opponent.RevealedCards;
-            IList<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList();
+            IList<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList(); // TODO: Revealed but not played tjoust cards must not be removed from the decklist
 
             // If no opponent's cards were revealed yet or we have no imported archetype decks in the database, return empty card list
             if (!opponentCardlist.Any() || !ArchetypeDecks.Any())
@@ -246,11 +246,12 @@ namespace HDT.Plugins.Advisor
                 // Calculate similarities between all opponent's class archetype decks and all yet known opponent cards
                 foreach (var archetypeDeck in ArchetypeDecks.Where(d => d.Class == CoreAPI.Game.Opponent.Class))
                 {
-                    dict.Add(archetypeDeck, archetypeDeck.Similarity(opponentCardlist));
+                    // Insert deck with calculated value into dictionary and prevent exception by inserting duplicate decks
+                    if (!dict.ContainsKey(archetypeDeck)) dict.Add(archetypeDeck, archetypeDeck.Similarity(opponentCardlist));
                 }
 
                 // Get highest similarity value
-                var maxSim = dict.Values.Max();
+                var maxSim = dict.Values.Max(); // TODO: Some unreproducable bug threw an exception here. System.InvalidOperationException: Sequence contains no elements @ IEnumerable.Max()
 
                 // If any archetype deck matches more than 0% show the deck with the highest similarity
                 if (maxSim > 0)
