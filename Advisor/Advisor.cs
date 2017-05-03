@@ -230,7 +230,7 @@ namespace HDT.Plugins.Advisor
 
             // Get opponent's cards list (all yet revealed cards)
             //var opponentCardlist = Core.Game.Opponent.RevealedCards;
-            IList<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList(); // TODO: Revealed but not played tjoust cards must not be removed from the decklist
+            IList<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList(); // TODO: Revealed but not played joust cards must not be removed from the decklist
 
             // If no opponent's cards were revealed yet or we have no imported archetype decks in the database, return empty card list
             if (!opponentCardlist.Any() || !ArchetypeDecks.Any())
@@ -271,8 +271,8 @@ namespace HDT.Plugins.Advisor
                     {
                         var predictedCards = ((Deck)deck.Clone()).Cards.ToList();
 
-                        //Remove already played cards from predicted archetype deck
-                        foreach (var card in opponentCardlist)
+                        // Remove already played opponent cards from predicted archetype deck. But don't remove revealed jousted cards, because they were only seen and not played yet.
+                        foreach (var card in opponentCardlist.Where(x => !x.Jousted))
                         {
                             if (predictedCards.Contains(card))
                             {
