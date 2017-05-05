@@ -230,7 +230,7 @@ namespace HDT.Plugins.Advisor
 
             // Get opponent's cards list (all yet revealed cards)
             //var opponentCardlist = Core.Game.Opponent.RevealedCards;
-            IList<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList(); // TODO: Revealed but not played joust cards must not be removed from the decklist
+            IList<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList();
 
             // If no opponent's cards were revealed yet or we have no imported archetype decks in the database, return empty card list
             if (!opponentCardlist.Any() || !ArchetypeDecks.Any())
