@@ -35,11 +35,16 @@
                           HorizontalAlignment="Left" Margin="0,5,0,0"
                           VerticalAlignment="Top"
                           ToolTip="Shows statistics of the archetype deck like winrate and number of played games." />
-                <CheckBox Content="Check for updates"
+                <CheckBox Content="Check for plugin updates"
                           IsChecked="{Binding Settings.Default.CheckForUpdates}"
                           HorizontalAlignment="Left" Margin="0,5,0,0"
                           VerticalAlignment="Top"
                           ToolTip="Automatically check for updates when the plugin is loaded." />
+                <CheckBox Content="Show absolute similarity"
+                          IsChecked="{Binding Settings.Default.ShowAbsoluteSimilarity}"
+                          HorizontalAlignment="Left" Margin="0,5,0,0"
+                          VerticalAlignment="Top"
+                          ToolTip="Shows the similarity of decks as absolute number of matching and played cards instead of a percentage." />
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Overlay position (x, y):" VerticalAlignment="Center"></Label>
                     <TextBox Text="{Binding Settings.Default.OverlayPositionX, UpdateSourceTrigger=PropertyChanged}"

@@ -225,8 +225,12 @@ namespace HDT.Plugins.Advisor
             // Only continue if in valid game mode or game format
             if (!IsValidGameMode || !IsValidGameFormat) return;
 
-            // Small delay to guarantee opponents cards list is up to date
+            // Small delay to guarantee opponents cards list is up to date (should be 300+ ms in debug mode or with attached debugger, otherwise restarting HDT could lead to an incomplete opponent decklist!)
+#if DEBUG
+            await Task.Delay(1000);
+#else
             await Task.Delay(100);
+#endif
 
             // Get opponent's cards list (all yet revealed cards)
             //var opponentCardlist = Core.Game.Opponent.RevealedCards;
@@ -264,14 +268,18 @@ namespace HDT.Plugins.Advisor
                     // Select best matched deck with both highest similarity value and most played games
                     var matchedDeck = topGamesDecks.First();
 
-                    // Count how many cards from opponent deck are in selected deck
-                    int matchingCards = 0;
-                    foreach (var opponentDeckCard in opponentCardlist)
-                        foreach (var selectedDeckCard in matchedDeck.Key.Cards)
-                            if (!opponentDeckCard.IsCreated && opponentDeckCard.Equals(selectedDeckCard))
-                                matchingCards++;
+                    // Show matched deck name and similarity value or number of matching cards and number of all played cards
+                    if (Settings.Default.ShowAbsoluteSimilarity)
+                    {
+                        // Count how many cards from opponent deck are in matched deck
+                        int matchingCards = matchedDeck.Key.CountMatchingCards(opponentCardlist);
+                        _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}/{2})", matchedDeck.Key.Name, matchingCards, opponentCardlist.Sum(x => x.Count));
+                    }
+                    else
+                    {
+                        _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}%)", matchedDeck.Key.Name, Math.Round(matchedDeck.Value * 100, 2));
+                    }
 
-                    _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}/{2})", matchedDeck.Key.Name, matchingCards, opponentCardlist.Count);
                     _advisorOverlay.LblStats.Text = String.Format("{0}", matchedDeck.Key.Note);
                     Deck deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).First(d => d.Name == matchedDeck.Key.Name);
                     if (deck != null)

@@ -40,8 +40,8 @@ namespace HDT.Plugins.Advisor
         }
 
         /// <summary>
-        /// Uses the Jaccard index to give a indication of similarity between the two decks.</summary>
-        /// <returns>Returns a float between 0 and 1 inclusive</returns>
+        /// Uses the Jaccard index to give a indication of similarity between a deck and a cardlist.</summary>
+        /// <returns>The Jaccard index, a float between 0 and 1</returns>
         public static float Similarity(this Deck thisDeck, IList<Card> cards)
         {
             if (cards == null)
@@ -66,6 +66,30 @@ namespace HDT.Plugins.Advisor
             }
 
             return (float)Math.Round((float)lenAnB / (lenA + lenB - lenAnB), 4);
+        }
+
+        /// <summary>
+        /// Counts the absolute number of matching/intersecting cards between a deck and a cardlist.</summary>
+        /// <returns>The number of intersecting cards</returns>
+        public static int CountMatchingCards(this Deck thisDeck, IList<Card> cards)
+        {
+            if (cards == null)
+                return 0;
+
+            int count = 0;
+
+            foreach (var i in thisDeck.Cards)
+            {
+                foreach (var j in cards)
+                {
+                    if (i.Equals(j))
+                    {
+                        count += Math.Min(i.Count, j.Count);
+                    }
+                }
+            }
+
+            return count;
         }
 
         /// <summary>

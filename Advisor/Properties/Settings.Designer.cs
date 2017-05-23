@@ -238,5 +238,17 @@ namespace Advisor.Properties {
                 this["ShowStatistics"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowAbsoluteSimilarity {
+            get {
+                return ((bool)(this["ShowAbsoluteSimilarity"]));
+            }
+            set {
+                this["ShowAbsoluteSimilarity"] = value;
+            }
+        }
     }
 }
