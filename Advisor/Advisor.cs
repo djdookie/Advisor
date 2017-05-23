@@ -264,7 +264,14 @@ namespace HDT.Plugins.Advisor
                     // Select best matched deck with both highest similarity value and most played games
                     var matchedDeck = topGamesDecks.First();
 
-                    _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}%)", matchedDeck.Key.Name, Math.Round(matchedDeck.Value * 100, 2));
+                    // Count how many cards from opponent deck are in selected deck
+                    int matchingCards = 0;
+                    foreach (var opponentDeckCard in opponentCardlist)
+                        foreach (var selectedDeckCard in matchedDeck.Key.Cards)
+                            if (!opponentDeckCard.IsCreated && opponentDeckCard.Equals(selectedDeckCard))
+                                matchingCards++;
+
+                    _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}/{2})", matchedDeck.Key.Name, matchingCards, opponentCardlist.Count);
                     _advisorOverlay.LblStats.Text = String.Format("{0}", matchedDeck.Key.Note);
                     Deck deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).First(d => d.Name == matchedDeck.Key.Name);
                     if (deck != null)
