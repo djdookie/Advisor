@@ -247,8 +247,8 @@ namespace HDT.Plugins.Advisor
                 // Create archetype dictionary
                 IDictionary<Deck, float> dict = new Dictionary<Deck, float>();
 
-                // Calculate similarities between all opponent's class archetype decks and all yet known opponent cards
-                foreach (var archetypeDeck in ArchetypeDecks.Where(d => d.Class == CoreAPI.Game.Opponent.Class))
+                // Calculate similarities between all opponent's class archetype decks and all yet known opponent cards. Exclude wild decks in standard format using NAND expression.
+                foreach (var archetypeDeck in ArchetypeDecks.Where(d => d.Class == CoreAPI.Game.Opponent.Class && !(d.IsWildDeck && CoreAPI.Game.CurrentFormat == Format.Standard)))
                 {
                     // Insert deck with calculated value into dictionary and prevent exception by inserting duplicate decks
                     if (!dict.ContainsKey(archetypeDeck)) dict.Add(archetypeDeck, archetypeDeck.Similarity(opponentCardlist));
