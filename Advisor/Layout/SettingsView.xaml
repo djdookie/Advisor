@@ -53,7 +53,7 @@
                             Minimum="0" SmallChange="0.01" LargeChange="0.1" Maximum="1" />
                     <TextBox Text="{Binding Settings.Default.MinimumSimilarity, StringFormat=\{0:P\}}"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Center" Width="40"
+                        VerticalAlignment="Center" Width="50"
                         ToolTip="Only show decks when similarity is greater than this percent." Margin="5,0,0,0" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
