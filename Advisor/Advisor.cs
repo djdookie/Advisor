@@ -258,7 +258,7 @@ namespace HDT.Plugins.Advisor
                 var maxSim = dict.Values.Max(); // TODO: Some unreproducable bug threw an exception here. System.InvalidOperationException: Sequence contains no elements @ IEnumerable.Max()
 
                 // If any archetype deck matches more than MinimumSimilarity show the deck with the highest similarity
-                if (maxSim > Settings.Default.MinimumSimilarity)
+                if (maxSim >= Settings.Default.MinimumSimilarity)
                 {
                     // Select top decks with highest similarity value
                     var topSimDecks = (from d in dict where Math.Abs(d.Value - maxSim) < 0.001 select d).ToList();
