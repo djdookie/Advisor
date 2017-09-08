@@ -303,6 +303,13 @@ namespace HDT.Plugins.Advisor
                         currentArchetypeDeckGuid = matchedDeck.Key.DeckId;
                     }
                 }
+                else
+                {
+                    _advisorOverlay.LblArchetype.Text = String.Format("Best match: {0}%", Math.Round(maxSim * 100, 2));
+                    _advisorOverlay.LblStats.Text = "";
+                    _advisorOverlay.Update(new List<Card>(), currentArchetypeDeckGuid!=Guid.Empty);
+                    currentArchetypeDeckGuid = Guid.Empty;
+                }
             }
         }
 
