@@ -12,10 +12,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="OverlayPositionX" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">230</Value>
+      <Value Profile="(Default)">150</Value>
     </Setting>
     <Setting Name="OverlayPositionY" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">134</Value>
     </Setting>
     <Setting Name="ActivateInRanked" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -48,7 +48,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="OverlayScaling" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">100</Value>
+      <Value Profile="(Default)">70</Value>
     </Setting>
     <Setting Name="OverlayOpacity" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
@@ -59,7 +59,7 @@
     <Setting Name="ShowAbsoluteSimilarity" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="MinimumSimilarity" Type="System.Single" Scope="User">
+    <Setting Name="MinimumSimilarity" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>

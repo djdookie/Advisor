@@ -255,10 +255,10 @@ namespace HDT.Plugins.Advisor
                 }
 
                 // Get highest similarity value
-                var maxSim = dict.Values.Max(); // TODO: Some unreproducable bug threw an exception here. System.InvalidOperationException: Sequence contains no elements @ IEnumerable.Max()
+                var maxSim = dict.Values.DefaultIfEmpty(0).Max(); // Some unreproducable bug threw an exception here. System.InvalidOperationException: Sequence contains no elements @ IEnumerable.Max() => should be fixed by DefaultIfEmpty() now!
 
-                // If any archetype deck matches more than MinimumSimilarity show the deck with the highest similarity
-                if (maxSim >= Settings.Default.MinimumSimilarity)
+                // If any archetype deck matches more than MinimumSimilarity (as percentage) show the deck with the highest similarity
+                if (maxSim >= Settings.Default.MinimumSimilarity * 0.01)
                 {
                     // Select top decks with highest similarity value
                     var topSimDecks = (from d in dict where Math.Abs(d.Value - maxSim) < 0.001 select d).ToList();
@@ -305,9 +305,10 @@ namespace HDT.Plugins.Advisor
                 }
                 else
                 {
+                    // If no archetype deck matches more than MinimumSimilarity clear the list and show the best match percentage
                     _advisorOverlay.LblArchetype.Text = String.Format("Best match: {0}%", Math.Round(maxSim * 100, 2));
                     _advisorOverlay.LblStats.Text = "";
-                    _advisorOverlay.Update(new List<Card>(), currentArchetypeDeckGuid!=Guid.Empty);
+                    _advisorOverlay.Update(new List<Card>(), currentArchetypeDeckGuid != Guid.Empty);
                     currentArchetypeDeckGuid = Guid.Empty;
                 }
             }

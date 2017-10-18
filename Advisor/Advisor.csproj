@@ -132,6 +132,7 @@
     <Compile Include="Services\TempoStorm\SnapshotResponse.cs" />
     <Compile Include="Services\TrackerLogger.cs" />
     <Compile Include="Services\TrackerRepository.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>
@@ -157,7 +158,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>

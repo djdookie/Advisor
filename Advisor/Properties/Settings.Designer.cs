@@ -12,7 +12,7 @@ namespace Advisor.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -61,7 +61,7 @@ namespace Advisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("230")]
+        [global::System.Configuration.DefaultSettingValueAttribute("150")]
         public int OverlayPositionX {
             get {
                 return ((int)(this["OverlayPositionX"]));
@@ -73,7 +73,7 @@ namespace Advisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("134")]
         public int OverlayPositionY {
             get {
                 return ((int)(this["OverlayPositionY"]));
@@ -205,7 +205,7 @@ namespace Advisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        [global::System.Configuration.DefaultSettingValueAttribute("70")]
         public int OverlayScaling {
             get {
                 return ((int)(this["OverlayScaling"]));
@@ -254,9 +254,9 @@ namespace Advisor.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public float MinimumSimilarity {
+        public int MinimumSimilarity {
             get {
-                return ((float)(this["MinimumSimilarity"]));
+                return ((int)(this["MinimumSimilarity"]));
             }
             set {
                 this["MinimumSimilarity"] = value;

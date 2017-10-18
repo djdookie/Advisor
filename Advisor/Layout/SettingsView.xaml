@@ -46,15 +46,16 @@
                           VerticalAlignment="Top"
                           ToolTip="Shows the similarity of decks as absolute number of matching and played cards instead of a percentage." />
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Min. Similarity:" VerticalAlignment="Center"></Label>
+                    <Label Content="Min. similarity:" VerticalAlignment="Center"></Label>
                     <Slider x:Name="SliderMinimumSimilarity"
-                            VerticalAlignment="Center" Width="125"
+                            VerticalAlignment="Center" Width="127"
                             Value="{Binding Settings.Default.MinimumSimilarity, UpdateSourceTrigger=PropertyChanged}"
-                            Minimum="0" SmallChange="0.01" LargeChange="0.1" Maximum="1" />
-                    <TextBox Text="{Binding Settings.Default.MinimumSimilarity, StringFormat=\{0:P\}}"
+                            Minimum="0" SmallChange="1" LargeChange="10" Maximum="100" />
+                    <TextBox Text="{Binding Settings.Default.MinimumSimilarity, UpdateSourceTrigger=PropertyChanged}"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Center" Width="50"
-                        ToolTip="Only show decks when similarity is greater than this percent." Margin="5,0,0,0" />
+                        VerticalAlignment="Center" Width="30"
+                        ToolTip="Only show decks with similarity greater or equal to this percentage." Margin="5,0,0,0" />
+                    <Label Content="%" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Overlay position (x, y):" VerticalAlignment="Center"></Label>
@@ -82,8 +83,9 @@
                                 Minimum="1" SmallChange="1" LargeChange="10" Maximum="200" />
                     <TextBox Text="{Binding Settings.Default.OverlayScaling, UpdateSourceTrigger=PropertyChanged}"
                           HorizontalAlignment="Left"
-                          VerticalAlignment="Center" Width="40"
+                          VerticalAlignment="Center" Width="30"
                           ToolTip="The scaling of the overlay in percent." Margin="5,0,0,0" />
+                    <Label Content="%" VerticalAlignment="Center" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Opacity:" VerticalAlignment="Center"></Label>
@@ -93,8 +95,9 @@
                             Minimum="0" SmallChange="1" LargeChange="10" Maximum="100" />
                     <TextBox Text="{Binding Settings.Default.OverlayOpacity, UpdateSourceTrigger=PropertyChanged}"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Center" Width="40"
+                        VerticalAlignment="Center" Width="30"
                         ToolTip="The opacity of the overlay in percent." Margin="5,0,0,0" />
+                    <Label Content="%" VerticalAlignment="Center" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
