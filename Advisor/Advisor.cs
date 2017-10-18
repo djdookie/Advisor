@@ -169,7 +169,7 @@ namespace HDT.Plugins.Advisor
                 _advisorOverlay.LblArchetype.Text = "";
                 _advisorOverlay.LblStats.Text = "";
 
-                await Task.Delay(2000);
+                await Task.Delay(5000);
 
                 _advisorOverlay.Update(new List<Card>(), true);
                 currentArchetypeDeckGuid = Guid.Empty;
