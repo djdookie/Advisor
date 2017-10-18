@@ -60,7 +60,7 @@ namespace HDT.Plugins.Advisor
         public async void OnLoad()
         {
             // Small delay to guarantee all game variables are set correctly by now (especially CoreAPI.Game.IsInMenu)
-            await Task.Delay(500);
+            await Task.Delay(2000);
 
             _advisorOverlay = new AdvisorOverlay();
 			Core.OverlayCanvas.Children.Add(_advisorOverlay);
@@ -92,7 +92,7 @@ namespace HDT.Plugins.Advisor
         {
         }
 
-        public Version Version => new Version(1, 0, 6);
+        public Version Version => new Version(1, 0, 7);
 
         public async Task CheckForUpdate()
         {

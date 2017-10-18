@@ -48,7 +48,7 @@ namespace HDT.Plugins.Advisor
             //trackerRepository = new TrackerRepository();
             //LoadArchetypeDecks();
 
-            _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
+            _advisorOverlay.LblArchetype.Text = "";
             _advisorOverlay.LblStats.Text = "";
             //_advisorOverlay.Update(new List<Card>());
             UpdateCardList();
@@ -160,14 +160,20 @@ namespace HDT.Plugins.Advisor
         //internal Entity Opponent => Entities?.FirstOrDefault(x => x.IsOpponent);
 
         // Reset on when a new game starts
-        internal void GameStart()
+        internal async void GameStart()
         {
             // Only continue if in valid game mode and game format
             if (IsValidGameMode && IsValidGameFormat)
             {
                 _advisorOverlay.UpdatePosition();
-                _advisorOverlay.LblArchetype.Text = "No matching archetype yet";
+                _advisorOverlay.LblArchetype.Text = "";
                 _advisorOverlay.LblStats.Text = "";
+
+                await Task.Delay(2000);
+
+                _advisorOverlay.Update(new List<Card>(), true);
+                currentArchetypeDeckGuid = Guid.Empty;
+
                 UpdateCardList();
                 _advisorOverlay.Show();
             }
@@ -236,8 +242,9 @@ namespace HDT.Plugins.Advisor
             //var opponentCardlist = Core.Game.Opponent.RevealedCards;
             IList<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList();
 
-            // If no opponent's cards were revealed yet or we have no imported archetype decks in the database, return empty card list
-            if (!opponentCardlist.Any() || !ArchetypeDecks.Any())
+            // If opponent's class is unknown yet or we have no imported archetype decks in the database, return empty card list
+            //if (!opponentCardlist.Any() || !ArchetypeDecks.Any())
+            if (CoreAPI.Game.Opponent.Class == "" || !ArchetypeDecks.Any())
             {
                 currentArchetypeDeckGuid = Guid.Empty;
                 _advisorOverlay.Update(new List<Card>(), true);
