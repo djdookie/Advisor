@@ -46,6 +46,17 @@
                           VerticalAlignment="Top"
                           ToolTip="Shows the similarity of decks as absolute number of matching and played cards instead of a percentage." />
                 <StackPanel Orientation="Horizontal">
+                    <Label Content="Min. Similarity:" VerticalAlignment="Center"></Label>
+                    <Slider x:Name="SliderMinimumSimilarity"
+                            VerticalAlignment="Center" Width="125"
+                            Value="{Binding Settings.Default.MinimumSimilarity, UpdateSourceTrigger=PropertyChanged}"
+                            Minimum="0" SmallChange="0.01" LargeChange="0.1" Maximum="1" />
+                    <TextBox Text="{Binding Settings.Default.MinimumSimilarity, StringFormat=\{0:P\}}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center" Width="50"
+                        ToolTip="Only show decks when similarity is greater than this percent." Margin="5,0,0,0" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <Label Content="Overlay position (x, y):" VerticalAlignment="Center"></Label>
                     <TextBox Text="{Binding Settings.Default.OverlayPositionX, UpdateSourceTrigger=PropertyChanged}"
                           HorizontalAlignment="Left"
