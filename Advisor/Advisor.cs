@@ -257,8 +257,8 @@ namespace HDT.Plugins.Advisor
                 // Get highest similarity value
                 var maxSim = dict.Values.Max(); // TODO: Some unreproducable bug threw an exception here. System.InvalidOperationException: Sequence contains no elements @ IEnumerable.Max()
 
-                // If any archetype deck matches more than 0% show the deck with the highest similarity
-                if (maxSim > 0)
+                // If any archetype deck matches more than MinimumSimilarity show the deck with the highest similarity
+                if (maxSim >= Settings.Default.MinimumSimilarity)
                 {
                     // Select top decks with highest similarity value
                     var topSimDecks = (from d in dict where Math.Abs(d.Value - maxSim) < 0.001 select d).ToList();
@@ -302,6 +302,13 @@ namespace HDT.Plugins.Advisor
                         // Remember current archetype deck guid with highest similarity to opponent's played cards
                         currentArchetypeDeckGuid = matchedDeck.Key.DeckId;
                     }
+                }
+                else
+                {
+                    _advisorOverlay.LblArchetype.Text = String.Format("Best match: {0}%", Math.Round(maxSim * 100, 2));
+                    _advisorOverlay.LblStats.Text = "";
+                    _advisorOverlay.Update(new List<Card>(), currentArchetypeDeckGuid!=Guid.Empty);
+                    currentArchetypeDeckGuid = Guid.Empty;
                 }
             }
         }
