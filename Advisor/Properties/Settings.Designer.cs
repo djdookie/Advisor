@@ -262,5 +262,20 @@ namespace Advisor.Properties {
                 this["MinimumSimilarity"] = value;
             }
         }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowNonMatchingCards
+        {
+            get
+            {
+                return ((bool)(this["ShowNonMatchingCards"]));
+            }
+            set
+            {
+                this["ShowNonMatchingCards"] = value;
+            }
+        }
     }
 }
