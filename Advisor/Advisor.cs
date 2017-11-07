@@ -15,6 +15,7 @@ using HDT.Plugins.Advisor.Services;
 using HDT.Plugins.Advisor.Layout;
 using Hearthstone_Deck_Tracker.Enums;
 using Hearthstone_Deck_Tracker.Utility.Logging;
+using Hearthstone_Deck_Tracker.Utility.Extensions;
 //using Hearthstone_Deck_Tracker.Windows;
 using MahApps.Metro.Controls;
 using Card = Hearthstone_Deck_Tracker.Hearthstone.Card;
@@ -280,7 +281,7 @@ namespace HDT.Plugins.Advisor
                     {
                         // Count how many cards from opponent deck are in matched deck
                         int matchingCards = matchedDeck.Key.CountMatchingCards(opponentCardlist);
-                        _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}/{2})", matchedDeck.Key.Name, matchingCards, opponentCardlist.Sum(x => x.Count));
+                        _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}/{2})", matchedDeck.Key.Name, matchingCards, matchedDeck.Key.CountUnion(opponentCardlist));
                     }
                     else
                     {
@@ -293,29 +294,59 @@ namespace HDT.Plugins.Advisor
                     {
                         var predictedCards = ((Deck)deck.Clone()).Cards.ToList();
 
-                        // Remove already played opponent cards from predicted archetype deck. But don't remove revealed jousted cards, because they were only seen and not played yet.
-                        foreach (var card in opponentCardlist.Where(x => !x.Jousted))
+                        foreach (var card in opponentCardlist)
                         {
+                            // Remove already played opponent cards from predicted archetype deck. But don't remove revealed jousted cards, because they were only seen and not played yet.
                             if (predictedCards.Contains(card))
                             {
                                 var item = predictedCards.Find(x => x.Id == card.Id);
-                                item.Count -= card.Count;
+
+                                if (!card.Jousted)
+                                {
+                                    item.Count -= card.Count;
+                                }
+
+                                // highlight jousted cards in green
+                                // also highlight when deck has 2 of a card and we have matched one
+                                if (item.Count > 0)
+                                {
+                                    item.HighlightInHand = true;
+                                    item.InHandCount += card.Count;
+                                }
+                                else
+                                {
+                                    item.HighlightInHand = false;
+                                    item.InHandCount = 0;
+                                }
                             }
+                            if (Settings.Default.ShowNonMatchingCards)
+                            {
+                                // Show known cards that don't match the archetype deck, in red
+                                if (!predictedCards.Contains(card))
+                                {
+                                    var item = (Card)card.Clone();
+                                    item.HighlightInHand = false;
+                                    item.WasDiscarded = true;
+                                    if (!item.Jousted)
+                                        item.Count = 0;
+                                    predictedCards.Add(item);
+                                }
+                            }
+
                         }
                         //var sortedPredictedCards = predictedCards.OrderBy(x => x.Cost).ThenBy(y => y.Name).ToList();
                         bool isNewArchetypeDeck = currentArchetypeDeckGuid != matchedDeck.Key.DeckId;
                         // Update overlay cards
-                        _advisorOverlay.Update(predictedCards, isNewArchetypeDeck);
+                        _advisorOverlay.Update(predictedCards.ToSortedCardList(), isNewArchetypeDeck);
                         // Remember current archetype deck guid with highest similarity to opponent's played cards
                         currentArchetypeDeckGuid = matchedDeck.Key.DeckId;
                     }
                 }
                 else
                 {
-                    // If no archetype deck matches more than MinimumSimilarity clear the list and show the best match percentage
                     _advisorOverlay.LblArchetype.Text = String.Format("Best match: {0}%", Math.Round(maxSim * 100, 2));
                     _advisorOverlay.LblStats.Text = "";
-                    _advisorOverlay.Update(new List<Card>(), currentArchetypeDeckGuid != Guid.Empty);
+                    _advisorOverlay.Update(Settings.Default.ShowNonMatchingCards ? opponentCardlist.ToList() : new List<Card>(), currentArchetypeDeckGuid != Guid.Empty);
                     currentArchetypeDeckGuid = Guid.Empty;
                 }
             }

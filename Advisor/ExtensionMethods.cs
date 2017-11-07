@@ -92,6 +92,30 @@ namespace HDT.Plugins.Advisor
             return count;
         }
 
+        public static int CountUnion(this Deck thisDeck, IList<Card> cards)
+        {
+            if (cards == null)
+                return 0;
+
+            var lenA = thisDeck.Cards.Sum(x => x.Count);
+            var lenB = cards.Sum(x => x.Count);
+
+            int count = 0;
+
+            foreach (var i in thisDeck.Cards)
+            {
+                foreach (var j in cards)
+                {
+                    if (i.Equals(j))
+                    {
+                        count += Math.Min(i.Count, j.Count);
+                    }
+                }
+            }
+
+            return lenA + lenB - count;
+        }
+
         /// <summary>
         /// Gets the number of played games stored in the deck's note field.
         /// </summary>
