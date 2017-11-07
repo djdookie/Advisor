@@ -12,6 +12,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
     </UserControl.Resources>
+    <ScrollViewer>
     <StackPanel Margin="10,15,10,15">
         <GroupBox Header="Options">
             <StackPanel>
@@ -147,4 +148,5 @@
         </GroupBox>
 
     </StackPanel>
+    </ScrollViewer>
 </UserControl>
