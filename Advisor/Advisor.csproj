@@ -46,11 +46,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="HearthDb">
-      <HintPath>C:\Users\Patrick\AppData\Local\HearthstoneDeckTracker\app-1.5.1\HearthDb.dll</HintPath>
+      <HintPath>C:\Users\Patrick\AppData\Local\HearthstoneDeckTracker\app-1.6.5\HearthDb.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="HearthstoneDeckTracker">
-      <HintPath>C:\Users\Patrick\AppData\Local\HearthstoneDeckTracker\app-1.5.1\HearthstoneDeckTracker.exe</HintPath>
+      <HintPath>C:\Users\Patrick\AppData\Local\HearthstoneDeckTracker\app-1.6.5\HearthstoneDeckTracker.exe</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -58,7 +58,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MahApps.Metro">
-      <HintPath>C:\Users\Patrick\AppData\Local\HearthstoneDeckTracker\app-1.5.1\MahApps.Metro.dll</HintPath>
+      <HintPath>C:\Users\Patrick\AppData\Local\HearthstoneDeckTracker\app-1.6.5\MahApps.Metro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

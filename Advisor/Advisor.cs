@@ -50,6 +50,9 @@ namespace HDT.Plugins.Advisor
 
             _advisorOverlay.LblArchetype.Text = "";
             _advisorOverlay.LblStats.Text = "";
+
+            //Task.Delay(5000); // TODO: CoreAPI.Game.IsInMenu is true, so Advisor overlay is not shown after instantiating this addon while a game is running. How do we repair this?
+
             //_advisorOverlay.Update(new List<Card>());
             UpdateCardList();
 
@@ -228,15 +231,15 @@ namespace HDT.Plugins.Advisor
         /// </summary>
         internal async void UpdateCardList()
         {
-            // Only continue if in valid game mode or game format
-            if (!IsValidGameMode || !IsValidGameFormat) return;
-
             // Small delay to guarantee opponents cards list is up to date (should be 300+ ms in debug mode or with attached debugger, otherwise restarting HDT could lead to an incomplete opponent decklist!)
 #if DEBUG
             await Task.Delay(1000);
 #else
             await Task.Delay(100);
 #endif
+
+            // Only continue if in valid game mode or game format
+            if (!IsValidGameMode || !IsValidGameFormat) return;
 
             // Get opponent's cards list (all yet revealed cards)
             //var opponentCardlist = Core.Game.Opponent.RevealedCards;
@@ -264,13 +267,13 @@ namespace HDT.Plugins.Advisor
                 // Get highest similarity value
                 var maxSim = dict.Values.DefaultIfEmpty(0).Max(); // Some unreproducable bug threw an exception here. System.InvalidOperationException: Sequence contains no elements @ IEnumerable.Max() => should be fixed by DefaultIfEmpty() now!
 
-                // If any archetype deck matches more than MinimumSimilarity (as percentage) show the deck with the highest similarity
-                if (maxSim >= Settings.Default.MinimumSimilarity * 0.01)
+                // If any archetype deck matches more than MinimumSimilarity (as percentage) show the deck with the highest similarity (important: we need at least 1 deck in dict, otherwise we can't show any results.)
+                if (dict.Count > 0 && maxSim >= Settings.Default.MinimumSimilarity * 0.01)
                 {
                     // Select top decks with highest similarity value
                     var topSimDecks = (from d in dict where Math.Abs(d.Value - maxSim) < 0.001 select d).ToList();
                     // Select top decks with most played games
-                    var maxGames = topSimDecks.Max(x => x.Key.GetPlayedGames());
+                    var maxGames = topSimDecks.Max(x => x.Key.GetPlayedGames()); // If class was something like "Groddo the Bogwarden" in monster hunt, we got an InvalidOperationException at Max() because dict was empty. Now we check for dict > 0 above to prevent this.
                     var topGamesDecks = (from t in topSimDecks where t.Key.GetPlayedGames() == maxGames select t).ToList();
                     // Select best matched deck with both highest similarity value and most played games
                     var matchedDeck = topGamesDecks.First();
