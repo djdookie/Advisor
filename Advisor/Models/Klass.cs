@@ -11,6 +11,7 @@
 		Shaman,
 		Warlock,
 		Warrior,
+		DemonHunter,
 		Any
 	}
 
@@ -29,6 +30,7 @@
 				case "shaman": return Klass.Shaman;
 				case "warlock": return Klass.Warlock;
 				case "warrior": return Klass.Warrior;
+				case "demonhunter": return Klass.DemonHunter;
 				default: return Klass.Any;
 			}
 		}
