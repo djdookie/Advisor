@@ -157,11 +157,11 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
             foreach (HtmlNode site in deckSites)
             {
                 // Extract link
-                HtmlNode link = site.SelectSingleNode("./div/h4/a/@href");
+                HtmlNode link = site.SelectSingleNode("./h4/a/@href");
                 string hrefValue = link.GetAttributeValue("href", string.Empty);
 
                 // Extract info
-                HtmlNode stats = site.SelectSingleNode("./div/small");
+                HtmlNode stats = site.SelectSingleNode("./div");
                 string innerText = stats.InnerText;
 
                 // Create deck from site
