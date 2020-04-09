@@ -171,8 +171,11 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
                 result.Note = innerText;
 
                 // Parse and add Guid to the deck
-                string strGuid = Regex.Match(hrefValue, @"[0-9a-f]{8}[-]?([0-9a-f]{4}[-]?){3}[0-9a-f]{12}").ToString();
-                result.DeckId = new Guid(strGuid);
+                string strId = Regex.Match(hrefValue, @"/deck/([0-9]+)/").Groups[1].Value;
+                if (!string.IsNullOrEmpty(strId))
+                {
+                    result.DeckId = new Guid(strId.PadLeft(32, '0'));
+                }
 
                 // Set import datetime as LastEdited
                 result.LastEdited = DateTime.Now;
