@@ -160,6 +160,14 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
                 HtmlNode link = site.SelectSingleNode("./h4/a/@href");
                 string hrefValue = link.GetAttributeValue("href", string.Empty);
 
+                // Parse and check deck ID
+                string strId = Regex.Match(hrefValue, @"/deck/([0-9]+)/").Groups[1].Value;
+                if (string.IsNullOrEmpty(strId))
+                {
+                    Interlocked.Decrement(ref _decksFound);
+                    continue;
+                }
+
                 // Extract info
                 HtmlNode stats = site.SelectSingleNode("./div");
                 string innerText = stats.InnerText;
@@ -170,12 +178,8 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
                 // Add info to the deck
                 result.Note = innerText;
 
-                // Parse and add Guid to the deck
-                string strId = Regex.Match(hrefValue, @"/deck/([0-9]+)/").Groups[1].Value;
-                if (!string.IsNullOrEmpty(strId))
-                {
-                    result.DeckId = new Guid(strId.PadLeft(32, '0'));
-                }
+                // Add Guid to the deck
+                result.DeckId = new Guid(strId.PadLeft(32, '0'));
 
                 // Set import datetime as LastEdited
                 result.LastEdited = DateTime.Now;
