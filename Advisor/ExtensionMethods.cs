@@ -100,7 +100,7 @@ namespace HDT.Plugins.Advisor
         public static int GetPlayedGames(this Deck thisDeck)
         {
             int result;
-            bool success = Int32.TryParse(Regex.Match(thisDeck.Note, @"[0-9]+$").ToString(), out result);
+            bool success = Int32.TryParse(Regex.Match(thisDeck.Note, @"Games: ([0-9]+)").Groups[1].Value, out result);
             return success ? result : 0;
         }
     }
