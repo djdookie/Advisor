@@ -52,14 +52,11 @@ namespace HDT.Plugins.Advisor.Layout
 			switch (icon.ToLower())
 			{
 				case "download":
-					unicode = "\ue9c5"; break;
+					unicode = "\u21e9"; break;
 				case "error":
-					unicode = "\uea0e"; break;
-				case "github":
-					unicode = "\ueab0"; break;
-				case "info":
+					unicode = "\u20e0"; break;
 				default:
-					unicode = "\uea08"; break;
+					unicode = "!"; break;
 			}
 
 			UtilityButton.Content = unicode;
