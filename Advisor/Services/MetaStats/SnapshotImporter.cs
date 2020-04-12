@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -170,7 +171,7 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
 
                 // Extract info
                 HtmlNode stats = site.SelectSingleNode("./div");
-                string innerText = stats.InnerText;
+                string innerText = string.Join("\n", stats.InnerText.Trim().Split('\n').Select(s => s.Trim()));
 
                 // Create deck from site
                 var result = await Task.Run(() => GetDeck(BaseUrl + hrefValue, progress));
