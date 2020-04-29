@@ -22,12 +22,9 @@ namespace HDT.Plugins.Advisor
     internal class Advisor
     {
         private static Flyout _settingsFlyout;
-
         private static Flyout _notificationFlyout;
-
         private readonly AdvisorOverlay _advisorOverlay;
-
-        private Guid currentArchetypeDeckGuid;
+        private Guid _currentArchetypeDeckGuid;
 
         public Advisor(AdvisorOverlay overlay)
         {
@@ -144,7 +141,7 @@ namespace HDT.Plugins.Advisor
                 await Task.Delay(5000);
 
                 _advisorOverlay.Update(new List<Card>(), true);
-                currentArchetypeDeckGuid = Guid.Empty;
+                _currentArchetypeDeckGuid = Guid.Empty;
 
                 UpdateCardList();
                 _advisorOverlay.Show();
@@ -220,7 +217,7 @@ namespace HDT.Plugins.Advisor
             // If opponent's class is unknown yet or we have no imported archetype decks in the database, return empty card list
             if (CoreAPI.Game.Opponent.Class == "" || !ArchetypeDecks.Any())
             {
-                currentArchetypeDeckGuid = Guid.Empty;
+                _currentArchetypeDeckGuid = Guid.Empty;
                 _advisorOverlay.Update(new List<Card>(), true);
             }
             else
@@ -282,7 +279,7 @@ namespace HDT.Plugins.Advisor
                             }
                         }
 
-                        var isNewArchetypeDeck = currentArchetypeDeckGuid != matchedDeck.Key.DeckId;
+                        var isNewArchetypeDeck = _currentArchetypeDeckGuid != matchedDeck.Key.DeckId;
 
                         // remove cards with 0 left when setting is set to true
                         if (Settings.Default.RemovePlayedCards)
@@ -293,7 +290,7 @@ namespace HDT.Plugins.Advisor
                         // Update overlay cards
                         _advisorOverlay.Update(predictedCards, isNewArchetypeDeck);
                         // Remember current archetype deck guid with highest similarity to opponent's played cards
-                        currentArchetypeDeckGuid = matchedDeck.Key.DeckId;
+                        _currentArchetypeDeckGuid = matchedDeck.Key.DeckId;
                     }
                 }
                 else
@@ -301,8 +298,8 @@ namespace HDT.Plugins.Advisor
                     // If no archetype deck matches more than MinimumSimilarity clear the list and show the best match percentage
                     _advisorOverlay.LblArchetype.Text = string.Format("Best match: {0}%", Math.Round(maxSim * 100, 2));
                     _advisorOverlay.LblStats.Text = "";
-                    _advisorOverlay.Update(new List<Card>(), currentArchetypeDeckGuid != Guid.Empty);
-                    currentArchetypeDeckGuid = Guid.Empty;
+                    _advisorOverlay.Update(new List<Card>(), _currentArchetypeDeckGuid != Guid.Empty);
+                    _currentArchetypeDeckGuid = Guid.Empty;
                 }
             }
         }

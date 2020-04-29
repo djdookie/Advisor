@@ -13,10 +13,9 @@ namespace HDT.Plugins.Advisor
 {
     public class AdvisorPlugin : IPlugin
     {
+        private Advisor _advisor;
         private AdvisorOverlay _advisorOverlay;
         private MenuItem _menu;
-
-        private Advisor advisor;
 
         public string Author => "Dookie";
 
@@ -51,7 +50,7 @@ namespace HDT.Plugins.Advisor
 
             _advisorOverlay = new AdvisorOverlay();
             Core.OverlayCanvas.Children.Add(_advisorOverlay);
-            advisor = new Advisor(_advisorOverlay);
+            _advisor = new Advisor(_advisorOverlay);
 
             // Check for updates
             if (Settings.Default.CheckForUpdates)
@@ -59,14 +58,14 @@ namespace HDT.Plugins.Advisor
                 await CheckForUpdate();
             }
 
-            GameEvents.OnInMenu.Add(advisor.InMenu);
-            GameEvents.OnGameStart.Add(advisor.GameStart);
-            GameEvents.OnOpponentPlay.Add(advisor.OpponentPlay);
-            GameEvents.OnOpponentSecretTriggered.Add(advisor.OpponentSecretTiggered);
-            GameEvents.OnOpponentDeckDiscard.Add(advisor.OpponentDeckDiscard);
-            GameEvents.OnOpponentDeckToPlay.Add(advisor.OpponentDeckToPlay);
-            GameEvents.OnOpponentHandDiscard.Add(advisor.OpponentHandDiscard);
-            GameEvents.OnOpponentJoustReveal.Add(advisor.OpponentJoustReveal);
+            GameEvents.OnInMenu.Add(_advisor.InMenu);
+            GameEvents.OnGameStart.Add(_advisor.GameStart);
+            GameEvents.OnOpponentPlay.Add(_advisor.OpponentPlay);
+            GameEvents.OnOpponentSecretTriggered.Add(_advisor.OpponentSecretTiggered);
+            GameEvents.OnOpponentDeckDiscard.Add(_advisor.OpponentDeckDiscard);
+            GameEvents.OnOpponentDeckToPlay.Add(_advisor.OpponentDeckToPlay);
+            GameEvents.OnOpponentHandDiscard.Add(_advisor.OpponentHandDiscard);
+            GameEvents.OnOpponentJoustReveal.Add(_advisor.OpponentJoustReveal);
             // TODO: How to prevent from multiple GameEvent registrations we disabling and reenabling plugins? See: https://github.com/HearthSim/Hearthstone-Deck-Tracker/issues/3079
         }
 
@@ -86,9 +85,9 @@ namespace HDT.Plugins.Advisor
             var latest = await Github.CheckForUpdate("kimsey0", "Advisor", Version);
             if (latest != null)
             {
-                Advisor.Notify("Plugin update available", $"[DOWNLOAD]({latest.html_url}) Advisor {latest.tag_name}", 0,
-                    "download", () => Process.Start(latest.html_url));
-                Log.Info("Update available: " + latest.tag_name, "Advisor");
+                Advisor.Notify("Plugin update available", $"[DOWNLOAD]({latest.HtmlUrl}) Advisor {latest.TagName}", 0,
+                    "download", () => Process.Start(latest.HtmlUrl));
+                Log.Info("Update available: " + latest.TagName, "Advisor");
             }
         }
     }

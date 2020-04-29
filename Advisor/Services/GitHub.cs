@@ -9,7 +9,7 @@ namespace HDT.Plugins.Advisor.Services
 {
     public class Github
     {
-        private static readonly ILoggingService _logger = new TrackerLogger();
+        private static readonly ILoggingService Logger = new TrackerLogger();
 
         // Check if there is a newer release on Github than current
         public static async Task<GithubRelease> CheckForUpdate(string user, string repo, Version version)
@@ -19,7 +19,7 @@ namespace HDT.Plugins.Advisor.Services
                 var latest = await GetLatestRelease(user, repo);
 
                 // tag needs to be in strict version format: e.g. 0.0.0
-                var v = new Version(latest.tag_name.TrimStart('v'));
+                var v = new Version(latest.TagName.TrimStart('v'));
 
                 // check if latest is newer than current
                 if (v.CompareTo(version) > 0)
@@ -29,7 +29,7 @@ namespace HDT.Plugins.Advisor.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                Logger.Error(ex);
                 Advisor.Notify($"{repo}: Plugin update check failed", ex.Message, 15, "error");
             }
 
@@ -63,10 +63,10 @@ namespace HDT.Plugins.Advisor.Services
         // Basic release info for JSON deserialization
         public class GithubRelease
         {
-            public string html_url { get; set; }
-            public string tag_name { get; set; }
-            public string prerelease { get; set; }
-            public string published_at { get; set; }
+            [JsonProperty("html_url")] public string HtmlUrl { get; set; }
+            [JsonProperty("tag_name")] public string TagName { get; set; }
+            [JsonProperty("prerelease")] public string Prerelease { get; set; }
+            [JsonProperty("published_at")] public string PublishedAt { get; set; }
         }
     }
 }
