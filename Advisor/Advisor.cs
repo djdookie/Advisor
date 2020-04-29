@@ -16,26 +16,17 @@ using Hearthstone_Deck_Tracker.Hearthstone;
 using Hearthstone_Deck_Tracker.Utility.Logging;
 using MahApps.Metro.Controls;
 using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
-//using Hearthstone_Deck_Tracker.Windows;
-
-//using HDT.Plugins.Advisor.Models;
 
 namespace HDT.Plugins.Advisor
 {
     internal class Advisor
     {
-        // Highest deck similarity
-        //double maxSim = 0;
-        //TrackerRepository trackerRepository;
         private static Flyout _settingsFlyout;
 
         private static Flyout _notificationFlyout;
 
-        //private int mana = 0;
         private readonly AdvisorOverlay _advisorOverlay;
 
-        //IEnumerable<ArchetypeDeck> archetypeDecks;
-        //private IList<Deck> _archetypeDecks;
         private Guid currentArchetypeDeckGuid;
 
         public Advisor(AdvisorOverlay overlay)
@@ -45,16 +36,11 @@ namespace HDT.Plugins.Advisor
             Settings.Default.PropertyChanged += Settings_PropertyChanged;
 
             _advisorOverlay = overlay;
-            //trackerRepository = new TrackerRepository();
-            //LoadArchetypeDecks();
 
             _advisorOverlay.LblArchetype.Text = "";
             _advisorOverlay.LblStats.Text = "";
 
             // TODO: CoreAPI.Game.IsInMenu is true, so Advisor overlay is not shown after instantiating this addon while a game is running. How do we repair this?
-            //Task.Delay(5000);
-
-            //_advisorOverlay.Update(new List<Card>());
             UpdateCardList();
 
             // Hide in menu, if necessary
@@ -126,16 +112,6 @@ namespace HDT.Plugins.Advisor
             }
         }
 
-        ///// <summary>
-        ///// Load all archetype decks from tracker repository
-        ///// </summary>
-        //private void GetArchetypeDecks()
-        //{
-        //    //archetypeDecks = trackerRepository.GetAllArchetypeDecks().Where(d => d.Klass == Models.KlassKonverter.FromString(CoreAPI.Game.Opponent.Class));
-        //    _archetypeDecks = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList();
-        //    // TODO: Select newest version of any all decks like before?
-        //}
-
         /// <summary>
         ///     All archetype decks from tracker repository
         /// </summary>
@@ -152,13 +128,8 @@ namespace HDT.Plugins.Advisor
         private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Settings.Default.Save();
-            //_advisorOverlay.UpdatePosition();
             GameStart();
         }
-
-        //internal List<Entity> Entities => Helper.DeepClone<Dictionary<int, Entity>>(CoreAPI.Game.Entities).Values.ToList<Entity>();
-
-        //internal Entity Opponent => Entities?.FirstOrDefault(x => x.IsOpponent);
 
         // Reset on when a new game starts
         internal async void GameStart()
@@ -244,11 +215,9 @@ namespace HDT.Plugins.Advisor
             }
 
             // Get opponent's cards list (all yet revealed cards)
-            //var opponentCardlist = Core.Game.Opponent.RevealedCards;
             IList<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList();
 
             // If opponent's class is unknown yet or we have no imported archetype decks in the database, return empty card list
-            //if (!opponentCardlist.Any() || !ArchetypeDecks.Any())
             if (CoreAPI.Game.Opponent.Class == "" || !ArchetypeDecks.Any())
             {
                 currentArchetypeDeckGuid = Guid.Empty;
@@ -313,7 +282,6 @@ namespace HDT.Plugins.Advisor
                             }
                         }
 
-                        //var sortedPredictedCards = predictedCards.OrderBy(x => x.Cost).ThenBy(y => y.Name).ToList();
                         var isNewArchetypeDeck = currentArchetypeDeckGuid != matchedDeck.Key.DeckId;
 
                         // remove cards with 0 left when setting is set to true
@@ -341,10 +309,6 @@ namespace HDT.Plugins.Advisor
 
         public static void CloseOpenNoteWindows()
         {
-            //foreach (var x in Application.Current.Windows.OfType<NoteView>())
-            //    x.Close();
-            //foreach (var x in Application.Current.Windows.OfType<BasicNoteView>())
-            //    x.Close();
         }
 
         public static void ShowSettings()

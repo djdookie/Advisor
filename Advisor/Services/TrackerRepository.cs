@@ -144,23 +144,11 @@ namespace HDT.Plugins.Advisor.Services
                         Core.MainWindow.ReloadTags();
                     }
                 }
-                //// hack time!
-                //// use MainWindow.ArchiveDeck to update
-                //// set deck archive to opposite of desired
-                //deck.Archived = !archive;
-                //// add and save
-                //DeckList.Instance.Decks.Add(deck);
-                //DeckList.Save();
-                //// now reverse 'archive' of the deck
-                //// this should refresh all ui elements
-                //Core.MainWindow.ArchiveDeck(deck, archive);
 
                 // Add and save deck
                 deck.Archived = archive;
                 DeckList.Instance.Decks.Add(deck);
                 DeckList.Save();
-                // Refresh decklist
-                //Core.MainWindow.LoadAndUpdateDecks();
             }
         }
 
@@ -228,7 +216,6 @@ namespace HDT.Plugins.Advisor.Services
             }
 
             // Refresh decklist
-            //Core.MainWindow.LoadAndUpdateDecks();
             var deletedDecks = decks.Count - DeckList.Instance.Decks.Where(d => d.Tags.Contains(tag)).ToList().Count;
             return deletedDecks;
         }

@@ -17,7 +17,6 @@ namespace HDT.Plugins.Advisor
         private MenuItem _menu;
 
         private Advisor advisor;
-        // IEnumerable<Card> revealedCards;
 
         public string Author => "Dookie";
 
@@ -62,7 +61,6 @@ namespace HDT.Plugins.Advisor
 
             GameEvents.OnInMenu.Add(advisor.InMenu);
             GameEvents.OnGameStart.Add(advisor.GameStart);
-            //GameEvents.OnTurnStart.Add(advisor.TurnStart);
             GameEvents.OnOpponentPlay.Add(advisor.OpponentPlay);
             GameEvents.OnOpponentSecretTriggered.Add(advisor.OpponentSecretTiggered);
             GameEvents.OnOpponentDeckDiscard.Add(advisor.OpponentDeckDiscard);
@@ -75,7 +73,6 @@ namespace HDT.Plugins.Advisor
         public void OnUnload()
         {
             Core.OverlayCanvas.Children.Remove(_advisorOverlay);
-            //Settings.Default.Save();
         }
 
         public void OnUpdate()

@@ -22,7 +22,6 @@ namespace HDT.Plugins.Advisor.Models
         {
             foreach (var card in cards)
             {
-                //Database.GetCardFromId(card.Id);
                 Cards.Add(new Card(card.Id, card.Name, card.Count, card.Background));
             }
         }

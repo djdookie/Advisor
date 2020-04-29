@@ -78,13 +78,6 @@
                             VerticalAlignment="Center" Width="40"
                             ToolTip="The y position of the overlay." />
                     </StackPanel>
-                    <!--<StackPanel Orientation="Horizontal">
-                    <Label Content="Overlay position Y:" VerticalAlignment="Center"></Label>
-                    <TextBox Text="{Binding Settings.Default.OverlayPositionY, UpdateSourceTrigger=PropertyChanged}"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Center" Width="50"
-                          ToolTip="The y position of the overlay." />
-                </StackPanel>-->
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Scaling:" VerticalAlignment="Center" Width="53" />
                         <Slider x:Name="SliderOverlayPlayerScaling"

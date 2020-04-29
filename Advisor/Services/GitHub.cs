@@ -19,7 +19,6 @@ namespace HDT.Plugins.Advisor.Services
                 var latest = await GetLatestRelease(user, repo);
 
                 // tag needs to be in strict version format: e.g. 0.0.0
-                //Version v = new Version(latest.tag_name);
                 var v = new Version(latest.tag_name.TrimStart('v'));
 
                 // check if latest is newer than current

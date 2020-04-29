@@ -44,7 +44,6 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
         public async Task<int> ImportDecks(bool archive, bool deletePrevious, bool shortenName, IProgress<Tuple<int, int>> progress)
         {
             _logger.Info("Starting archetype deck import");
-            //int deckCount = 0;
 
             // Delete previous snapshot decks
             if (deletePrevious)

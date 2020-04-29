@@ -23,16 +23,6 @@
                                    ScrollViewer.CanContentScroll="False">
             <controls:AnimatedCardList.ItemContainerStyle>
                 <Style TargetType="controls:AnimatedCard">
-                    <!--<Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
-                    <Setter Property="ToolTipService.ShowDuration" Value="60000" />
-                    <Setter Property="ToolTipService.IsEnabled" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:CardList}}, Path=ShowToolTip}" />
-                    <Setter Property="ToolTip">
-                        <Setter.Value>
-                            <ToolTip Background="Transparent" BorderBrush="Transparent">
-                                <hearthstoneDeckTracker:CardToolTip/>
-                            </ToolTip>
-                        </Setter.Value>
-                    </Setter>-->
                     <Setter Property="Margin" Value="0,1,0,0" />
                 </Style>
             </controls:AnimatedCardList.ItemContainerStyle>
@@ -41,16 +31,4 @@
     <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblStats" FontSize="15" TextAlignment="Center"
                                                  Text="#Games: 30, Win-Rate: 50%" Width="200"
                                                  Visibility="{Binding Path=ShowStatistics, Source={x:Static properties:Settings.Default}, Converter={StaticResource BooleanToVisibilityConverter}}" />
-    <!--<ItemsControl x:Name="icCardlist">
-        <ItemsControl.ItemContainerStyle>
-            <Style>
-                <Setter Property="FrameworkElement.Margin" Value="0,1,0,0" />
-            </Style>
-        </ItemsControl.ItemContainerStyle>
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <Rectangle Fill="{Binding Background}" Height="34" Width="217" />
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>-->
 </StackPanel>
