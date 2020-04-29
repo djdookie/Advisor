@@ -122,8 +122,9 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
 	            if (shortenName)
 	            {
 	                deckName = deckName.Replace(deck.Class, "").Trim();
-	                deckName = deckName.Replace("- MetaStats ", "");
-	                deckName = deckName.Replace("  ", " ");
+                    deckName = deckName.Replace("Demon Hunter", "");
+                    deckName = deckName.Replace("- MetaStats ", "");
+                    deckName = deckName.Replace("  ", " ");
 	            }
 
 	            _tracker.AddDeck(deckName, deck, archive, ArchetypeTag, PluginTag);
@@ -171,7 +172,7 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
 
                 // Extract info
                 HtmlNode stats = site.SelectSingleNode("./div");
-                string innerText = string.Join("\n", stats.InnerText.Trim().Split('\n').Select(s => s.Trim()));
+                string innerText = string.Join(", ", stats.InnerText.Trim().Split('\n').Select(s => s.Trim()));
 
                 // Create deck from site
                 var result = await Task.Run(() => GetDeck(BaseUrl + hrefValue, progress));

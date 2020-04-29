@@ -307,6 +307,13 @@ namespace HDT.Plugins.Advisor
                         }
                         //var sortedPredictedCards = predictedCards.OrderBy(x => x.Cost).ThenBy(y => y.Name).ToList();
                         bool isNewArchetypeDeck = currentArchetypeDeckGuid != matchedDeck.Key.DeckId;
+
+                        // remove cards with 0 left when setting is set to true
+                        if (Settings.Default.RemovePlayedCards)
+                        {
+                            predictedCards = predictedCards.Where(x => x.Count > 0).ToList();
+                        }
+
                         // Update overlay cards
                         _advisorOverlay.Update(predictedCards, isNewArchetypeDeck);
                         // Remember current archetype deck guid with highest similarity to opponent's played cards

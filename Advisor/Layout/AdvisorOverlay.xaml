@@ -37,7 +37,7 @@
             </controls:AnimatedCardList.ItemContainerStyle>
         </controls:AnimatedCardList>
     </Viewbox>
-    <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblStats" FontSize="15" TextAlignment="Center" Text="Win-Rate: 50%, #Games: 30" Width="200" Visibility="{Binding Path=ShowStatistics, Source={x:Static properties:Settings.Default}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+    <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblStats" FontSize="15" TextAlignment="Center" Text="#Games: 30, Win-Rate: 50%" Width="200" Visibility="{Binding Path=ShowStatistics, Source={x:Static properties:Settings.Default}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
     <!--<ItemsControl x:Name="icCardlist">
         <ItemsControl.ItemContainerStyle>
             <Style>
