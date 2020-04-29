@@ -19,9 +19,11 @@ namespace HDT.Plugins.Advisor.Services.TempoStorm
             Items = new List<IncludeItem>(items);
         }
 
-        [JsonProperty("fields")] public List<string> Fields { get; set; }
+        [JsonProperty("fields")]
+        public List<string> Fields { get; set; }
 
-        [JsonProperty("include")] public List<IncludeItem> Items { get; set; }
+        [JsonProperty("include")]
+        public List<IncludeItem> Items { get; set; }
     }
 
     public class IncludeItem
@@ -47,8 +49,10 @@ namespace HDT.Plugins.Advisor.Services.TempoStorm
             Scope = new Include(single);
         }
 
-        [JsonProperty("relation")] public string Relation { get; set; }
+        [JsonProperty("relation")]
+        public string Relation { get; set; }
 
-        [JsonProperty("scope")] public Include Scope { get; set; }
+        [JsonProperty("scope")]
+        public Include Scope { get; set; }
     }
 }

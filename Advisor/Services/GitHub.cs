@@ -63,10 +63,17 @@ namespace HDT.Plugins.Advisor.Services
         // Basic release info for JSON deserialization
         public class GithubRelease
         {
-            [JsonProperty("html_url")] public string HtmlUrl { get; set; }
-            [JsonProperty("tag_name")] public string TagName { get; set; }
-            [JsonProperty("prerelease")] public string Prerelease { get; set; }
-            [JsonProperty("published_at")] public string PublishedAt { get; set; }
+            [JsonProperty("html_url")]
+            public string HtmlUrl { get; set; }
+
+            [JsonProperty("tag_name")]
+            public string TagName { get; set; }
+
+            [JsonProperty("prerelease")]
+            public string Prerelease { get; set; }
+
+            [JsonProperty("published_at")]
+            public string PublishedAt { get; set; }
         }
     }
 }

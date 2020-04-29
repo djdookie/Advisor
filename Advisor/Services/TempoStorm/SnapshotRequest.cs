@@ -12,13 +12,17 @@ namespace HDT.Plugins.Advisor.Services.TempoStorm
             Includes = new List<IncludeItem>();
         }
 
-        [JsonProperty("order")] public string SortOrder { get; set; }
+        [JsonProperty("order")]
+        public string SortOrder { get; set; }
 
-        [JsonProperty("fields")] public List<string> Fields { get; set; }
+        [JsonProperty("fields")]
+        public List<string> Fields { get; set; }
 
-        [JsonProperty("where")] private Dictionary<string, string> Query { get; set; }
+        [JsonProperty("where")]
+        private Dictionary<string, string> Query { get; set; }
 
-        [JsonProperty("include")] public List<IncludeItem> Includes { get; set; }
+        [JsonProperty("include")]
+        public List<IncludeItem> Includes { get; set; }
 
         public void SetFields(params string[] fields)
         {
