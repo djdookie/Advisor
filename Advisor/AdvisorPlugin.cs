@@ -96,7 +96,7 @@ namespace HDT.Plugins.Advisor
 
         public async Task CheckForUpdate()
         {
-            var latest = await Github.CheckForUpdate("djdookie", "Advisor", Version);
+            var latest = await Github.CheckForUpdate("kimsey0", "Advisor", Version);
             if (latest != null)
             {
                 Advisor.Notify("Plugin update available", $"[DOWNLOAD]({latest.html_url}) Advisor {latest.tag_name}", 0,

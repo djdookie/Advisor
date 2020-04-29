@@ -464,7 +464,7 @@ namespace HDT.Plugins.Advisor
         {
             try
             {
-                Process.Start("https://github.com/djdookie/Advisor");
+                Process.Start("https://github.com/kimsey0/Advisor");
             }
             catch (Exception e)
             {
