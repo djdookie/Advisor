@@ -5,49 +5,30 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:hearthstoneDeckTracker="clr-namespace:Hearthstone_Deck_Tracker;assembly=HearthstoneDeckTracker"
             xmlns:controls="clr-namespace:Hearthstone_Deck_Tracker.Controls;assembly=HearthstoneDeckTracker"
-            xmlns:properties="clr-namespace:Advisor.Properties"
+            xmlns:properties="clr-namespace:HDT.Plugins.Advisor.Properties"
             mc:Ignorable="d"
             d:DesignHeight="300" d:DesignWidth="300" Name="StackPanelOverlay">
     <StackPanel.LayoutTransform>
-        <ScaleTransform ScaleX="1" ScaleY="1"/>
+        <ScaleTransform ScaleX="1" ScaleY="1" />
     </StackPanel.LayoutTransform>
     <StackPanel.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </StackPanel.Resources>
-    <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblArchetype" FontSize="15" TextAlignment="Center" Text="Midrange Shaman (10%)" Width="200"/>
+    <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblArchetype" FontSize="15" TextAlignment="Center"
+                                                 Text="Midrange Shaman (10%)" Width="200" />
     <Viewbox Name="ViewBoxPlayer" StretchDirection="DownOnly" Stretch="Fill">
         <controls:AnimatedCardList x:Name="acList" Background="Transparent" BorderThickness="0"
-                                ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="221"
-                                ScrollViewer.VerticalScrollBarVisibility="Disabled" IsEnabled="False"
-                                ScrollViewer.CanContentScroll="False">
+                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="221"
+                                   ScrollViewer.VerticalScrollBarVisibility="Disabled" IsEnabled="False"
+                                   ScrollViewer.CanContentScroll="False">
             <controls:AnimatedCardList.ItemContainerStyle>
                 <Style TargetType="controls:AnimatedCard">
-                    <!--<Setter Property="ToolTipService.ShowOnDisabled" Value="True" />
-                    <Setter Property="ToolTipService.ShowDuration" Value="60000" />
-                    <Setter Property="ToolTipService.IsEnabled" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:CardList}}, Path=ShowToolTip}" />
-                    <Setter Property="ToolTip">
-                        <Setter.Value>
-                            <ToolTip Background="Transparent" BorderBrush="Transparent">
-                                <hearthstoneDeckTracker:CardToolTip/>
-                            </ToolTip>
-                        </Setter.Value>
-                    </Setter>-->
-                    <Setter Property="Margin" Value="0,1,0,0"/>
+                    <Setter Property="Margin" Value="0,1,0,0" />
                 </Style>
             </controls:AnimatedCardList.ItemContainerStyle>
         </controls:AnimatedCardList>
     </Viewbox>
-    <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblStats" FontSize="15" TextAlignment="Center" Text="#Games: 30, Win-Rate: 50%" Width="200" Visibility="{Binding Path=ShowStatistics, Source={x:Static properties:Settings.Default}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-    <!--<ItemsControl x:Name="icCardlist">
-        <ItemsControl.ItemContainerStyle>
-            <Style>
-                <Setter Property="FrameworkElement.Margin" Value="0,1,0,0" />
-            </Style>
-        </ItemsControl.ItemContainerStyle>
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <Rectangle Fill="{Binding Background}" Height="34" Width="217" />
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>-->
+    <hearthstoneDeckTracker:HearthstoneTextBlock x:Name="LblStats" FontSize="15" TextAlignment="Center"
+                                                 Text="#Games: 30, Win-Rate: 50%" Width="200"
+                                                 Visibility="{Binding Path=ShowStatistics, Source={x:Static properties:Settings.Default}, Converter={StaticResource BooleanToVisibilityConverter}}" />
 </StackPanel>

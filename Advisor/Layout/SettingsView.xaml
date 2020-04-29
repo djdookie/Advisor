@@ -17,138 +17,137 @@
             <GroupBox Header="Options">
                 <StackPanel>
                     <CheckBox Content="Auto archive decks"
-                          IsChecked="{Binding Settings.Default.AutoArchiveArchetypes}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top"
-                          ToolTip="Auto archive all archetype decks imported by the plugin." />
+                              IsChecked="{Binding Settings.Default.AutoArchiveArchetypes}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top"
+                              ToolTip="Auto archive all archetype decks imported by the plugin." />
                     <CheckBox Content="Shorten deck names"
-                          IsChecked="{Binding Settings.Default.ShortenDeckNames}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top"
-                          ToolTip="Remove the class from deck names imported by the plugin." />
+                              IsChecked="{Binding Settings.Default.ShortenDeckNames}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top"
+                              ToolTip="Remove the class from deck names imported by the plugin." />
                     <CheckBox Content="Delete previously imported decks"
-                          IsChecked="{Binding Settings.Default.DeletePreviouslyImported}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top"
-                          ToolTip="Delete any previously imported archetype decks before importing again." />
+                              IsChecked="{Binding Settings.Default.DeletePreviouslyImported}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top"
+                              ToolTip="Delete any previously imported archetype decks before importing again." />
                     <CheckBox Content="Show deck statistics"
-                          IsChecked="{Binding Settings.Default.ShowStatistics}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top"
-                          ToolTip="Shows statistics of the archetype deck like winrate and number of played games." />
+                              IsChecked="{Binding Settings.Default.ShowStatistics}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top"
+                              ToolTip="Shows statistics of the archetype deck like winrate and number of played games." />
                     <CheckBox Content="Check for plugin updates"
-                          IsChecked="{Binding Settings.Default.CheckForUpdates}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top"
-                          ToolTip="Automatically check for updates when the plugin is loaded." />
+                              IsChecked="{Binding Settings.Default.CheckForUpdates}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top"
+                              ToolTip="Automatically check for updates when the plugin is loaded." />
                     <CheckBox Content="Show absolute similarity"
-                          IsChecked="{Binding Settings.Default.ShowAbsoluteSimilarity}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top"
-                          ToolTip="Shows the similarity of decks as absolute number of matching and played cards instead of a percentage." />
+                              IsChecked="{Binding Settings.Default.ShowAbsoluteSimilarity}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top"
+                              ToolTip="Shows the similarity of decks as absolute number of matching and played cards instead of a percentage." />
                     <CheckBox Content="Remove played cards"
-                          IsChecked="{Binding Settings.Default.RemovePlayedCards}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top"
-                          ToolTip="Completely removes played cards from the prediction instead of just making them gray." />
+                              IsChecked="{Binding Settings.Default.RemovePlayedCards}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top"
+                              ToolTip="Completely removes played cards from the prediction instead of just making them gray." />
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Min. similarity:" VerticalAlignment="Center"></Label>
+                        <Label Content="Min. similarity:" VerticalAlignment="Center" />
                         <Slider x:Name="SliderMinimumSimilarity"
-                            VerticalAlignment="Center" Width="127"
-                            Value="{Binding Settings.Default.MinimumSimilarity, UpdateSourceTrigger=PropertyChanged}"
-                            Minimum="0" SmallChange="1" LargeChange="10" Maximum="100" />
-                        <TextBox Text="{Binding Settings.Default.MinimumSimilarity, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center" Width="30"
-                        ToolTip="Only show decks with similarity greater or equal to this percentage." Margin="5,0,0,0" />
+                                VerticalAlignment="Center" Width="127"
+                                Value="{Binding Settings.Default.MinimumSimilarity, UpdateSourceTrigger=PropertyChanged}"
+                                Minimum="0" SmallChange="1" LargeChange="10" Maximum="100" />
+                        <TextBox
+                            Text="{Binding Settings.Default.MinimumSimilarity, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center" Width="30"
+                            ToolTip="Only show decks with similarity greater or equal to this percentage."
+                            Margin="5,0,0,0" />
                         <Label Content="%" VerticalAlignment="Center" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Overlay position (x, y):" VerticalAlignment="Center"></Label>
-                        <TextBox Text="{Binding Settings.Default.OverlayPositionX, UpdateSourceTrigger=PropertyChanged}"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Center" Width="40"
-                          ToolTip="The x position of the overlay." />
-                        <TextBox Text="{Binding Settings.Default.OverlayPositionY, UpdateSourceTrigger=PropertyChanged}"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Center" Width="40"
-                          ToolTip="The y position of the overlay." />
+                        <Label Content="Overlay position (x, y):" VerticalAlignment="Center" />
+                        <TextBox
+                            Text="{Binding Settings.Default.OverlayPositionX, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center" Width="40"
+                            ToolTip="The x position of the overlay." />
+                        <TextBox
+                            Text="{Binding Settings.Default.OverlayPositionY, UpdateSourceTrigger=PropertyChanged}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center" Width="40"
+                            ToolTip="The y position of the overlay." />
                     </StackPanel>
-                    <!--<StackPanel Orientation="Horizontal">
-                    <Label Content="Overlay position Y:" VerticalAlignment="Center"></Label>
-                    <TextBox Text="{Binding Settings.Default.OverlayPositionY, UpdateSourceTrigger=PropertyChanged}"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Center" Width="50"
-                          ToolTip="The y position of the overlay." />
-                </StackPanel>-->
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Scaling:" VerticalAlignment="Center" Width="53"></Label>
+                        <Label Content="Scaling:" VerticalAlignment="Center" Width="53" />
                         <Slider x:Name="SliderOverlayPlayerScaling"
                                 VerticalAlignment="Center" Width="160"
                                 Value="{Binding Settings.Default.OverlayScaling, UpdateSourceTrigger=PropertyChanged}"
                                 Minimum="1" SmallChange="1" LargeChange="10" Maximum="200" />
                         <TextBox Text="{Binding Settings.Default.OverlayScaling, UpdateSourceTrigger=PropertyChanged}"
-                          HorizontalAlignment="Left"
-                          VerticalAlignment="Center" Width="30"
-                          ToolTip="The scaling of the overlay in percent." Margin="5,0,0,0" />
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center" Width="30"
+                                 ToolTip="The scaling of the overlay in percent." Margin="5,0,0,0" />
                         <Label Content="%" VerticalAlignment="Center" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="Opacity:" VerticalAlignment="Center"></Label>
+                        <Label Content="Opacity:" VerticalAlignment="Center" />
                         <Slider x:Name="SliderOverlayPlayerOpacity"
-                            VerticalAlignment="Center" Width="160"
-                            Value="{Binding Settings.Default.OverlayOpacity, UpdateSourceTrigger=PropertyChanged}"
-                            Minimum="0" SmallChange="1" LargeChange="10" Maximum="100" />
+                                VerticalAlignment="Center" Width="160"
+                                Value="{Binding Settings.Default.OverlayOpacity, UpdateSourceTrigger=PropertyChanged}"
+                                Minimum="0" SmallChange="1" LargeChange="10" Maximum="100" />
                         <TextBox Text="{Binding Settings.Default.OverlayOpacity, UpdateSourceTrigger=PropertyChanged}"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center" Width="30"
-                        ToolTip="The opacity of the overlay in percent." Margin="5,0,0,0" />
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Center" Width="30"
+                                 ToolTip="The opacity of the overlay in percent." Margin="5,0,0,0" />
                         <Label Content="%" VerticalAlignment="Center" />
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
-            <GroupBox x:Name="ModeGroup" Header="Game modes" ToolTip="Advisor will only be active in the selected game modes.">
+            <GroupBox x:Name="ModeGroup" Header="Game modes"
+                      ToolTip="Advisor will only be active in the selected game modes.">
                 <StackPanel>
                     <CheckBox x:Name="cbRanked" Content="Ranked"
-                          IsChecked="{Binding Settings.ActivateInRanked}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top" />
+                              IsChecked="{Binding Settings.ActivateInRanked}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top" />
                     <CheckBox x:Name="cbCasual" Content="Casual"
-                          IsChecked="{Binding Settings.ActivateInCasual}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top" />
+                              IsChecked="{Binding Settings.ActivateInCasual}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top" />
                     <CheckBox x:Name="cbFriendly" Content="Friendly"
-                          IsChecked="{Binding Settings.ActivateInFriendly}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top" />
+                              IsChecked="{Binding Settings.ActivateInFriendly}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top" />
                     <CheckBox x:Name="cbSpectator" Content="Spectator"
-                          IsChecked="{Binding Settings.ActivateInSpectator}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top" />
+                              IsChecked="{Binding Settings.ActivateInSpectator}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top" />
                     <CheckBox x:Name="cbArena" Content="Arena"
-                          IsChecked="{Binding Settings.ActivateInArena}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top" />
+                              IsChecked="{Binding Settings.ActivateInArena}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top" />
                     <CheckBox x:Name="cbBrawl" Content="Brawl"
-                          IsChecked="{Binding Settings.ActivateInBrawl}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top" />
+                              IsChecked="{Binding Settings.ActivateInBrawl}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top" />
                     <CheckBox x:Name="cbPractice" Content="Practice"
-                          IsChecked="{Binding Settings.ActivateInPractice}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top" />
+                              IsChecked="{Binding Settings.ActivateInPractice}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top" />
                 </StackPanel>
             </GroupBox>
-            <GroupBox x:Name="FormatGroup" Header="Game formats" ToolTip="Advisor will only be active in the selected game formats.">
+            <GroupBox x:Name="FormatGroup" Header="Game formats"
+                      ToolTip="Advisor will only be active in the selected game formats.">
                 <StackPanel>
                     <CheckBox x:Name="cbStandard" Content="Standard"
-                          IsChecked="{Binding Settings.ActivateInStandard}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top" />
+                              IsChecked="{Binding Settings.ActivateInStandard}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top" />
                     <CheckBox x:Name="cbWild" Content="Wild"
-                          IsChecked="{Binding Settings.ActivateInWild}"
-                          HorizontalAlignment="Left" Margin="0,5,0,0"
-                          VerticalAlignment="Top" />
+                              IsChecked="{Binding Settings.ActivateInWild}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top" />
                 </StackPanel>
             </GroupBox>
         </StackPanel>

@@ -3,71 +3,56 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Navigation;
-using Advisor.Properties;
-using Hearthstone_Deck_Tracker;
-using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
-using HDT.Plugins.Advisor.Services;
 using HDT.Plugins.Advisor.Layout;
+using HDT.Plugins.Advisor.Properties;
+using HDT.Plugins.Advisor.Services;
+using HDT.Plugins.Advisor.Services.MetaStats;
+using Hearthstone_Deck_Tracker;
 using Hearthstone_Deck_Tracker.Enums;
+using Hearthstone_Deck_Tracker.Hearthstone;
 using Hearthstone_Deck_Tracker.Utility.Logging;
-//using Hearthstone_Deck_Tracker.Windows;
 using MahApps.Metro.Controls;
-using Card = Hearthstone_Deck_Tracker.Hearthstone.Card;
-using Deck = Hearthstone_Deck_Tracker.Hearthstone.Deck;
-
-//using HDT.Plugins.Advisor.Models;
+using CoreAPI = Hearthstone_Deck_Tracker.API.Core;
 
 namespace HDT.Plugins.Advisor
 {
-
     internal class Advisor
     {
-        //private int mana = 0;
-        private AdvisorOverlay _advisorOverlay = null;
-        // Highest deck similarity
-        //double maxSim = 0;
-        //TrackerRepository trackerRepository;
         private static Flyout _settingsFlyout;
         private static Flyout _notificationFlyout;
-        //IEnumerable<ArchetypeDeck> archetypeDecks;
-        //private IList<Deck> _archetypeDecks;
-        private Guid currentArchetypeDeckGuid;
+        private readonly AdvisorOverlay _advisorOverlay;
+        private Guid _currentArchetypeDeckGuid;
 
         public Advisor(AdvisorOverlay overlay)
         {
             _notificationFlyout = CreateDialogFlyout();
             _settingsFlyout = CreateSettingsFlyout();
-            Settings.Default.PropertyChanged += new PropertyChangedEventHandler(Settings_PropertyChanged);
+            Settings.Default.PropertyChanged += Settings_PropertyChanged;
 
             _advisorOverlay = overlay;
-            //trackerRepository = new TrackerRepository();
-            //LoadArchetypeDecks();
 
             _advisorOverlay.LblArchetype.Text = "";
             _advisorOverlay.LblStats.Text = "";
 
-            //Task.Delay(5000); // TODO: CoreAPI.Game.IsInMenu is true, so Advisor overlay is not shown after instantiating this addon while a game is running. How do we repair this?
-
-            //_advisorOverlay.Update(new List<Card>());
+            // TODO: CoreAPI.Game.IsInMenu is true, so Advisor overlay is not shown after instantiating this addon while a game is running. How do we repair this?
             UpdateCardList();
 
             // Hide in menu, if necessary
             if (Config.Instance.HideInMenu && CoreAPI.Game.IsInMenu)
             {
                 _advisorOverlay.Hide();
-            } else
+            }
+            else
             {
                 _advisorOverlay.Show();
             }
         }
 
         /// <summary>
-        /// Determine if in valid game mode as specified in config
+        ///     Determine if in valid game mode as specified in config
         /// </summary>
         public bool IsValidGameMode
         {
@@ -95,15 +80,13 @@ namespace HDT.Plugins.Advisor
                             return true;
                     }
                 }
-                else
-                {
-                    return false;
-                }
+
+                return false;
             }
         }
 
         /// <summary>
-        /// Determine if in valid game format as specified in config
+        ///     Determine if in valid game format as specified in config
         /// </summary>
         public bool IsValidGameFormat
         {
@@ -121,25 +104,13 @@ namespace HDT.Plugins.Advisor
                             return true;
                     }
                 }
-                else
-                {
-                    return false;
-                }
+
+                return false;
             }
         }
 
-        ///// <summary>
-        ///// Load all archetype decks from tracker repository
-        ///// </summary>
-        //private void GetArchetypeDecks()
-        //{
-        //    //archetypeDecks = trackerRepository.GetAllArchetypeDecks().Where(d => d.Klass == Models.KlassKonverter.FromString(CoreAPI.Game.Opponent.Class));
-        //    _archetypeDecks = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList();
-        //    // TODO: Select newest version of any all decks like before?
-        //}
-
         /// <summary>
-        /// All archetype decks from tracker repository
+        ///     All archetype decks from tracker repository
         /// </summary>
         private IList<Deck> ArchetypeDecks
         {
@@ -147,20 +118,15 @@ namespace HDT.Plugins.Advisor
         }
 
         /// <summary>
-        /// If settings were changed, update overlay and save settings
+        ///     If settings were changed, update overlay and save settings
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             Settings.Default.Save();
-            //_advisorOverlay.UpdatePosition();
             GameStart();
         }
-
-        //internal List<Entity> Entities => Helper.DeepClone<Dictionary<int, Entity>>(CoreAPI.Game.Entities).Values.ToList<Entity>();
-
-        //internal Entity Opponent => Entities?.FirstOrDefault(x => x.IsOpponent);
 
         // Reset on when a new game starts
         internal async void GameStart()
@@ -175,7 +141,7 @@ namespace HDT.Plugins.Advisor
                 await Task.Delay(5000);
 
                 _advisorOverlay.Update(new List<Card>(), true);
-                currentArchetypeDeckGuid = Guid.Empty;
+                _currentArchetypeDeckGuid = Guid.Empty;
 
                 UpdateCardList();
                 _advisorOverlay.Show();
@@ -226,8 +192,9 @@ namespace HDT.Plugins.Advisor
         }
 
         /// <summary>
-        /// Determine similarity between all archetype decks and all cards played by the opponent yet.
-        /// Then update the cardlist displayed in the overlay with the highest matching archetype deck after removing all opponent cards.
+        ///     Determine similarity between all archetype decks and all cards played by the opponent yet.
+        ///     Then update the cardlist displayed in the overlay with the highest matching archetype deck after removing all
+        ///     opponent cards.
         /// </summary>
         internal async void UpdateCardList()
         {
@@ -239,17 +206,18 @@ namespace HDT.Plugins.Advisor
 #endif
 
             // Only continue if in valid game mode or game format
-            if (!IsValidGameMode || !IsValidGameFormat) return;
+            if (!IsValidGameMode || !IsValidGameFormat)
+            {
+                return;
+            }
 
             // Get opponent's cards list (all yet revealed cards)
-            //var opponentCardlist = Core.Game.Opponent.RevealedCards;
             IList<Card> opponentCardlist = Core.Game.Opponent.OpponentCardList.Where(x => !x.IsCreated).ToList();
 
             // If opponent's class is unknown yet or we have no imported archetype decks in the database, return empty card list
-            //if (!opponentCardlist.Any() || !ArchetypeDecks.Any())
             if (CoreAPI.Game.Opponent.Class == "" || !ArchetypeDecks.Any())
             {
-                currentArchetypeDeckGuid = Guid.Empty;
+                _currentArchetypeDeckGuid = Guid.Empty;
                 _advisorOverlay.Update(new List<Card>(), true);
             }
             else
@@ -261,11 +229,15 @@ namespace HDT.Plugins.Advisor
                 foreach (var archetypeDeck in ArchetypeDecks.Where(d => d.Class == CoreAPI.Game.Opponent.Class && !(d.IsWildDeck && CoreAPI.Game.CurrentFormat == Format.Standard)))
                 {
                     // Insert deck with calculated value into dictionary and prevent exception by inserting duplicate decks
-                    if (!dict.ContainsKey(archetypeDeck)) dict.Add(archetypeDeck, archetypeDeck.Similarity(opponentCardlist));
+                    if (!dict.ContainsKey(archetypeDeck))
+                    {
+                        dict.Add(archetypeDeck, archetypeDeck.Similarity(opponentCardlist));
+                    }
                 }
 
                 // Get highest similarity value
-                var maxSim = dict.Values.DefaultIfEmpty(0).Max(); // Some unreproducable bug threw an exception here. System.InvalidOperationException: Sequence contains no elements @ IEnumerable.Max() => should be fixed by DefaultIfEmpty() now!
+                // Some unreproducable bug threw an exception here. System.InvalidOperationException: Sequence contains no elements @ IEnumerable.Max() => should be fixed by DefaultIfEmpty() now!
+                var maxSim = dict.Values.DefaultIfEmpty(0).Max();
 
                 // If any archetype deck matches more than MinimumSimilarity (as percentage) show the deck with the highest similarity (important: we need at least 1 deck in dict, otherwise we can't show any results.)
                 if (dict.Count > 0 && maxSim >= Settings.Default.MinimumSimilarity * 0.01)
@@ -273,7 +245,8 @@ namespace HDT.Plugins.Advisor
                     // Select top decks with highest similarity value
                     var topSimDecks = (from d in dict where Math.Abs(d.Value - maxSim) < 0.001 select d).ToList();
                     // Select top decks with most played games
-                    var maxGames = topSimDecks.Max(x => x.Key.GetPlayedGames()); // If class was something like "Groddo the Bogwarden" in monster hunt, we got an InvalidOperationException at Max() because dict was empty. Now we check for dict > 0 above to prevent this.
+                    // If class was something like "Groddo the Bogwarden" in monster hunt, we got an InvalidOperationException at Max() because dict was empty. Now we check for dict > 0 above to prevent this.
+                    var maxGames = topSimDecks.Max(x => x.Key.GetPlayedGames());
                     var topGamesDecks = (from t in topSimDecks where t.Key.GetPlayedGames() == maxGames select t).ToList();
                     // Select best matched deck with both highest similarity value and most played games
                     var matchedDeck = topGamesDecks.First();
@@ -282,19 +255,19 @@ namespace HDT.Plugins.Advisor
                     if (Settings.Default.ShowAbsoluteSimilarity)
                     {
                         // Count how many cards from opponent deck are in matched deck
-                        int matchingCards = matchedDeck.Key.CountMatchingCards(opponentCardlist);
-                        _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}/{2})", matchedDeck.Key.Name, matchingCards, opponentCardlist.Sum(x => x.Count));
+                        var matchingCards = matchedDeck.Key.CountMatchingCards(opponentCardlist);
+                        _advisorOverlay.LblArchetype.Text = string.Format("{0} ({1}/{2})", matchedDeck.Key.Name, matchingCards, opponentCardlist.Sum(x => x.Count));
                     }
                     else
                     {
-                        _advisorOverlay.LblArchetype.Text = String.Format("{0} ({1}%)", matchedDeck.Key.Name, Math.Round(matchedDeck.Value * 100, 2));
+                        _advisorOverlay.LblArchetype.Text = string.Format("{0} ({1}%)", matchedDeck.Key.Name, Math.Round(matchedDeck.Value * 100, 2));
                     }
 
-                    _advisorOverlay.LblStats.Text = String.Format("{0}", matchedDeck.Key.Note);
-                    Deck deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).First(d => d.Name == matchedDeck.Key.Name);
+                    _advisorOverlay.LblStats.Text = string.Format("{0}", matchedDeck.Key.Note);
+                    var deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).First(d => d.Name == matchedDeck.Key.Name);
                     if (deck != null)
                     {
-                        var predictedCards = ((Deck)deck.Clone()).Cards.ToList();
+                        var predictedCards = ((Deck) deck.Clone()).Cards.ToList();
 
                         // Remove already played opponent cards from predicted archetype deck. But don't remove revealed jousted cards, because they were only seen and not played yet.
                         foreach (var card in opponentCardlist.Where(x => !x.Jousted))
@@ -305,8 +278,8 @@ namespace HDT.Plugins.Advisor
                                 item.Count -= card.Count;
                             }
                         }
-                        //var sortedPredictedCards = predictedCards.OrderBy(x => x.Cost).ThenBy(y => y.Name).ToList();
-                        bool isNewArchetypeDeck = currentArchetypeDeckGuid != matchedDeck.Key.DeckId;
+
+                        var isNewArchetypeDeck = _currentArchetypeDeckGuid != matchedDeck.Key.DeckId;
 
                         // remove cards with 0 left when setting is set to true
                         if (Settings.Default.RemovePlayedCards)
@@ -317,56 +290,43 @@ namespace HDT.Plugins.Advisor
                         // Update overlay cards
                         _advisorOverlay.Update(predictedCards, isNewArchetypeDeck);
                         // Remember current archetype deck guid with highest similarity to opponent's played cards
-                        currentArchetypeDeckGuid = matchedDeck.Key.DeckId;
+                        _currentArchetypeDeckGuid = matchedDeck.Key.DeckId;
                     }
                 }
                 else
                 {
                     // If no archetype deck matches more than MinimumSimilarity clear the list and show the best match percentage
-                    _advisorOverlay.LblArchetype.Text = String.Format("Best match: {0}%", Math.Round(maxSim * 100, 2));
+                    _advisorOverlay.LblArchetype.Text = string.Format("Best match: {0}%", Math.Round(maxSim * 100, 2));
                     _advisorOverlay.LblStats.Text = "";
-                    _advisorOverlay.Update(new List<Card>(), currentArchetypeDeckGuid != Guid.Empty);
-                    currentArchetypeDeckGuid = Guid.Empty;
+                    _advisorOverlay.Update(new List<Card>(), _currentArchetypeDeckGuid != Guid.Empty);
+                    _currentArchetypeDeckGuid = Guid.Empty;
                 }
             }
-        }
-
-        public static void CloseOpenNoteWindows()
-        {
-            //foreach (var x in Application.Current.Windows.OfType<NoteView>())
-            //    x.Close();
-            //foreach (var x in Application.Current.Windows.OfType<BasicNoteView>())
-            //    x.Close();
         }
 
         public static void ShowSettings()
         {
             if (_settingsFlyout == null)
+            {
                 _settingsFlyout = CreateSettingsFlyout();
+            }
+
             _settingsFlyout.IsOpen = true;
-        }
-
-        public static void CloseSettings()
-        {
-            if (_settingsFlyout != null)
-                _settingsFlyout.IsOpen = false;
-        }
-
-        public static void CloseNotification()
-        {
-            if (_notificationFlyout != null)
-                _notificationFlyout.IsOpen = false;
         }
 
         public static void Notify(string title, string message, int autoClose, string icon = null, Action action = null)
         {
             if (_notificationFlyout == null)
+            {
                 _notificationFlyout = CreateDialogFlyout();
+            }
+
             var view = new DialogView(_notificationFlyout, title, message, autoClose);
             if (!string.IsNullOrEmpty(icon))
             {
                 view.SetUtilityButton(action, icon);
             }
+
             _notificationFlyout.Content = view;
             _notificationFlyout.IsOpen = true;
         }
@@ -377,7 +337,8 @@ namespace HDT.Plugins.Advisor
             var progressIndicator = new Progress<Tuple<int, int>>(ReportProgress);
             try
             {
-                var importer = new Services.MetaStats.SnapshotImporter(new TrackerRepository()); // TODO: Get back to the IArchetypeImporter interface?
+                // TODO: Get back to the IArchetypeImporter interface?
+                var importer = new SnapshotImporter(new TrackerRepository());
                 var count = await importer.ImportDecks(
                     Settings.Default.AutoArchiveArchetypes,
                     Settings.Default.DeletePreviouslyImported,
@@ -386,50 +347,29 @@ namespace HDT.Plugins.Advisor
                 // Refresh decklist
                 Core.MainWindow.LoadAndUpdateDecks();
                 Notify("Import complete", $"{count} decks imported", 10);
-
             }
             catch (Exception e)
             {
                 Log.Error(e);
-                Notify("Import failed", e.Message, 15, "error", null);
+                Notify("Import failed", e.Message, 15, "error");
             }
         }
 
         /// <summary>
-        /// Reports the progress to the UI
+        ///     Reports the progress to the UI
         /// </summary>
         /// <param name="value"></param>
         private static void ReportProgress(Tuple<int, int> value)
         {
-            int percentage = (int)((double)value.Item1 / value.Item2 * 100); 
+            var percentage = (int) ((double) value.Item1 / value.Item2 * 100);
             Notify("Import in progress", $"{value.Item1} of {value.Item2} decks ({percentage}%) imported", 0);
-        }
-
-        public static async Task ImportTempostormDecks()
-        {
-            try
-            {
-                IArchetypeImporter importer = new Services.TempoStorm.SnapshotImporter(new HttpClient(), new TrackerRepository());
-                var count = await importer.ImportDecks(
-                    Settings.Default.AutoArchiveArchetypes,
-                    Settings.Default.DeletePreviouslyImported,
-                    Settings.Default.ShortenDeckNames);
-                // Refresh decklist
-                Core.MainWindow.LoadAndUpdateDecks();
-                Notify("Import complete", $"{count} decks imported", 10);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-                Notify("Import failed", e.Message, 15, "error", null);
-            }
         }
 
         public static void DeleteArchetypeDecks()
         {
             try
             {
-                var importer = new Services.MetaStats.SnapshotImporter(new TrackerRepository());
+                var importer = new SnapshotImporter(new TrackerRepository());
                 var count = importer.DeleteDecks();
                 // Refresh decklist
                 Core.MainWindow.LoadAndUpdateDecks();
@@ -438,12 +378,12 @@ namespace HDT.Plugins.Advisor
             catch (Exception e)
             {
                 Log.Error(e);
-                Notify("Deletion failed", e.Message, 15, "error", null);
+                Notify("Deletion failed", e.Message, 15, "error");
             }
         }
 
         /// <summary>
-        /// Open link to donation website in standard browser
+        ///     Open link to donation website in standard browser
         /// </summary>
         public static void Donate()
         {
@@ -458,7 +398,7 @@ namespace HDT.Plugins.Advisor
         }
 
         /// <summary>
-        /// Open link to plugin website in standard browser
+        ///     Open link to plugin website in standard browser
         /// </summary>
         public static void OpenWebsite()
         {
