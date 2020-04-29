@@ -2,7 +2,7 @@
 
 namespace HDT.Plugins.Advisor.Services
 {
-    public class TrackerLogger : ILoggingService
+    public class TrackerLogger
     {
         public void Debug(object obj)
         {

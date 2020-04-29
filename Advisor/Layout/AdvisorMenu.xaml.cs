@@ -24,11 +24,6 @@ namespace HDT.Plugins.Advisor.Layout
             await Advisor.ImportMetastatsDecks();
         }
 
-        private async void Menu_ImportTempostormDecks_Click(object sender, RoutedEventArgs e)
-        {
-            await Advisor.ImportTempostormDecks();
-        }
-
         private void Menu_DeleteArchetypeDecks_Click(object sender, RoutedEventArgs e)
         {
             Advisor.DeleteArchetypeDecks();

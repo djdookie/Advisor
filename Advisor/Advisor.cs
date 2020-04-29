@@ -304,10 +304,6 @@ namespace HDT.Plugins.Advisor
             }
         }
 
-        public static void CloseOpenNoteWindows()
-        {
-        }
-
         public static void ShowSettings()
         {
             if (_settingsFlyout == null)
@@ -316,22 +312,6 @@ namespace HDT.Plugins.Advisor
             }
 
             _settingsFlyout.IsOpen = true;
-        }
-
-        public static void CloseSettings()
-        {
-            if (_settingsFlyout != null)
-            {
-                _settingsFlyout.IsOpen = false;
-            }
-        }
-
-        public static void CloseNotification()
-        {
-            if (_notificationFlyout != null)
-            {
-                _notificationFlyout.IsOpen = false;
-            }
         }
 
         public static void Notify(string title, string message, int autoClose, string icon = null, Action action = null)
@@ -383,26 +363,6 @@ namespace HDT.Plugins.Advisor
         {
             var percentage = (int) ((double) value.Item1 / value.Item2 * 100);
             Notify("Import in progress", $"{value.Item1} of {value.Item2} decks ({percentage}%) imported", 0);
-        }
-
-        public static async Task ImportTempostormDecks()
-        {
-            try
-            {
-                IArchetypeImporter importer = new Services.TempoStorm.SnapshotImporter(new HttpClient(), new TrackerRepository());
-                var count = await importer.ImportDecks(
-                    Settings.Default.AutoArchiveArchetypes,
-                    Settings.Default.DeletePreviouslyImported,
-                    Settings.Default.ShortenDeckNames);
-                // Refresh decklist
-                Core.MainWindow.LoadAndUpdateDecks();
-                Notify("Import complete", $"{count} decks imported", 10);
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-                Notify("Import failed", e.Message, 15, "error");
-            }
         }
 
         public static void DeleteArchetypeDecks()

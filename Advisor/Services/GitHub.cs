@@ -9,7 +9,7 @@ namespace HDT.Plugins.Advisor.Services
 {
     public class Github
     {
-        private static readonly ILoggingService Logger = new TrackerLogger();
+        private static readonly TrackerLogger Logger = new TrackerLogger();
 
         // Check if there is a newer release on Github than current
         public static async Task<GithubRelease> CheckForUpdate(string user, string repo, Version version)
@@ -42,7 +42,7 @@ namespace HDT.Plugins.Advisor.Services
             var url = string.Format("https://api.github.com/repos/{0}/{1}/releases", user, repo);
             try
             {
-                var json = "";
+                string json;
                 using (var wc = new WebClient())
                 {
                     // API requires user-agent string, user name or app name preferred

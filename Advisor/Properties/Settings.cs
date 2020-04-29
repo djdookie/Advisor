@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.Configuration;
-
-namespace HDT.Plugins.Advisor.Properties
+﻿namespace HDT.Plugins.Advisor.Properties
 {
     // This class allows you to handle specific events on the settings class:
     //  The SettingChanging event is raised before a setting's value is changed.
@@ -10,14 +7,5 @@ namespace HDT.Plugins.Advisor.Properties
     //  The SettingsSaving event is raised before the setting values are saved.
     public sealed partial class Settings
     {
-        private void SettingChangingEventHandler(object sender, SettingChangingEventArgs e)
-        {
-            // Add code to handle the SettingChangingEvent event here.
-        }
-
-        private void SettingsSavingEventHandler(object sender, CancelEventArgs e)
-        {
-            // Add code to handle the SettingsSaving event here.
-        }
     }
 }

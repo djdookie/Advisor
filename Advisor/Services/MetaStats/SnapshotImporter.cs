@@ -21,11 +21,11 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
 
         private static int _decksFound;
         private static int _decksImported;
-        private readonly ILoggingService _logger;
+        private readonly TrackerLogger _logger;
 
-        private readonly ITrackerRepository _tracker;
+        private readonly TrackerRepository _tracker;
 
-        public SnapshotImporter(ITrackerRepository tracker)
+        public SnapshotImporter(TrackerRepository tracker)
         {
             _tracker = tracker;
             _logger = new TrackerLogger();
@@ -65,7 +65,7 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
             {
                 // Get the value of the HREF attribute
                 var hrefValue = link.GetAttributeValue("href", string.Empty);
-                // Create tasks to parallel process all classites and speed up the deck collection
+                // Create tasks to parallel process all class sites and speed up the deck collection
                 var task = Task.Run(() => GetClassDecks(BaseUrl + hrefValue, progress));
                 tasks.Add(task);
             }
@@ -102,7 +102,7 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
         /// </summary>
         /// <param name="decks">A list of HDT decks</param>
         /// <param name="archive">Flag if the decks should be auto-archived</param>
-        /// <param name="shortenName">Flag if class name and website name should be removed from the deckname</param>
+        /// <param name="shortenName">Flag if class name and website name should be removed from the deck name</param>
         /// <returns></returns>
         private int SaveDecks(IEnumerable<Deck> decks, bool archive, bool shortenName)
         {
