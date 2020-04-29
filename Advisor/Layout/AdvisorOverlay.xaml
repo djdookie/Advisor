@@ -5,7 +5,7 @@
             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
             xmlns:hearthstoneDeckTracker="clr-namespace:Hearthstone_Deck_Tracker;assembly=HearthstoneDeckTracker"
             xmlns:controls="clr-namespace:Hearthstone_Deck_Tracker.Controls;assembly=HearthstoneDeckTracker"
-            xmlns:properties="clr-namespace:Advisor.Properties"
+            xmlns:properties="clr-namespace:HDT.Plugins.Advisor.Properties"
             mc:Ignorable="d"
             d:DesignHeight="300" d:DesignWidth="300" Name="StackPanelOverlay">
     <StackPanel.LayoutTransform>

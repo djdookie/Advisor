@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using Advisor.Properties;
 using HDT.Plugins.Advisor.Layout;
+using HDT.Plugins.Advisor.Properties;
 using HDT.Plugins.Advisor.Services;
 using Hearthstone_Deck_Tracker.API;
 using Hearthstone_Deck_Tracker.Plugins;

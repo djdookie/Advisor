@@ -1,5 +1,5 @@
-﻿using Advisor.Properties;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
+using HDT.Plugins.Advisor.Properties;
 
 namespace HDT.Plugins.Advisor.Layout
 {

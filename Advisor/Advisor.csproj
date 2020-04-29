@@ -7,7 +7,7 @@
     <ProjectGuid>{392B67C8-4A13-4259-AA0F-09F3B0AC7669}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Advisor</RootNamespace>
+    <RootNamespace>HDT.Plugins.Advisor</RootNamespace>
     <AssemblyName>Advisor</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -132,7 +132,7 @@
     <Compile Include="Services\TempoStorm\SnapshotResponse.cs" />
     <Compile Include="Services\TrackerLogger.cs" />
     <Compile Include="Services\TrackerRepository.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Properties\Settings.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>

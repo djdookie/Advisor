@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Advisor.Properties;
+using HDT.Plugins.Advisor.Properties;
 using Hearthstone_Deck_Tracker.Hearthstone;
 
 namespace HDT.Plugins.Advisor.Layout
