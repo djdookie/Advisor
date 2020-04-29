@@ -3,32 +3,26 @@ using Newtonsoft.Json;
 
 namespace HDT.Plugins.Advisor.Services.TempoStorm
 {
-	public class Slugs
-	{
-		[JsonProperty("slugs")]
-		public List<SlugItem> Items { get; set; }
+    public class Slugs
+    {
+        public Slugs()
+        {
+            Items = new List<SlugItem>();
+        }
 
-		public Slugs()
-		{
-			Items = new List<SlugItem>();
-		}
-	}
+        [JsonProperty("slugs")] public List<SlugItem> Items { get; set; }
+    }
 
-	public class SlugItem
-	{
-		[JsonProperty("slug")]
-		public string Slug { get; set; }
+    public class SlugItem
+    {
+        [JsonProperty("slug")] public string Slug { get; set; }
 
-		[JsonProperty("linked")]
-		public bool Linked { get; set; }
+        [JsonProperty("linked")] public bool Linked { get; set; }
 
-		[JsonProperty("id")]
-		public string Id { get; set; }
+        [JsonProperty("id")] public string Id { get; set; }
 
-		[JsonProperty("snapshotId")]
-		public string SnapshotId { get; set; }
+        [JsonProperty("snapshotId")] public string SnapshotId { get; set; }
 
-		[JsonProperty("deckId")]
-		public string deckId { get; set; }
-	}
+        [JsonProperty("deckId")] public string deckId { get; set; }
+    }
 }

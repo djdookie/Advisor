@@ -4,61 +4,66 @@ using System.Linq;
 
 namespace HDT.Plugins.Advisor.Models
 {
-	public class Deck
-	{
-		public Klass Klass { get; set; }
-		public bool IsStandard { get; set; }
-		public List<Card> Cards { get; set; }
+    public class Deck
+    {
+        public Deck()
+        {
+            Cards = new List<Card>();
+        }
 
-		public Deck()
-		{
-			Cards = new List<Card>();
-		}
-
-		public Deck(Klass klass, bool standard)
-			: this()
-		{
-			Klass = klass;
-			IsStandard = standard;
-		}
+        public Deck(Klass klass, bool standard)
+            : this()
+        {
+            Klass = klass;
+            IsStandard = standard;
+        }
 
         public Deck(IEnumerable<Hearthstone_Deck_Tracker.Hearthstone.Card> cards) : this()
         {
             foreach (var card in cards)
             {
                 //Database.GetCardFromId(card.Id);
-                this.Cards.Add(new Models.Card(card.Id, card.Name, card.Count, card.Background));
+                Cards.Add(new Card(card.Id, card.Name, card.Count, card.Background));
             }
         }
 
-		/// <summary>
-		/// Uses the Jaccard index to give a indication of similarity
-		/// between the two decks. </summary>
-		/// <returns>Returns a float between 0 and 1 inclusive </returns>
-		public virtual float Similarity(Deck deck)
-		{
-			if (deck == null)
-				return 0;
+        public Klass Klass { get; set; }
+        public bool IsStandard { get; set; }
+        public List<Card> Cards { get; set; }
 
-			var lenA = Cards.Sum(x => x.Count);
-			var lenB = deck.Cards.Sum(x => x.Count);
-			var lenAnB = 0;
+        /// <summary>
+        ///     Uses the Jaccard index to give a indication of similarity
+        ///     between the two decks.
+        /// </summary>
+        /// <returns>Returns a float between 0 and 1 inclusive </returns>
+        public virtual float Similarity(Deck deck)
+        {
+            if (deck == null)
+            {
+                return 0;
+            }
 
-			if (lenA == 0 && lenB == 0)
-				return 1;
+            var lenA = Cards.Sum(x => x.Count);
+            var lenB = deck.Cards.Sum(x => x.Count);
+            var lenAnB = 0;
 
-			foreach (var i in Cards)
-			{
-				foreach (var j in deck.Cards)
-				{
-					if (i.Equals(j))
-					{
-						lenAnB += Math.Min(i.Count, j.Count);
-					}
-				}
-			}
+            if (lenA == 0 && lenB == 0)
+            {
+                return 1;
+            }
 
-			return (float)Math.Round((float)lenAnB / (lenA + lenB - lenAnB), 4);
-		}
-	}
+            foreach (var i in Cards)
+            {
+                foreach (var j in deck.Cards)
+                {
+                    if (i.Equals(j))
+                    {
+                        lenAnB += Math.Min(i.Count, j.Count);
+                    }
+                }
+            }
+
+            return (float) Math.Round((float) lenAnB / (lenA + lenB - lenAnB), 4);
+        }
+    }
 }

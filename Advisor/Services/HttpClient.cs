@@ -5,43 +5,47 @@ using System.Threading.Tasks;
 
 namespace HDT.Plugins.Advisor.Services
 {
-	public class HttpClient : IHttpClient
-	{
-		private async Task<string> JsonRequest(string url, string data = null)
-		{
-			using (var wc = new WebClient())
-			{
-				wc.Encoding = Encoding.UTF8;
-				wc.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+    public class HttpClient : IHttpClient
+    {
+        public async Task<string> JsonGet(string url)
+        {
+            return await JsonRequest(url);
+        }
 
-				var response = "";
-				if (string.IsNullOrWhiteSpace(data))
-					response = await wc.DownloadStringTaskAsync(new Uri(url));
-				else
-					response = await wc.UploadStringTaskAsync(new Uri(url), data);
+        public async Task<string> JsonPost(string url, string data)
+        {
+            return await JsonRequest(url, data);
+        }
 
-				return response;
-			}
-		}
+        public Task<string> Get(string url)
+        {
+            throw new NotImplementedException();
+        }
 
-		public async Task<string> JsonGet(string url)
-		{
-			return await JsonRequest(url);
-		}
+        public Task<string> Post(string url, string data)
+        {
+            throw new NotImplementedException();
+        }
 
-		public async Task<string> JsonPost(string url, string data)
-		{
-			return await JsonRequest(url, data);
-		}
+        private async Task<string> JsonRequest(string url, string data = null)
+        {
+            using (var wc = new WebClient())
+            {
+                wc.Encoding = Encoding.UTF8;
+                wc.Headers.Add(HttpRequestHeader.ContentType, "application/json");
 
-		public Task<string> Get(string url)
-		{
-			throw new NotImplementedException();
-		}
+                var response = "";
+                if (string.IsNullOrWhiteSpace(data))
+                {
+                    response = await wc.DownloadStringTaskAsync(new Uri(url));
+                }
+                else
+                {
+                    response = await wc.UploadStringTaskAsync(new Uri(url), data);
+                }
 
-		public Task<string> Post(string url, string data)
-		{
-			throw new NotImplementedException();
-		}
-	}
+                return response;
+            }
+        }
+    }
 }

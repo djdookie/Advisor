@@ -1,30 +1,25 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using HDT.Plugins.Advisor.Services.TempoStorm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
 namespace HDT.Plugins.Advisor.Services.TempoStorm.Tests
 {
-    [TestClass()]
+    [TestClass]
     public class SnapshotImporterTests
     {
-        [TestMethod()]
+        [TestMethod]
         public void SnapshotImporterTest()
         {
             Assert.Fail();
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void GetSnapshotSlugTest()
         {
             Assert.Fail();
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void GetSnapshotMockTest()
         {
             var mock = new Mock<IHttpClient>();
@@ -37,7 +32,7 @@ namespace HDT.Plugins.Advisor.Services.TempoStorm.Tests
             Assert.AreEqual("Salt for all", result.Title);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void GetSnapshotTest()
         {
             //var mock = new Mock<IHttpClient>();
@@ -51,7 +46,7 @@ namespace HDT.Plugins.Advisor.Services.TempoStorm.Tests
             Assert.AreEqual("Salt for all", result.Title);
         }
 
-        [TestMethod()]
+        [TestMethod]
         public void ImportDecksTest()
         {
             var httpClient = new HttpClient();
@@ -59,7 +54,7 @@ namespace HDT.Plugins.Advisor.Services.TempoStorm.Tests
             var importer = new SnapshotImporter(httpClient, trackerRepository);
 
             //_logger.Info("Starting meta deck import");
-            int deckCount = 0;
+            var deckCount = 0;
             // delete previous snapshot decks
             //if (deletePrevious)
             //{
@@ -95,6 +90,6 @@ namespace HDT.Plugins.Advisor.Services.TempoStorm.Tests
 
             //    _tracker.AddDeck(deckName, dt.Deck.PlayerClass, cards, archive, ArchetypeTag, PluginTag);
             //    deckCount++;
-            }
         }
+    }
 }

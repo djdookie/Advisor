@@ -1,56 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using Advisor.Properties;
+using HDT.Plugins.Advisor.Layout;
+using HDT.Plugins.Advisor.Services;
 using Hearthstone_Deck_Tracker.API;
 using Hearthstone_Deck_Tracker.Plugins;
 using Hearthstone_Deck_Tracker.Utility.Logging;
-using Hearthstone_Deck_Tracker.Hearthstone;
-using HDT.Plugins.Advisor.Layout;
-using Advisor.Properties;
-using HDT.Plugins.Advisor.Services;
 
 namespace HDT.Plugins.Advisor
 {
     public class AdvisorPlugin : IPlugin
     {
-        private MenuItem _menu;
         private AdvisorOverlay _advisorOverlay;
-        Advisor advisor;
-       // IEnumerable<Card> revealedCards;
+        private MenuItem _menu;
 
-        public string Author
-        {
-            get { return "Dookie"; }
-        }
+        private Advisor advisor;
+        // IEnumerable<Card> revealedCards;
 
-        public string ButtonText
-        {
-            get { return "Settings"; }
-        }
+        public string Author => "Dookie";
 
-        public string Description
-        {
-            get { return "This plugin tries to guess the opponent's deck while playing and shows it's supposed cards."; }
-        }
+        public string ButtonText => "Settings";
+
+        public string Description => "This plugin tries to guess the opponent's deck while playing and shows it's supposed cards.";
 
         public MenuItem MenuItem
         {
             get
             {
                 if (_menu == null)
+                {
                     _menu = new AdvisorMenu();
+                }
+
                 return _menu;
             }
         }
 
-        public string Name
-        {
-            get { return "Advisor"; }
-        }
+        public string Name => "Advisor";
 
         public void OnButtonPress()
         {
@@ -63,12 +51,14 @@ namespace HDT.Plugins.Advisor
             await Task.Delay(2000);
 
             _advisorOverlay = new AdvisorOverlay();
-			Core.OverlayCanvas.Children.Add(_advisorOverlay);
-			advisor = new Advisor(_advisorOverlay);
+            Core.OverlayCanvas.Children.Add(_advisorOverlay);
+            advisor = new Advisor(_advisorOverlay);
 
             // Check for updates
             if (Settings.Default.CheckForUpdates)
+            {
                 await CheckForUpdate();
+            }
 
             GameEvents.OnInMenu.Add(advisor.InMenu);
             GameEvents.OnGameStart.Add(advisor.GameStart);

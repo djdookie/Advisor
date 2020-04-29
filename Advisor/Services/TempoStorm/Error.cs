@@ -2,18 +2,14 @@
 
 namespace HDT.Plugins.Advisor.Services.TempoStorm
 {
-	public class Error
-	{
-		[JsonProperty("name")]
-		public string Name { get; set; }
+    public class Error
+    {
+        [JsonProperty("name")] public string Name { get; set; }
 
-		[JsonProperty("status")]
-		public int Status { get; set; }
+        [JsonProperty("status")] public int Status { get; set; }
 
-		[JsonProperty("message")]
-		public string Message { get; set; }
+        [JsonProperty("message")] public string Message { get; set; }
 
-		[JsonProperty("statusCode")]
-		public int StatusCode { get; set; }
-	}
+        [JsonProperty("statusCode")] public int StatusCode { get; set; }
+    }
 }
