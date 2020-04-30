@@ -1,16 +1,15 @@
 ﻿<MenuItem x:Class="HDT.Plugins.Advisor.Layout.AdvisorMenu"
-            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-            mc:Ignorable="d"
-            Header="Advisor"
-            Click="MenuItem_Click"
-            d:DesignHeight="300" d:DesignWidth="300">
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          mc:Ignorable="d"
+          Header="Advisor"
+          Click="MenuItem_Click"
+          d:DesignHeight="300" d:DesignWidth="300">
     <!-- SubMenus -->
     <MenuItem Header="Settings" Click="Menu_Settings_Click" />
     <MenuItem Header="Import archetype decks" Click="Menu_ImportMetastatsDecks_Click" />
-    <!--<MenuItem Header="IMPORT TEMPOSTORM DECKS" Click="Menu_ImportTempostormDecks_Click" />-->
     <MenuItem Header="Delete archetype decks" Click="Menu_DeleteArchetypeDecks_Click" />
     <MenuItem Header="Website" Click="Menu_Website_Click" />
     <MenuItem Header="Donate" Click="Menu_Donate_Click" />

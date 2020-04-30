@@ -2,36 +2,36 @@
 
 namespace HDT.Plugins.Advisor.Services
 {
-	public class TrackerLogger : ILoggingService
-	{
-		public void Debug(object obj)
-		{
-			Log.Debug(obj.ToString());
-		}
+    public class TrackerLogger
+    {
+        public void Debug(object obj)
+        {
+            Log.Debug(obj.ToString());
+        }
 
-		public void Debug(string message)
-		{
-			Log.Debug(message);
-		}
+        public void Debug(string message)
+        {
+            Log.Debug(message);
+        }
 
-		public void Error(object obj)
-		{
-			Log.Error(obj.ToString());
-		}
+        public void Error(object obj)
+        {
+            Log.Error(obj.ToString());
+        }
 
-		public void Error(string message)
-		{
-			Log.Error(message);
-		}
+        public void Error(string message)
+        {
+            Log.Error(message);
+        }
 
-		public void Info(object obj)
-		{
-			Log.Info(obj.ToString());
-		}
+        public void Info(object obj)
+        {
+            Log.Info(obj.ToString());
+        }
 
-		public void Info(string message)
-		{
-			Log.Info(message);
-		}
-	}
+        public void Info(string message)
+        {
+            Log.Info(message);
+        }
+    }
 }
