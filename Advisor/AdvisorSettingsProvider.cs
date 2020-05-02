@@ -64,9 +64,9 @@ namespace HDT.Plugins.Advisor
             {
                 var value = new SettingsPropertyValue(settingsProperty);
                 
-                if (values != null)
+                if (values != null && values.TryGetValue(settingsProperty.Name, out var serializedValue))
                 {
-                    value.SerializedValue = values[settingsProperty.Name];
+                    value.SerializedValue = serializedValue;
                 }
 
                 settingsPropertyValueCollection.Add(value);
