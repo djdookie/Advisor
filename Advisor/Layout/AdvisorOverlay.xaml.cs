@@ -16,9 +16,6 @@ namespace HDT.Plugins.Advisor.Layout
 
         public void Update(List<Card> cards, bool reset)
         {
-            // hide if card list is empty
-            //this.Visibility = cards.Count <= 0 ? Visibility.Hidden : Visibility.Visible;
-            //this.acList.ItemsSource = cards;
             acList.Update(cards, reset);
             UpdatePosition();
         }
@@ -29,8 +26,6 @@ namespace HDT.Plugins.Advisor.Layout
         public void UpdatePosition()
         {
             // Set overlay position
-            //Canvas.SetTop(this, Core.OverlayWindow.Height * 1 / 100);
-            //Canvas.SetLeft(this, Core.OverlayWindow.Width * 12 / 100);
             Canvas.SetLeft(this, Settings.Default.OverlayPositionX);
             Canvas.SetTop(this, Settings.Default.OverlayPositionY);
 
@@ -50,7 +45,5 @@ namespace HDT.Plugins.Advisor.Layout
         {
             Visibility = Visibility.Hidden;
         }
-
-        //public bool ShowStatistics => Settings.Default.ShowStatistics;
     }
 }
