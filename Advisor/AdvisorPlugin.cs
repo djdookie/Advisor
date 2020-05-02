@@ -48,6 +48,8 @@ namespace HDT.Plugins.Advisor
             // Small delay to guarantee all game variables are set correctly by now (especially CoreAPI.Game.IsInMenu)
             await Task.Delay(2000);
 
+            AdvisorSettingsProvider.Apply();
+
             _advisorOverlay = new AdvisorOverlay();
             Core.OverlayCanvas.Children.Add(_advisorOverlay);
             _advisor = new Advisor(_advisorOverlay);
