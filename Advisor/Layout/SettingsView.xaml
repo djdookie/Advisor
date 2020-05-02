@@ -46,6 +46,11 @@
                               HorizontalAlignment="Left" Margin="0,5,0,0"
                               VerticalAlignment="Top"
                               ToolTip="Shows the similarity of decks as absolute number of matching and played cards instead of a percentage." />
+                    <CheckBox Content="Show non-matching cards"
+                              IsChecked="{Binding Settings.Default.ShowNonMatchingCards}"
+                              HorizontalAlignment="Left" Margin="0,5,0,0"
+                              VerticalAlignment="Top"
+                              ToolTip="Include cards that don't match the archetype deck in the overlay." />
                     <CheckBox Content="Remove played cards"
                               IsChecked="{Binding Settings.Default.RemovePlayedCards}"
                               HorizontalAlignment="Left" Margin="0,5,0,0"
