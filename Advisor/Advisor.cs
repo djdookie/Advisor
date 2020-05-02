@@ -330,8 +330,8 @@ namespace HDT.Plugins.Advisor
                     // If no archetype deck matches more than MinimumSimilarity clear the list and show the best match percentage
                     _advisorOverlay.LblArchetype.Text = String.Format("Best match: {0}%", Math.Round(maxSim * 100, 2));
                     _advisorOverlay.LblStats.Text = "";
-                    _advisorOverlay.Update(Settings.Default.ShowNonMatchingCards ? opponentCardlist.ToList() : new List<Card>(), currentArchetypeDeckGuid != Guid.Empty);
-                    currentArchetypeDeckGuid = Guid.Empty;
+                    _advisorOverlay.Update(Settings.Default.ShowNonMatchingCards ? opponentCardlist.ToList() : new List<Card>(), _currentArchetypeDeckGuid != Guid.Empty);
+                    _currentArchetypeDeckGuid = Guid.Empty;
                 }
             }
         }
