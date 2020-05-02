@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Hearthstone_Deck_Tracker.Utility.Logging;
 using Newtonsoft.Json;
 
 namespace HDT.Plugins.Advisor.Services
 {
     public class Github
     {
-        private static readonly TrackerLogger Logger = new TrackerLogger();
-
         // Check if there is a newer release on Github than current
         public static async Task<GithubRelease> CheckForUpdate(string user, string repo, Version version)
         {
@@ -29,7 +28,7 @@ namespace HDT.Plugins.Advisor.Services
             }
             catch (Exception ex)
             {
-                Logger.Error(ex);
+                Log.Error(ex.ToString());
                 Advisor.Notify($"{repo}: Plugin update check failed", ex.Message, 15, "error");
             }
 
@@ -39,25 +38,19 @@ namespace HDT.Plugins.Advisor.Services
         // Use the Github API to get the latest release for a repo
         public static async Task<GithubRelease> GetLatestRelease(string user, string repo)
         {
-            var url = string.Format("https://api.github.com/repos/{0}/{1}/releases", user, repo);
-            try
-            {
-                string json;
-                using (var wc = new WebClient())
-                {
-                    // API requires user-agent string, user name or app name preferred
-                    wc.Headers.Add(HttpRequestHeader.UserAgent, user);
-                    json = await wc.DownloadStringTaskAsync(url);
-                }
+            var url = $"https://api.github.com/repos/{user}/{repo}/releases";
 
-                var releases = JsonConvert.DeserializeObject<List<GithubRelease>>(json);
-
-                return releases.FirstOrDefault();
-            }
-            catch (Exception ex)
+            string json;
+            using (var wc = new WebClient())
             {
-                throw ex;
+                // API requires user-agent string, user name or app name preferred
+                wc.Headers.Add(HttpRequestHeader.UserAgent, user);
+                json = await wc.DownloadStringTaskAsync(url);
             }
+
+            var releases = JsonConvert.DeserializeObject<List<GithubRelease>>(json);
+
+            return releases.FirstOrDefault();
         }
 
         // Basic release info for JSON deserialization

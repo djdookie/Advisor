@@ -107,7 +107,6 @@
     </Compile>
     <Compile Include="Services\GitHub.cs" />
     <Compile Include="Services\MetaStats\SnapshotImporter.cs" />
-    <Compile Include="Services\TrackerLogger.cs" />
     <Compile Include="Services\TrackerRepository.cs" />
     <Compile Include="Properties\Settings.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

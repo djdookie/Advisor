@@ -87,7 +87,7 @@ namespace HDT.Plugins.Advisor
             {
                 Advisor.Notify("Plugin update available", $"[DOWNLOAD]({latest.HtmlUrl}) Advisor {latest.TagName}", 0,
                     "download", () => Process.Start(latest.HtmlUrl));
-                Log.Info("Update available: " + latest.TagName, "Advisor");
+                Log.Info($"Update available: {latest.TagName}", "Advisor");
             }
         }
     }

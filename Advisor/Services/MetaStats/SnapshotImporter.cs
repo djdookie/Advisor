@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Hearthstone_Deck_Tracker;
 using Hearthstone_Deck_Tracker.Hearthstone;
 using Hearthstone_Deck_Tracker.Importing;
+using Hearthstone_Deck_Tracker.Utility.Logging;
 using HtmlAgilityPack;
 
 namespace HDT.Plugins.Advisor.Services.MetaStats
@@ -21,14 +22,12 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
 
         private static int _decksFound;
         private static int _decksImported;
-        private readonly TrackerLogger _logger;
 
         private readonly TrackerRepository _tracker;
 
         public SnapshotImporter(TrackerRepository tracker)
         {
             _tracker = tracker;
-            _logger = new TrackerLogger();
             _decksFound = 0;
             _decksImported = 0;
         }
@@ -43,7 +42,7 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
         /// <returns>The number of imported decks</returns>
         public async Task<int> ImportDecks(bool archive, bool deletePrevious, bool shortenName, IProgress<Tuple<int, int>> progress)
         {
-            _logger.Info("Starting archetype deck import");
+            Log.Info("Starting archetype deck import");
 
             // Delete previous snapshot decks
             if (deletePrevious)
@@ -51,47 +50,34 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
                 DeleteDecks();
             }
 
-            var hw = new HtmlWeb();
-            var doc = new HtmlDocument();
-            doc = hw.Load(BaseSnapshotUrl);
+            var htmlWeb = new HtmlWeb();
+            var document = htmlWeb.Load(BaseSnapshotUrl);
 
             // Get link for each class
-            var classSites = doc.DocumentNode.SelectNodes("//div[@id='meta-nav']/ul/li/a/@href");
+            var classSites = document.DocumentNode.SelectNodes("//div[@id='meta-nav']/ul/li/a/@href");
 
-            var tasks = new List<Task<IList<Deck>>>();
-            var decks = new List<Deck>();
-
-            foreach (var link in classSites)
-            {
-                // Get the value of the HREF attribute
-                var hrefValue = link.GetAttributeValue("href", string.Empty);
-                // Create tasks to parallel process all class sites and speed up the deck collection
-                var task = Task.Run(() => GetClassDecks(BaseUrl + hrefValue, progress));
-                tasks.Add(task);
-            }
+            var tasks = classSites.Select(l => l.GetAttributeValue("href", string.Empty))
+                .Select(u => Task.Run(() => GetClassDecks(BaseUrl + u, progress)))
+                .ToList();
 
             // Wait for all threads to finish, then combine results
-            await Task.WhenAll(tasks);
-
-            foreach (var t in tasks)
-            {
-                decks.AddRange(t.Result);
-            }
+            var results = await Task.WhenAll(tasks);
+            var decks = results.SelectMany(r => r).ToList();
 
             // TODO: Remove duplicates if any?
 
-            _logger.Info($"Saving {decks.Count} decks to the decklist.");
+            Log.Info($"Saving {decks.Count} decks to the decklist.");
 
             // Add all decks to the tracker
             var deckCount = await Task.Run(() => SaveDecks(decks, archive, shortenName));
 
             if (deckCount == decks.Count)
             {
-                _logger.Info($"Import of {deckCount} archetype decks completed.");
+                Log.Info($"Import of {deckCount} archetype decks completed.");
             }
             else
             {
-                _logger.Error($"Only {deckCount} of {decks.Count} archetype could be imported. Connection problems?");
+                Log.Error($"Only {deckCount} of {decks.Count} archetype could be imported. Connection problems?");
             }
 
             return deckCount;
@@ -115,7 +101,7 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
                     throw new ImportException("At least one deck couldn't be imported. Connection problems?");
                 }
 
-                _logger.Info($"Importing deck ({deck.Name})");
+                Log.Info($"Importing deck ({deck.Name})");
 
                 // Optionally remove player class from deck name
                 // E.g. 'Control Warrior' => 'Control'
@@ -144,11 +130,10 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
         /// <returns>The list of all parsed decks</returns>
         private async Task<IList<Deck>> GetClassDecks(string url, IProgress<Tuple<int, int>> progress)
         {
-            var hw = new HtmlWeb();
-            var doc = new HtmlDocument();
-            doc = hw.Load(url);
+            var htmlWeb = new HtmlWeb();
+            var document = htmlWeb.Load(url);
 
-            var deckSites = doc.DocumentNode.SelectNodes("//div[@class='decklist']");
+            var deckSites = document.DocumentNode.SelectNodes("//div[@class='decklist']");
 
             // Count found decks thread-safe
             Interlocked.Add(ref _decksFound, deckSites.Count);
@@ -220,7 +205,7 @@ namespace HDT.Plugins.Advisor.Services.MetaStats
         /// </summary>
         public int DeleteDecks()
         {
-            _logger.Info("Deleting all archetype decks");
+            Log.Info("Deleting all archetype decks");
             return _tracker.DeleteAllDecksWithTag(PluginTag);
         }
     }

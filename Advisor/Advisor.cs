@@ -113,10 +113,7 @@ namespace HDT.Plugins.Advisor
         /// <summary>
         ///     All archetype decks from tracker repository
         /// </summary>
-        private IList<Deck> ArchetypeDecks
-        {
-            get { return DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).ToList(); }
-        }
+        private static IEnumerable<Deck> ArchetypeDecks => DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype"));
 
         /// <summary>
         ///     If settings were changed, update overlay and save settings
@@ -224,17 +221,11 @@ namespace HDT.Plugins.Advisor
             else
             {
                 // Create archetype dictionary
-                IDictionary<Deck, float> dict = new Dictionary<Deck, float>();
-
                 // Calculate similarities between all opponent's class archetype decks and all yet known opponent cards. Exclude wild decks in standard format using NAND expression. OR expression should also work: (!d.IsWildDeck || CoreAPI.Game.CurrentFormat == Format.Wild)
-                foreach (var archetypeDeck in ArchetypeDecks.Where(d => d.Class == CoreAPI.Game.Opponent.Class && !(d.IsWildDeck && CoreAPI.Game.CurrentFormat == Format.Standard)))
-                {
-                    // Insert deck with calculated value into dictionary and prevent exception by inserting duplicate decks
-                    if (!dict.ContainsKey(archetypeDeck))
-                    {
-                        dict.Add(archetypeDeck, archetypeDeck.Similarity(opponentCardlist));
-                    }
-                }
+                IDictionary<Deck, float> dict = ArchetypeDecks
+                    .Where(d => d.Class == CoreAPI.Game.Opponent.Class && !(d.IsWildDeck && CoreAPI.Game.CurrentFormat == Format.Standard))
+                    .Distinct()
+                    .ToDictionary(d => d, d => d.Similarity(opponentCardlist));
 
                 // Get highest similarity value
                 // Some unreproducable bug threw an exception here. System.InvalidOperationException: Sequence contains no elements @ IEnumerable.Max() => should be fixed by DefaultIfEmpty() now!
@@ -244,11 +235,11 @@ namespace HDT.Plugins.Advisor
                 if (dict.Count > 0 && maxSim >= Settings.Default.MinimumSimilarity * 0.01)
                 {
                     // Select top decks with highest similarity value
-                    var topSimDecks = (from d in dict where Math.Abs(d.Value - maxSim) < 0.001 select d).ToList();
+                    var topSimDecks = dict.Where(d => Math.Abs(d.Value - maxSim) < 0.001).ToList();
                     // Select top decks with most played games
                     // If class was something like "Groddo the Bogwarden" in monster hunt, we got an InvalidOperationException at Max() because dict was empty. Now we check for dict > 0 above to prevent this.
                     var maxGames = topSimDecks.Max(x => x.Key.GetPlayedGames());
-                    var topGamesDecks = (from t in topSimDecks where t.Key.GetPlayedGames() == maxGames select t).ToList();
+                    var topGamesDecks = topSimDecks.Where(t => t.Key.GetPlayedGames() == maxGames).ToList();
                     // Select best matched deck with both highest similarity value and most played games
                     var matchedDeck = topGamesDecks.First();
 
@@ -264,64 +255,62 @@ namespace HDT.Plugins.Advisor
                         _advisorOverlay.LblArchetype.Text = $"{matchedDeck.Key.Name} ({Math.Round(matchedDeck.Value * 100, 2)}%)";
                     }
 
-                    _advisorOverlay.LblStats.Text = $"{matchedDeck.Key.Note}";
+                    _advisorOverlay.LblStats.Text = matchedDeck.Key.Note;
                     var deck = DeckList.Instance.Decks.Where(d => d.TagList.ToLowerInvariant().Contains("archetype")).First(d => d.Name == matchedDeck.Key.Name);
-                    if (deck != null)
+
+                    var predictedCards = ((Deck) deck.Clone()).Cards.ToList();
+
+                    foreach (var card in opponentCardlist)
                     {
-                        var predictedCards = ((Deck) deck.Clone()).Cards.ToList();
-
-                        foreach (var card in opponentCardlist)
+                        // Remove already played opponent cards from predicted archetype deck. But don't remove revealed jousted cards, because they were only seen and not played yet.
+                        if (predictedCards.Contains(card))
                         {
-                            // Remove already played opponent cards from predicted archetype deck. But don't remove revealed jousted cards, because they were only seen and not played yet.
-                            if (predictedCards.Contains(card))
+                            var item = predictedCards.Find(x => x.Id == card.Id);
+
+                            if (!card.Jousted)
                             {
-                                var item = predictedCards.Find(x => x.Id == card.Id);
-
-                                if (!card.Jousted)
-                                {
-                                    item.Count -= card.Count;
-                                }
-
-                                // Highlight jousted cards in green. Also highlight when deck has 2 of a card and we have matched one.
-                                if (item.Count > 0)
-                                {
-                                    item.HighlightInHand = true;
-                                    item.InHandCount += card.Count;
-                                }
-                                else
-                                {
-                                    item.HighlightInHand = false;
-                                    item.InHandCount = 0;
-                                }
+                                item.Count -= card.Count;
                             }
-                            else if (Settings.Default.ShowNonMatchingCards)
+
+                            // Highlight jousted cards in green. Also highlight when deck has 2 of a card and we have matched one.
+                            if (item.Count > 0)
                             {
-                                // Show known cards that don't match the archetype deck, in red
-                                var item = (Card) card.Clone();
+                                item.HighlightInHand = true;
+                                item.InHandCount += card.Count;
+                            }
+                            else
+                            {
                                 item.HighlightInHand = false;
-                                item.WasDiscarded = true;
-                                if (!item.Jousted)
-                                {
-                                    item.Count = 0;
-                                }
-
-                                predictedCards.Add(item);
+                                item.InHandCount = 0;
                             }
                         }
-
-                        var isNewArchetypeDeck = _currentArchetypeDeckGuid != matchedDeck.Key.DeckId;
-
-                        // Remove cards with 0 left when setting is set to true.
-                        if (Settings.Default.RemovePlayedCards)
+                        else if (Settings.Default.ShowNonMatchingCards)
                         {
-                            predictedCards = predictedCards.Where(x => x.Count > 0).ToList();
-                        }
+                            // Show known cards that don't match the archetype deck, in red
+                            var item = (Card) card.Clone();
+                            item.HighlightInHand = false;
+                            item.WasDiscarded = true;
+                            if (!item.Jousted)
+                            {
+                                item.Count = 0;
+                            }
 
-                        // Update overlay cards.
-                        _advisorOverlay.Update(predictedCards.ToSortedCardList(), isNewArchetypeDeck);
-                        // Remember current archetype deck guid with highest similarity to opponent's played cards.
-                        _currentArchetypeDeckGuid = matchedDeck.Key.DeckId;
+                            predictedCards.Add(item);
+                        }
                     }
+
+                    var isNewArchetypeDeck = _currentArchetypeDeckGuid != matchedDeck.Key.DeckId;
+
+                    // Remove cards with 0 left when setting is set to true.
+                    if (Settings.Default.RemovePlayedCards)
+                    {
+                        predictedCards = predictedCards.Where(x => x.Count > 0).ToList();
+                    }
+
+                    // Update overlay cards.
+                    _advisorOverlay.Update(predictedCards.ToSortedCardList(), isNewArchetypeDeck);
+                    // Remember current archetype deck guid with highest similarity to opponent's played cards.
+                    _currentArchetypeDeckGuid = matchedDeck.Key.DeckId;
                 }
                 else
                 {
@@ -445,26 +434,30 @@ namespace HDT.Plugins.Advisor
 
         private static Flyout CreateSettingsFlyout()
         {
-            var settings = new Flyout();
-            settings.Name = "AdvisorSettingsFlyout";
-            settings.Position = Position.Left;
+            var settings = new Flyout
+            {
+                Name = "AdvisorSettingsFlyout",
+                Position = Position.Left,
+                Header = "Advisor Settings",
+                Content = new SettingsView()
+            };
             Panel.SetZIndex(settings, 100);
-            settings.Header = "Advisor Settings";
-            settings.Content = new SettingsView();
             Core.MainWindow.Flyouts.Items.Add(settings);
             return settings;
         }
 
         private static Flyout CreateDialogFlyout()
         {
-            var dialog = new Flyout();
-            dialog.Name = "AdvisorDialogFlyout";
-            dialog.Theme = FlyoutTheme.Accent;
-            dialog.Position = Position.Bottom;
-            dialog.TitleVisibility = Visibility.Collapsed;
-            dialog.CloseButtonVisibility = Visibility.Collapsed;
-            dialog.IsPinned = false;
-            dialog.Height = 50;
+            var dialog = new Flyout
+            {
+                Name = "AdvisorDialogFlyout",
+                Theme = FlyoutTheme.Accent,
+                Position = Position.Bottom,
+                TitleVisibility = Visibility.Collapsed,
+                CloseButtonVisibility = Visibility.Collapsed,
+                IsPinned = false,
+                Height = 50
+            };
             Panel.SetZIndex(dialog, 1000);
             Core.MainWindow.Flyouts.Items.Add(dialog);
             return dialog;
