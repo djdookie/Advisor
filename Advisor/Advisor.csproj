@@ -7,20 +7,22 @@
     <ProjectGuid>{392B67C8-4A13-4259-AA0F-09F3B0AC7669}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Advisor</RootNamespace>
+    <RootNamespace>HDT.Plugins.Advisor</RootNamespace>
     <AssemblyName>Advisor</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>C:\Users\Patrick\AppData\Roaming\HearthstoneDeckTracker\Plugins\Advisor\</OutputPath>
+    <OutputPath>C:\Users\Jacob\AppData\Roaming\HearthstoneDeckTracker\Plugins\Advisor\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
+    <StartAction>Program</StartAction>
+    <StartProgram>C:\Users\Jacob\AppData\Local\HearthstoneDeckTracker\app-1.11.7\HearthstoneDeckTracker.exe</StartProgram>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -45,12 +47,8 @@
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="HearthDb">
-      <HintPath>C:\Users\Patrick\AppData\Local\HearthstoneDeckTracker\app-1.6.5\HearthDb.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="HearthstoneDeckTracker">
-      <HintPath>C:\Users\Patrick\AppData\Local\HearthstoneDeckTracker\app-1.6.5\HearthstoneDeckTracker.exe</HintPath>
+      <HintPath>C:\Users\Jacob\AppData\Local\HearthstoneDeckTracker\app-1.11.7\HearthstoneDeckTracker.exe</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.4.9.5, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
@@ -58,7 +56,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="MahApps.Metro">
-      <HintPath>C:\Users\Patrick\AppData\Local\HearthstoneDeckTracker\app-1.6.5\MahApps.Metro.dll</HintPath>
+      <HintPath>C:\Users\Jacob\AppData\Local\HearthstoneDeckTracker\app-1.11.7\MahApps.Metro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -72,6 +70,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -80,9 +79,7 @@
     </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -105,34 +102,16 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Layout\SettingsViewModel.cs" />
-    <Compile Include="Models\ArchetypeDeck.cs" />
-    <Compile Include="Models\Card.cs" />
-    <Compile Include="Models\Deck.cs" />
-    <Compile Include="Models\Klass.cs" />
-    <Compile Include="Models\MatchResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="AdvisorSettingsProvider.cs" />
     <Compile Include="Services\GitHub.cs" />
-    <Compile Include="Services\HttpClient.cs" />
-    <Compile Include="Services\IArchetypeImporter.cs" />
-    <Compile Include="Services\IHttpClient.cs" />
-    <Compile Include="Services\ILoggingService.cs" />
-    <Compile Include="Services\ITrackerRepository.cs" />
     <Compile Include="Services\MetaStats\SnapshotImporter.cs" />
-    <Compile Include="Services\TempoStorm\DeckSnapshot.cs" />
-    <Compile Include="Services\TempoStorm\Error.cs" />
-    <Compile Include="Services\TempoStorm\Include.cs" />
-    <Compile Include="Services\TempoStorm\Slugs.cs" />
-    <Compile Include="Services\TempoStorm\SnapshotImporter.cs" />
-    <Compile Include="Services\TempoStorm\SnapshotRequest.cs" />
-    <Compile Include="Services\TempoStorm\SnapshotResponse.cs" />
-    <Compile Include="Services\TrackerLogger.cs" />
     <Compile Include="Services\TrackerRepository.cs" />
-    <Compile Include="Settings.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
   </ItemGroup>
