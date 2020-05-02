@@ -72,12 +72,14 @@ namespace HDT.Plugins.Advisor
         public static int CountUnion(this Deck thisDeck, IList<Card> cards)
         {
             if (cards == null)
+            {
                 return 0;
+            }
 
             var lenA = thisDeck.Cards.Sum(x => x.Count);
             var lenB = cards.Sum(x => x.Count);
 
-            int count = 0;
+            var count = 0;
 
             foreach (var i in thisDeck.Cards)
             {
